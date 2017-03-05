@@ -17,14 +17,20 @@ namespace GSXF.Web.Controllers
     public class HomeController : BaseController
     {
 
-        public ActionResult Default()
-        {
-            return View();
-        }
 
         public ActionResult Index()
         {
+            if(Request.Cookies["MyCookie"]!= null)
+            {
+                string username = Request.Cookies["MyCookie"]["username"];
+                User user = userManager.Find(u => u.Name == username);
 
+                if(user != null)
+                {
+                    user.IsOnline = false;
+                    userManager.Update(user);
+                }
+            }
           
 
             return View();

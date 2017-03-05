@@ -52,7 +52,8 @@
                 Level: $('#level').val(),
                 CertificateNumber: $('#cn').val(),
                 IdentificationNumber:$('#idn').val(),
-                Name: $('#name').val()
+                Name: $('#name').val(),
+                CompanyName:$('#companyname').val()
             });
         }
         function doReset() {
@@ -60,6 +61,7 @@
             $('#cn').textbox('setValue', '');
             $('#IdentificationNumber').textbox('setValue', '');
             $('#name').textbox('setValue', '');
+            $('#companyname').textbox('setValue', '');
             doSearch();
         }
         function update() {
@@ -127,7 +129,9 @@
 </head>
 <body>
     <p style="margin-left:10px;">
-        证书类别:
+        注册公司：
+        <input name="CompanyName" id="companyname" class="easyui-textbox" style="width:180px" />
+        证书类别：
         <select name="Level" id="level" class="easyui-combobox" style="width:160px;"
                 data-options="panelHeight:'auto'" editable="false">
             <option value="-1">全部</option>

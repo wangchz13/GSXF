@@ -176,6 +176,16 @@ namespace GSXF.Web.Controllers
             //}
             
 
+            if(company.ExpiryDate1 < DateTime.Now)
+            {
+                return Content("贵公司服务资质已到期，请联系总队更新。");
+            }
+
+            if (company.ExpiryDate2 != null && ((DateTime)company.ExpiryDate2) < DateTime.Now)
+            {
+                return Content("贵公司服务资质已到期，请联系总队更新。");
+            }
+
             return View();
         }
 
@@ -319,7 +329,7 @@ namespace GSXF.Web.Controllers
                 return Json(resp);
             }
             var file = Request.Files[0];
-            if (file.ContentLength >= 20971520)
+            if (file.ContentLength >= 52428800)
             {
                 resp.Code = -2;
                 resp.Message = "上传文件太大";

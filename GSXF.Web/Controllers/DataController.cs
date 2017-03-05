@@ -86,7 +86,15 @@ namespace GSXF.Web.Controllers
             userManager.Update(user);
 
 
+
+
             Session.Add("User", user);
+
+            HttpCookie cookie = new HttpCookie("MyCookie");
+            cookie.Values.Add("username", user.Name);
+            cookie.Expires = DateTime.Now.AddHours(12);
+            Response.AppendCookie(cookie);
+
             return Json(resp);
         }
 
@@ -100,6 +108,16 @@ namespace GSXF.Web.Controllers
                 user = userManager.Find(user.ID);
                 user.IsOnline = false;
                 userManager.Update(user);
+
+                HttpCookie cookie = Request.Cookies["MyCookie"];
+                if(cookie!= null)
+                {
+                    cookie.Expires = DateTime.Now.AddDays(-1);
+                    Response.Cookies.Add(cookie);
+                    Request.Cookies.Remove("MyCookie");
+                }
+
+
             }
             Session.Clear();
             return Redirect("/");
@@ -392,7 +410,7 @@ namespace GSXF.Web.Controllers
                 CompanyName = p.Company.Name,
                 Type = p.Type.ToString(),
                 City = p.City.ToString(),
-                RecordDate = p.RecordDate.ToString(),
+                RecordDate = ((DateTime)p.RecordDate).ToShortDateString(),
                 Result = p.Result==true?"合格":"不合格"
             });
 
@@ -801,6 +819,10 @@ namespace GSXF.Web.Controllers
             string level = Request.QueryString["Level"];
             string cn = Request.QueryString["CertificateNumber"];
             string idn = Request.QueryString["IdentificationNumber"];
+            string cname = Request.QueryString["CompanyName"];
+
+            
+
 
             if(name!=null && name != "")
             {
@@ -820,6 +842,10 @@ namespace GSXF.Web.Controllers
                 employees = employees.Where(e => e.IdentificationNumber == idn);
             }
 
+            if (cname != null && cname != "")
+            {
+                employees = employees.Where(e => e.Company != null && e.Company.Name.Contains(cname));
+            }
 
             employees = employees.Where(e => e.Level == EmployeeLevel.一级注册消防工程师 || e.Level == EmployeeLevel.二级注册消防工程师 || e.Level == EmployeeLevel.临时注册消防工程师);
 
