@@ -1,0 +1,85 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>XMDJ</title>
+
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/Content/easyuijs")
+    <style>
+        td{
+            text-align:center;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $(".accept").click(function () {
+                $("#bgba").datagrid('deleteRow', $(this).parent().parent().parent().index());
+            });
+        });
+    </script>
+</head>
+<body style=" margin:0px;">
+    <div class="easyui-panel" title="报告备案">
+        <table class="easyui-datagrid" id="bgba">
+            <thead>
+                <tr>
+                    <th field="t1" width="300px">项目名称</th>
+                    <th field="t2" width="60px">项目类型</th>
+                    <th field="t9" width="60px">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>兰州市翠英大酒店</td>
+                    <td>安全评估</td>
+                    <td>
+                        <a href="#" class="accept">确认</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>兰州大学信息院飞云楼</td>
+                    <td>年度检测</td>
+                    <td>
+                        <a href="#" class="accept">确认</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>天水盛和大酒店</td>
+                    <td>竣工检测</td>
+                    <td>
+                        <a href="#" class="accept">确认</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>兰州市锦江阳光大酒店</td>
+                    <td>维护保养</td>
+                    <td>
+                        <a href="#" class="accept">确认</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>兰州东方大酒店</td>
+                    <td>维护保养</td>
+                    <td>
+                        <a href="#" class="accept">确认</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>兰州市段家滩路1220号盛源商务宾馆</td>
+                    <td>竣工检测</td>
+                    <td>
+                        <a href="#" class="accept">确认</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

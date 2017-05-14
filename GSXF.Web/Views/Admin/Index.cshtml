@@ -1,0 +1,133 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>后台管理系统</title>
+
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/Content/easyuijs")
+
+    <link href="~/Content/admin/admin.css" rel="stylesheet" />
+    <script src="~/Content/admin/admin.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body class="easyui-layout">
+    <div region="north" border="true" split="true" style="overflow:hidden; height:80px;">
+        <div class="top-bg">
+            
+            <span style="font-size:x-large;font-weight:600;">甘肃省社会消防服务信息管理系统</span>
+        </div>
+    </div>
+    <div region="south" border="true" split="true" style="overflow:hidden;height:40px;">
+        <div class="footer">版权所有:甘肃省消防总队</div>
+    </div>
+    <div region="west" split="true" title="导航菜单" style="width:200px;">
+        <div id="aa" class="easyui-accordion" style="position:absolute;top:27px;left:0px;right:0px;bottom:0px;">
+            <div title="子菜单1" iconcls="icon-save" style="overflow:auto;padding:5px 10px;">
+                <ul class="easyui-tree">
+                    <li>
+                        <span>监督检查</span>
+                        <ul>
+                            <li>
+                                <span>项目检查</span>
+                                <ul>
+                                    <li>
+                                        <span><a target="mainFrame" openUrl=@Url.Action("Test") href=@Url.Action("Test")>项目抽查</a></span>
+                                    </li>
+                                    <li>
+                                        <span><a target="mainFrame" href="http://www.baidu.com">检查任务</a></span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    @*<li>
+                        <span>查询</span>
+                        <ul>
+                            <li>
+                                <span><a target="mainFrame" href="http://www.baidu.com">技术服务项目查询</a></span>
+                            </li>
+                            <li>
+                                <span><a target="mainFrame" href="http://www.baidu.com">技术服务报告查询</a></span>
+                            </li>
+                            <li>
+                                <span><a target="mainFrame" href="http://www.baidu.com">机构信息查询</a></span>
+                            </li>
+                            <li>
+                                <span><a target="mainFrame" href="http://www.baidu.com">从业人员查询</a></span>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <span>综合服务</span>
+                        <ul>
+                            <li>
+                                <span><a target="mainFrame" href="http://www.baidu.com">PDF阅读器下载</a></span>
+                            </li>
+                        </ul>
+                    </li>*@
+                    <li>
+                        <span><a target="mainFrame" href=@Url.Action("ZYSQ") openUrl=@Url.Action("ZYSQ")>执业申请</a></span>
+                    </li>
+                    <li>
+                        <span><a target="mainFrame" href=@Url.Action("XMDJ") openUrl=@Url.Action("XMDJ")>项目登记</a></span>
+                    </li>
+                    <li>
+                        <span><a target="mainFrame" href=@Url.Action("TBZS")>图表展示</a></span>
+                    </li>
+                    <li>
+                        <span><a target="mainFrame" href=@Url.Action("BGBA")>报告备案</a></span>
+                    </li>
+                    <li>
+                        <span><a target="mainFrame" href=@Url.Action("PJYM")>评价页面</a></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="mainPanel" region="center" style="overflow:hidden;">
+        <div id="tabs" class="easyui-tabs" fit="true" border="false">
+
+            <div title="主页" style="padding: 0px; overflow: hidden;" id="home">
+                
+                <div id="p" class="easyui-panel" title="通知" style="width:100%;height:100%;">
+                    <table class="easyui-datagrid" style="width:100%;height:100%"  pagination="true"
+                           data-options="singleSelect:true,collapsible:true,url:'datagrid_data1.json',method:'get'">
+                        <thead>
+                            <tr>
+                                <th data-options="field:'attr1',width:250,align:'center'">标题</th>
+                                <th data-options="field:'listprice',width:80,align:'center'">发布人</th>
+                                <th data-options="field:'unitcost',width:80,align:'center'">发布时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>支队机构</td>
+                                <td>业务管理员</td>
+                                <td>2015-07-26</td>
+                            </tr>
+                            <tr>
+                                <td>支队</td>
+                                <td>业务管理员</td>
+                                <td>2015-07-26</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

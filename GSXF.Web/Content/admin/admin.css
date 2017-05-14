@@ -1,0 +1,20 @@
+﻿.footer{
+    width:100%;
+    text-align:center;
+    line-height:35px;
+}
+
+.top-bg {
+    background-color: #d8e4fe;
+    height: 100px;
+    /*width:100%;
+    background-image: url('../img/阿里旺旺图片20170430103251.jpg');
+    background-repeat:no-repeat;*/
+    background-repeat: no-repeat;
+    background-image: url('../img/bg_1900_100_logo_meitu_1_40.png');
+}
+
+.easyui-accordion li a{
+    text-decoration:none;
+    color:black;
+}

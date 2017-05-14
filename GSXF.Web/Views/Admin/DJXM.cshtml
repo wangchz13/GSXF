@@ -1,0 +1,412 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>DJXM</title>
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/Content/easyuijs")
+    <style>
+        body{
+            font-size:16px;
+        }
+        .step-wrap{
+            text-align:center;
+            margin-top:20px;
+            margin-bottom:20px;
+
+        }
+        .step-wrap .item{
+            display:inline-block;
+            color:#5a5a5a;
+            font-size:14px;
+            position:relative;
+            width:200px;
+        }
+        .step-num-wrap {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            background: #bcbcbc;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: inline-block;
+            position: relative;
+            z-index: 2;
+        }
+        .step-wrap .item+.item:before{
+            display:inline-block;
+            width:200px;
+            height:2px;
+            background:#bcbcbc;
+            content:"";
+            position:absolute;
+            top:20px;
+            left:-120px;
+        }
+        .done .step-num{
+            background-color:limegreen;
+        }
+        table#xmdj{
+            border:solid #ccc;
+            border-width:1px 0px 0px 1px;
+            width:100%;
+        }
+        td{
+            border:solid #ccc;
+            border-width:0px 1px 1px 0px;
+            text-align:center;
+        }
+        input{
+            width:inherit;
+        }
+        .step-div{
+            margin:0 auto;
+            text-align:center;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#btn-1").click(function () {
+                $('#step-1-div').hide();
+                $('#step-2-div').show();
+            });
+            $("#btn-2").click(function () {
+                $('#step-2-div').hide();
+                $('#step-3-div').show();
+            });
+            $("#btn-3").click(function () {
+                $('#step-3-div').hide();
+                $('#step-4-div').show();
+            });
+            $("#btn-4").click(function () {
+
+            });
+        });
+    </script>
+
+</head>
+<body>
+    <div class="step-wrap">
+        <div class="item">
+            <div class="step-num-wrap">
+                <div class="step-num">1</div>
+            </div>
+            <h3 class="step-title">项目登记</h3>
+        </div>
+        <div class="item">
+            <div class="step-num-wrap">
+                <div class="step-num">2</div>
+            </div>
+            <h3 class="step-title">入场检测</h3>
+        </div>
+        <div class="item">
+            <div class="step-num-wrap">
+                <div class="step-num">3</div>
+            </div>
+            <h3 class="step-title">出具报告</h3>
+        </div>
+        <div class="item">
+            <div class="step-num-wrap">
+                <div class="step-num">4</div>
+            </div>
+            <h3 class="step-title">提交备案</h3>
+        </div>
+    </div>
+    <div style="height:80%;width:100%;">
+        <div class="easyui-tabs" border="false" id="tabs">
+            <div id="step-1-div" class="step-div" title="1.项目登记">
+                <table id="xmdj">
+                    <tbody>
+                        <tr>
+                            <td colspan="7">
+                                项目登记表
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="5">
+                                委托<br />
+                                单位<br />
+                                信息
+                            </td>
+                            <td>
+                                委托单位
+                            </td>
+                            <td colspan="5" contenteditable="true"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                项目名称
+                            </td>
+                            <td colspan="3" contenteditable="true"></td>
+                            <td>
+                                项目类型
+                            </td>
+                            <td contenteditable="true"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                项目地区
+                            </td>
+                            <td colspan="5" contenteditable="true">
+                                某某市，某某县（选择填入，不同输入）
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                详细地址
+                            </td>
+                            <td colspan="5" contenteditable="true"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                联系人
+                            </td>
+                            <td contenteditable="true"></td>
+                            <td>
+                                联系电话
+                            </td>
+                            <td contenteditable="true"></td>
+                            <td>
+                                电子邮箱
+                            </td>
+                            <td contenteditable="true"></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="7">
+                                项目<br />
+                                信息
+                            </td>
+                            <td>
+                                检测机构
+                            </td>
+                            <td colspan="3" contenteditable="true"></td>
+                            <td>
+                                资质类型
+                            </td>
+                            <td contenteditable="true"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                服务内容
+                            </td>
+                            <td colspan="5" contenteditable="true"></td>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">
+                                服务范围
+                            </td>
+                            <td>
+                                使用性质
+                            </td>
+                            <td>
+                                火灾危险性
+                            </td>
+                            <td>
+                                单体建筑面积
+                            </td>
+                            <td>
+                                建筑层总数
+                            </td>
+                            <td>
+                                技术服务层数
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select name="fwfw">
+                                    <option value="0">民用建筑</option>
+                                    <option value="1">工业建筑</option>
+                                    <option value="2">其他</option>
+                                </select>
+                            </td>
+                            <td contenteditable="true"></td>
+                            <td contenteditable="true"></td>
+                            <td contenteditable="true"></td>
+                            <td contenteditable="true"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                合同编号
+                            </td>
+                            <td contenteditable="true"></td>
+                            <td>
+                                合同签订日期
+                            </td>
+                            <td contenteditable="true"></td>
+                            <td>
+                                合同起止日期
+                            </td>
+                            <td contenteditable="true"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                项目负责人
+                            </td>
+                            <td contenteditable="true"></td>
+                            <td>
+                                技术负责人
+                            </td>
+                            <td contenteditable="true"></td>
+                            <td>
+                                联系人
+                            </td>
+                            <td contenteditable="true"></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                备注
+                            </td>
+                            <td colspan="5" contenteditable="true"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <a href="#" class="easyui-linkbutton">保存</a>
+                </p>
+            </div>
+            <div id="step-2-div" class="step-div" title="2.入场检测">
+
+                <table class="easyui-datagrid" pagination="true">
+                    <thead>
+                        <tr>
+                            <th field="t1" width="300px">项目名称</th>
+                            <th field="t4" width="80px">检测时间</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>宝鸡如家酒店有限公司广园路店</td>
+                            <td contenteditable="true"></td>  
+                        </tr>
+                        <tr>
+                            <td>英才网络教育咨询有限公司高新校区装修工程</td>
+                            <td>2015-09-23</td>    
+                        </tr>
+                        <tr>
+                            <td>盛和大酒店</td>
+                            <td>2015-09-23</td>      
+                        </tr>
+                        <tr>
+                            <td>宝鸡如家酒店有限公司广园路店</td>
+                            <td>2015-09-23</td>
+                        </tr>
+                        <tr>
+                            <td>汉滨区悦动生态健身俱乐部装修工程</td>
+                            <td>2015-09-23</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <a href="#" class="easyui-linkbutton">保存并继续</a>
+            </div>
+            <div id="step-3-div" class="step-div" title="3.出具报告">
+                <div style="margin:0 auto;">
+                    <table class="easyui-datagrid" pagination="true">
+                        <thead>
+                            <tr>
+                                <th field="t1" width="300px">项目名称</th>
+                                <th field="t4" width="80px">检测时间</th>
+                                <th field="t5" width="200px">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>宝鸡如家酒店有限公司广园路店</td>
+                                <td contenteditable="true"></td>
+                                <td>
+                                    <a href="#">生成报告</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>英才网络教育咨询有限公司高新校区装修工程</td>
+                                <td>2015-09-23</td>
+                                <td>
+                                    <a href="#">生成报告</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>盛和大酒店</td>
+                                <td>2015-09-23</td>
+                                <td>
+                                    <a href="#">生成报告</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>宝鸡如家酒店有限公司广园路店</td>
+                                <td>2015-09-23</td>
+                                <td>
+                                    <a href="#">生成报告</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>汉滨区悦动生态健身俱乐部装修工程</td>
+                                <td>2015-09-23</td>
+                                <td>
+                                    <a href="#">生成报告</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="step-4-div" class="step-div" title="4.提交备案">
+                <table class="easyui-datagrid" pagination="true">
+                    <thead>
+                        <tr>
+                            <th field="t1" width="300px">项目名称</th>
+                            <th field="t4" width="80px">检测时间</th>
+                            <th field="t5" width="200px">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>宝鸡如家酒店有限公司广园路店</td>
+                            <td contenteditable="true"></td>
+                            <td>
+                                <a href="#">提交备案</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>英才网络教育咨询有限公司高新校区装修工程</td>
+                            <td>2015-09-23</td>
+                            <td>
+                                <a href="#">提交备案</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>盛和大酒店</td>
+                            <td>2015-09-23</td>
+                            <td>
+                                <a href="#">提交备案</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>宝鸡如家酒店有限公司广园路店</td>
+                            <td>2015-09-23</td>
+                            <td>
+                                <a href="#">提交备案</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>汉滨区悦动生态健身俱乐部装修工程</td>
+                            <td>2015-09-23</td>
+                            <td>
+                                <a href="#">提交备案</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+            
+        </div>
+</body>
+</html>

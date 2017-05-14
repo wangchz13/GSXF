@@ -1,0 +1,147 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>FWZL</title>
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/Content/easyuijs")
+    <style>
+        .star{
+            width:24px;
+            height:20px;
+            background: url(../../Content/img/star.png);
+            float:left;
+        }
+        .star.checked{
+            background: url(../../Content/img/star.png) 0 -20px !important;
+        }
+        .star_bg{
+            width:120px;
+            height:20px;
+            text-align:center;
+        }
+        td{
+            text-align:center;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $(".star_1").attr("title", "差");
+            $(".star_2").attr("title", "较差");
+            $(".star_3").attr("title", "普通");
+            $(".star_4").attr("title", "较好");
+            $(".star_5").attr("title", "好");
+        });
+    </script>
+</head>
+<body>
+    
+
+    <table class="easyui-datagrid" pagination="true">
+        <thead>
+            <tr>
+                <th field="t11" width="260px">机构名称</th>
+                <th field="t2" width="100px">服务类型</th>
+                <th field="t3" width="80px">所属地区</th>
+                <th field="t4" width="124px">服务评价</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>兰州市泰合工贸有限公司</td>
+                <td>安全评估</td>
+                <td>兰州</td>
+                <td>
+                    <div class="star_bg">
+                        <div class="star checked star_1"></div>
+                        <div class="star checked star_2"></div>
+                        <div class="star checked star_3"></div>
+                        <div class="star  star_4"></div>
+                        <div class="star  star_5"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>甘肃省消防检测服务有限公司</td>
+                <td>安全评估</td>
+                <td>兰州</td>
+                <td>
+                    <div class="star_bg">
+                        <div class="star checked star_1"></div>
+                        <div class="star checked star_2"></div>
+                        <div class="star checked star_3"></div>
+                        <div class="star checked star_4"></div>
+                        <div class="star  star_5"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>甘肃津元消防检测维护服务有限公司</td>
+                <td>安全评估</td>
+                <td>天水</td>
+
+                <td>
+                    <div class="star_bg">
+                        <div class="star checked star_1"></div>
+                        <div class="star checked star_2"></div>
+                        <div class="star  star_3"></div>
+                        <div class="star  star_4"></div>
+                        <div class="star  star_5"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>甘肃省建筑消防设施监测有限公司</td>
+                <td>安全评估</td>
+                <td>兰州新区</td>
+
+                <td>
+                    <div class="star_bg">
+                        <div class="star checked star_1"></div>
+                        <div class="star checked star_2"></div>
+                        <div class="star checked star_3"></div>
+                        <div class="star checked star_4"></div>
+                        <div class="star  star_5"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>甘肃消防检测维护服务有限公司</td>
+                <td>安全评估</td>
+                <td>兰州</td>
+
+                <td>
+                    <div class="star_bg">
+                        <div class="star checked star_1"></div>
+                        <div class="star checked star_2"></div>
+                        <div class="star checked star_3"></div>
+                        <div class="star  star_4"></div>
+                        <div class="star  star_5"></div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>天鸿消防技术检测有限公司</td>
+                <td>安全评估</td>
+                <td>白银</td>
+
+                <td>
+                    <div class="star_bg">
+                        <div class="star checked star_1"></div>
+                        <div class="star  star_2"></div>
+                        <div class="star  star_3"></div>
+                        <div class="star  star_4"></div>
+                        <div class="star  star_5"></div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

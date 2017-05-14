@@ -1,0 +1,177 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>消防机构</title>
+
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/Content/easyuijs")
+
+    <link href="~/Content/admin/admin.css" rel="stylesheet" />
+    <script src="~/Content/admin/admin.js"></script>
+    <script src="~/Content/Highcharts/highcharts.js"></script>
+    <script src="~/Content/Highcharts/exporting.js"></script>
+    <style>
+    </style>
+</head>
+
+<body class="easyui-layout">
+    <div region="north" border="true" split="true" style="overflow:hidden; height:100px;">
+        <div class="top-bg">
+        </div>
+    </div>
+    <div region="south" border="true" split="true" style="overflow:hidden;height:40px;">
+        <div class="footer">版权所有:甘肃省消防总队</div>
+    </div>
+    <div region="west" split="true" title="菜单" style="width:200px;">
+        <div id="aa" class="easyui-accordion" style="position:absolute;top:27px;left:0px;right:0px;bottom:0px;">
+            <ul class="easyui-tree">
+                <li>
+                    <span><a target="mainFrame" href=@Url.Action("Index_XFJG")>主页</a></span>
+                </li>
+                <li>
+                    <span><a target="mainFrame" href=@Url.Action("XMJG")>项目监管</a></span>
+                </li>
+                <li>
+                    <span><a target="mainFrame" href=@Url.Action("BGBA")>报告备案</a></span>
+                </li>
+                <li>
+                    <span>查询统计</span>
+                    <ul>
+                        <li>
+                            <span><a target="mainFrame" href=@Url.Action("XMCX")>项目查询</a></span>
+                        </li>
+                        <li>
+                            <span>机构查询</span>
+                            <ul>
+                                <li>
+                                    <span><a target="mainFrame" href=@Url.Action("SNJG")>省内机构</a></span>
+                                </li>
+                                <li>
+                                    <span><a target="mainFrame" href=@Url.Action("SWJG")>省外机构</a></span>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <span><a target="mainFrame" href=@Url.Action("JGBA")>机构备案</a></span>
+                </li>
+                <li>
+                    <span>服务质量</span>
+                    <ul>
+                        <li>
+                            <span><a target="mainFrame" href=@Url.Action("FWZL")>竣工检测</a></span>
+                        </li>
+                        <li>
+                            <span><a target="mainFrame" href=@Url.Action("FWZL2")>年度检测</a></span>
+                        </li>
+                        <li>
+                            <span><a target="mainFrame" href=@Url.Action("FWZL3")>维护保养</a></span>
+                        </li>
+                        <li>
+                            <span><a target="mainFrame" href=@Url.Action("FWZL4")>安全评估</a></span>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+    <div id="mainPanel" region="center" style="overflow:hidden;">
+        <div id="tabs" class="easyui-tabs" fit="true" border="false">
+            <div title="主页" style="padding: 0px; overflow: hidden;" id="home">
+                <div id="container" style="height: 400px;max-width:1100px; margin: 0 auto"></div>
+                <script type="text/javascript">
+                    Highcharts.setOptions({
+                        lang: {
+                            contextButtonTitle: "图表菜单",
+                            printChart: "打印图片",
+                            downloadJPEG: "下载JPEG 图片",
+                            downloadPDF: "下载PDF文档",
+                            downloadPNG: "下载PNG 图片",
+                            downloadSVG: "下载SVG 矢量图",
+                            exportButtonTitle: "导出图片"
+                        }
+                    });
+
+
+                    Highcharts.chart('container', {
+                        chart: {
+                            type: 'column'
+                        },
+                        title: {
+                            text: '地州市统计表'
+                        },
+                        xAxis: {
+                            categories: [
+                                '兰州',
+                                '天水',
+                                '金昌',
+                                '白银',
+                                '武威',
+                                '平凉',
+                                '酒泉',
+                                '庆阳',
+                                '定西',
+                                '陇南',
+                                '临夏',
+                                '嘉峪关',
+			                    '甘南',
+			                    '张掖',
+			                    '兰州新区'
+                            ],
+                            crosshair: true
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: '项目数量 (个)'
+                            }
+                        },
+                        tooltip: {
+                            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                                '<td style="padding:0"><b>{point.y} 个</b></td></tr>',
+                            footerFormat: '</table>',
+                            shared: true,
+                            useHTML: true
+                        },
+                        plotOptions: {
+                            column: {
+                                pointPadding: 0.2,
+                                borderWidth: 0
+                            }
+                        },
+                        series: [{
+                            name: '竣工检测',
+                            data: [49, 71, 106, 129, 144, 176, 135, 148, 216, 194, 95, 54,80,103,60]
+
+                        }, {
+                            name: '年度检测',
+                            data: [83, 78, 98, 93, 106, 84, 105, 104, 91, 83, 106, 92,90,64,43]
+
+                        }, {
+                            name: '维护保养',
+                            data: [48, 38, 39, 41, 47, 48, 59, 59, 52, 65, 59, 51,25,90,80]
+
+                        }, {
+                            name: '安全评估',
+                            data: [42, 33, 34, 39, 52, 75, 57, 60, 47, 39, 46, 51,34,87,92]
+
+                        }]
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

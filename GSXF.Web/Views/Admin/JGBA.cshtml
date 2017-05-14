@@ -1,0 +1,212 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>JGBA</title>
+
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/Content/easyuijs")
+
+    <script>
+        $(document).ready(function () {
+            $("#next-page").click(function () {
+                $('#tabs').tabs('select', "人员信息");
+
+            });
+            $("#front-page").click(function () {
+                $('#tabs').tabs('select', "机构信息");
+            });
+        });
+    </script>
+
+</head>
+<body style="padding:0px;margin:0px;">
+    <div class="easyui-tabs" border="false" id="tabs">
+        <div title="机构信息" style="padding:10px">
+            
+
+            <table id="jgxx">
+                <tr>
+                    <td>机构名称：</td>
+                    <td colspan="3">
+                        <input class="easyui-textbox" style="width:100%;">
+                    </td>
+                </tr>
+                <tr>
+                    <td>资质等级：</td>
+                    <td>
+                        <select class="easyui-combobox" name="state"
+                                data-options="panelHeight:'102px'" editable="false">
+                            <option value="1">一级</option>
+                            <option value="2">二级</option>
+                            <option value="3">三级</option>
+                            <option value="4">临时一级</option>
+                            <option value="5">临时二级</option>
+                            <option value="6">临时三级</option>
+                        </select>
+                    </td>
+                    <td>证书编号：</td>
+                    <td>
+                        <input class="easyui-textbox">
+                    </td>
+                    <td>证书有效日期：</td>
+                    <td>
+                        <input class="easyui-datebox" editable="false">
+                    </td>
+                </tr>
+                <tr>
+                    <td>办公场所地址：</td>
+                    <td colspan="3"><input class="easyui-textbox" style="width:100%">&nbsp;</td>
+                    <td>办公场所建筑面积：</td>
+                    <td><input class="easyui-textbox" style="height:23px">m2&nbsp;</td>
+                    <td><button>新增</button></td>
+                </tr>
+
+                <tr>
+                    <td>办公场所建筑总面积：</td>
+                    <td><input class="easyui-textbox">m2</td>
+                    <td>注册资金：</td>
+                    <td><input class="easyui-textbox">万元</td>
+                </tr>
+                <tr>
+                    <td>法定代表人：</td>
+                    <td><input class="easyui-textbox"></td>
+                    <td>办公电话：</td>
+                    <td><input class="easyui-textbox"></td>
+                    <td style="text-align:right">手机号码：</td>
+                    <td><input class="easyui-textbox"></td>
+                </tr>
+                <tr>
+                    <td>联系人：</td>
+                    <td><input class="easyui-textbox"></td>
+                    <td>办公电话：</td>
+                    <td><input class="easyui-textbox"></td>
+                    <td style="text-align:right">手机号码：</td>
+                    <td><input class="easyui-textbox"></td>
+                </tr>
+                <tr>
+                    <td>传真：</td>
+                    <td><input class="easyui-textbox"></td>
+                    <td>邮政编码：</td>
+                    <td><input class="easyui-textbox"></td>
+                    <td style="text-align:right">电子邮件：</td>
+                    <td><input class="easyui-textbox"></td>
+                </tr>
+                <tr>
+                    <td>人员信息汇总：</td>
+                    <td colspan="5"><input class="easyui-textbox" data-options="multiline:true" value="专业技术人员0人，操作人员0人" style="height:38px;width:100%" disabled="disabled"></td>
+                </tr>
+                <tr>
+                    <td>执业开通状态：</td>
+                    <td>待开通（未申请）</td>
+                </tr>
+            </table>
+            <br />
+            <div style="width:100px;margin:0 auto; height:50px;">
+                <a href="#" class="easyui-linkbutton" style="float:right;" id="next-page">下一页</a>
+            </div>
+            <div style="color:red">
+                提示：<br />
+                1.机构备案申请提交以后可以修改人员信息，其他信息请到消防总队申请修改。<br />
+                2.请尽快开通机构备案申请，申请通过后才能对项目进行登记。
+            </div>
+
+        </div>
+        <div title="人员信息" style="padding:0px;">
+
+            <div id="tb" style="height:auto">
+                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="$('#dlg').dialog('open')">添加</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除</a>
+            </div>
+            <table class="easyui-datagrid" style="width:100%;height:80%">
+                <thead>
+                    <tr>
+                        <th field="firstname" width="80">姓名</th>
+                        <th field="lastname" width="60">性别</th>
+                        <th field="phone" width="120">人员类别</th>
+                        <th field="email" width="100">证书编号</th>
+                        <th field="t" width="100">是否是技术负责人</th>
+                        <th field="tq" width="120">身份证号</th>
+                        <th field="t" width="120">办公电话</th>
+                        <th field="t" width="120">手机号码</th>
+                    </tr>
+                </thead>
+
+            </table>
+            <div style="margin:0 auto;width:200px;">
+                <a href="#" class="easyui-linkbutton" id="front-page">上一页</a>
+                <a href="#" class="easyui-linkbutton" iconCls="icon-save">保存</a>
+            </div>
+            <div id="dlg" class="easyui-dialog" title="人员信息" data-options="iconCls:'icon-save'" style="width:600px;height:400px;padding:10px;" closed="true">
+                <table>
+                    <tr>
+                        <td style="text-align:right;">姓名：</td>
+                        <td><input class="easyui-textbox"></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;">性别：</td>
+                        <td>
+                            <select class="easyui-combobox" name="state" style="width:60px;"
+                                    data-options="panelHeight:'auto'">
+                                <option value="0">男</option>
+                                <option value="1">女</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;">人员类别：</td>
+                        <td>
+                            <select class="easyui-combobox" name="state" style="width:240px;"
+                                    data-options="panelHeight:'auto'">
+                                <option value="0">一级注册消防工程师</option>
+                                <option value="1">二级注册消防工程师</option>
+                                <option value="2">建（构）筑物消防员（初级）</option>
+                                <option value="3">建（构）筑物消防员（中级）</option>
+                                <option value="4">建（构）筑物消防员（高级）</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;">证书编号：</td>
+                        <td><input class="easyui-textbox"></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;">是否是技术负责人：</td>
+                        <td><input type="checkbox" name="ck" value=""></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;">身份证号：</td>
+                        <td><input class="easyui-textbox"></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;">缴金情况：</td>
+                        <td>
+                            <input name="test" type="radio" value="" checked />是
+                            <input name="test" type="radio" value="" />否
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;">办公电话：</td>
+                        <td><input class="easyui-textbox"></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:right;">手机号码：</td>
+                        <td><input class="easyui-textbox"></td>
+                    </tr>
+                </table>
+                <div style="text-align:right">
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'">添加</a>
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-close'">关闭</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
