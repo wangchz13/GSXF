@@ -50,12 +50,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Article.cs" />
+    <Compile Include="ArticleManager.cs" />
     <Compile Include="BaseManager.cs" />
     <Compile Include="Category.cs" />
+    <Compile Include="CategoryManager.cs" />
     <Compile Include="Company.cs" />
+    <Compile Include="CompanyManager.cs" />
     <Compile Include="ContextFactory.cs" />
+    <Compile Include="EmployeeManager.cs" />
     <Compile Include="EnumItem.cs" />
     <Compile Include="GSXFContext.cs" />
+    <Compile Include="OfficeAddressManager.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Employee.cs" />
     <Compile Include="OfficeAddress.cs" />

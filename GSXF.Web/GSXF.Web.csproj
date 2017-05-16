@@ -375,6 +375,16 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GSXF.Auxiliary\GSXF.Auxiliary.csproj">
+      <Project>{676c7b47-bf44-46b6-81fe-c197aed17e3f}</Project>
+      <Name>GSXF.Auxiliary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GSXF.Core\GSXF.Core.csproj">
+      <Project>{948bd759-51d5-40eb-9f06-faa2d42bf4fb}</Project>
+      <Name>GSXF.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
