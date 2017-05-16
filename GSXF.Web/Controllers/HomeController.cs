@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using GSXF.Auxiliary;
+using GSXF.Core;
 
 namespace GSXF.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private static ArticleManager articleManager = new ArticleManager();
+        
         public ActionResult Default()
         {
             return View();
@@ -15,6 +19,7 @@ namespace GSXF.Web.Controllers
 
         public ActionResult Index()
         {
+            articleManager.Add(new Article() { Title = "test" });
             return View();
         }
 
