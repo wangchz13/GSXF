@@ -32,7 +32,7 @@ namespace GSXF.Core
         /// <summary>
         /// 证书有效期
         /// </summary>
-        public DateTime CertificateExpiryDate { get; set; }
+        public Nullable<DateTime> CertificateExpiryDate { get; set; }
         /// <summary>
         /// 办公地址
         /// </summary>
