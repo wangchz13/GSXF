@@ -81,5 +81,7 @@ namespace GSXF.Core
         /// 执业开通状态
         /// </summary>
         public bool Approved { get; set; }
+
+        public ICollection<Employee> Emoloyees { get; set; }
     }
 }

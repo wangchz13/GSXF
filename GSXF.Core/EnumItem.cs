@@ -182,4 +182,13 @@ namespace GSXF.Core
         /// </summary>
         GJXFY
     }
+    /// <summary>
+    /// 性别
+    /// </summary>
+    public enum Gender
+    {
+        man,
+        woman,
+        unknow
+    }
 }

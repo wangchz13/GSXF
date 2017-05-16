@@ -3,14 +3,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GSXF.Core
 {
-    public class Staff
+    public class Employee
     {
         [Key]
         public int ID { get; set; }
-
+        /// <summary>
+        /// 员工姓名
+        /// </summary>
         public string Name { get; set; }
-
-        public int Gender { get; set; }
+        /// <summary>
+        /// 性别
+        /// </summary>
+        public Gender Gender { get; set; }
 
         public StaffLevel Level { get; set; }
 
@@ -23,5 +27,7 @@ namespace GSXF.Core
         public string OfficePhone { get; set; }
 
         public string MobilePhone { get; set; }
+
+        public virtual Company Company { get; set; }
     }
 }

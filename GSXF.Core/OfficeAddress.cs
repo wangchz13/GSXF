@@ -15,5 +15,7 @@ namespace GSXF.Core
         /// 面积
         /// </summary>
         public float Area { get; set; }
+
+        public virtual Company Company { get; set; }
     }
 }
