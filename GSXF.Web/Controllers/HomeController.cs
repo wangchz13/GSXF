@@ -11,7 +11,7 @@ namespace GSXF.Web.Controllers
     public class HomeController : Controller
     {
         private static ArticleManager articleManager = new ArticleManager();
-        
+        private static EmployeeManager employeeManager = new EmployeeManager();
         public ActionResult Default()
         {
             return View();
@@ -41,6 +41,17 @@ namespace GSXF.Web.Controllers
         public ActionResult XMCX()
         {
             return View();
+        }
+
+        public ActionResult AddEmployee(List<Employee> list)
+        {
+            string result = "";
+            foreach(var i in list)
+            {
+                employeeManager.Add(i);
+                
+            }
+            return Json(new { rows = list.Count.ToString(), result = result });
         }
     }
 }
