@@ -39,7 +39,156 @@
             });
             //提交机构备案信息
             $("#Submit").click(function () {
-
+                var _list = {};
+                var rows = $('#dg').datagrid('getRows');
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+                    _list["list[" + i + "].Name"] = rows[i].Name;
+                    _list["list[" + i + "].Gender"] = rows[i].Gender;
+                    _list["list[" + i + "].Level"] = rows[i].Level;
+                    _list["list[" + i + "].CertificateNumber"] = rows[i].CertificateNumber;
+                    _list["list[" + i + "].IdentificationNumber"] = rows[i].IdentificationNumber;
+                    _list["list[" + i + "].IsDirector"] = rows[i].IsDirector;
+                    _list["list[" + i + "].OfficePhone"] = rows[i].OfficePhone;
+                    _list["list[" + i + "].MobilePhone"] = rows[i].MobilePhone;
+                }
+                $.ajax({
+                    url: '/Home/AddEmployee',
+                    data: _list,
+                    dataType: "json",
+                    type: "POST",
+                    success: function (data) {
+                        alert(data.rows + "," + data.result);
+                    }
+                });
+            });
+            //初始化人员信息表
+            $('#dg').datagrid({
+                columns: [[
+                    {
+                        field: 'Name',
+                        title: '姓名',
+                        width: 80,
+                        editor: {
+                            type: 'textbox',
+                            options: {
+                                required: true
+                            }
+                        }
+                    },
+                    {
+                        field: 'Gender',
+                        title: '性别',
+                        width:60,
+                        formatter:function(value){
+                            if(value == 0)
+                                return '男';
+                            else if(value == 1)
+                                return '女';
+                            else return '未知';          
+                        },
+                        editor:{type:'combobox',
+                            options:{
+                                valueField:'Id',
+                                textField:'Text',
+                                method:'get',
+                                url:'/Data/GenderList',
+                                required:true,
+                                editable:false,
+                                panelHeight:'auto'
+                            }
+                        }
+                    },
+                    {
+                        field: 'Level',
+                        title: '人员类别',
+                        width:160,
+                        formatter:function(value){
+                            if(value == 0)
+                                return '一级注册消防工程师';
+                            else if(value == 1)
+                                return '二级注册消防工程师';
+                            else if(value == 2)
+                                return '建(构)筑物消防员(初级)';
+                            else if(value == 3)
+                                return '建(构)筑物消防员(中级)';
+                            else if(value == 4)
+                                return '建(构)筑物消防员(高级)';     
+                        },
+                        editor:{type:'combobox',
+                            options:{
+                                valueField:'Id',
+                                textField:'Text',
+                                method:'get',
+                                url:'/Data/EmployeeLevelList',
+                                required:true,
+                                editable:false,
+                                panelHeight:'auto'
+                            }
+                        }
+                    },
+                    {
+                        field: 'CertificateNumber',
+                        title: '证书编号',
+                        width: 100,
+                        editor: {
+                            type: 'textbox',
+                            options: {
+                                required: true
+                            }
+                        }
+                    },
+                    {
+                        field: 'IdentificationNumber',
+                        title: '身份证号',
+                        width: 100,
+                        editor: {
+                            type: 'textbox',
+                            options: {
+                                required: true
+                            }
+                        }
+                    },
+                    {
+                        field: 'IsDirector',
+                        title: '是否是技术负责人',
+                        width: 100,
+                        align: 'center',
+                        editor: {
+                            type: 'checkbox',
+                            options: {
+                                on: '是',
+                                off: '否',
+                                required: true
+                            }
+                        }
+                    },
+                    {
+                        field: 'OfficePhone',
+                        title: '办公电话',
+                        width: 120,
+                        editor: {
+                            type: 'textbox',
+                            options: {
+                                required: true
+                            }
+                        }
+                    },
+                    {
+                        field: 'MobilePhone',
+                        title: '手机号码',
+                        width: 120,
+                        editor: {
+                            type: 'textbox',
+                            options: {
+                                required: true
+                            }
+                        }
+                    }
+                ]],
+                rownumbers: true,
+                singleSelect: true,
+                onClickRow: onClickRow
             });
         });
     </script>
@@ -151,65 +300,21 @@
         </div>
         <div title="人员信息" style="padding:0px;">
             <div id="tb" style="height:auto">
-                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">Append</a>
-                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">Remove</a>
-                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept()">Accept</a>
-                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">Reject</a>
-                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="getChanges()">GetChanges</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">添加</a>|
+                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除</a>|
+                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept()">保存</a>|
+                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">撤销</a>
             </div>
-            <table id="dg" class="easyui-datagrid" style="width:100%;height:80%"
-                            data-options="
-                                rownumbers:true,
-				                singleSelect: true,
-                                onClickRow:onClickRow
-			">
-                <thead>
-                    <tr>
-                        <th data-options="field:'Name',width:80">姓名</th>
-                        <th data-options="field:'Gender',
-                                        width:60,
-                                        formatter:function(value,row){return row.Text},
-                                        editor:{type:'combobox',
-                                                options:{
-                                                        valueField:'Id',
-                                                        textField:'Text',
-                                                        method:'get',
-                                                        url:'/Data/GenderList',
-                                                        required:true,
-                                                        panelHeight:'auto'
-                                                }
-                            }">性别</th>
-                        <th data-options="field:'Level',
-                                        width:120,
-                                        formatter:function(value,row){return row.Text},
-                                        editor:{type:'combobox',
-                                                options:{
-                                                       valueField:'Id',
-                                                        textField:'Text',
-                                                        method:'get',
-                                                        url:'/Data/EmployeeLevelList',
-                                                        required:true,
-                                                        panelHeight:'auto'
-                                                }
-                            }">人员类别</th>
-                        <th field="CertificateNumber" width="100">证书编号</th>
-                        <th field="IdentificationNumber" width="120">身份证号</th>
-                        <th field="IsDirector" width="100">是否是技术负责人</th>
-                        
-                        <th field="OfficePhone" width="120">办公电话</th>
-                        <th field="OfficePhone" width="120">手机号码</th>
-                    </tr>
-                </thead>
-
-            </table>
+            <table id="dg" class="easyui-datagrid" style="width:100%;height:80%"></table>
             <script type="text/javascript">
                 var editIndex = undefined;
                 function endEditing() {
                     if (editIndex == undefined) { return true }
                     if ($('#dg').datagrid('validateRow', editIndex)) {
-                        var ed = $('#dg').datagrid('getEditor', { index: editIndex, field: 'Gender' });
-                        var productname = $(ed.target).combobox('getText');
-                        $('#dg').datagrid('getRows')[editIndex]['GenderName'] = productname;
+                        //var ed = $('#dg').datagrid('getEditor', { index: editIndex, field: 'Gender' });
+                        //var gendertext = $(ed.target).combobox('getText');
+                        //$('#dg').datagrid('getRows')[editIndex]['Gender'] = gendertext;
+                        //console.log($('#dg').datagrid('getRows')[editIndex]);
                         $('#dg').datagrid('endEdit', editIndex);
                         editIndex = undefined;
                         return true;
@@ -230,7 +335,7 @@
                 }
                 function append() {
                     if (endEditing()) {
-                        $('#dg').datagrid('appendRow', { status: 'P' });
+                        $('#dg').datagrid('appendRow', { IsDirector: '是' });
                         editIndex = $('#dg').datagrid('getRows').length - 1;
                         $('#dg').datagrid('selectRow', editIndex)
                                 .datagrid('beginEdit', editIndex);
@@ -261,69 +366,6 @@
                 <a href="#" class="easyui-linkbutton" id="front-page">上一页</a>
                 <a href="#" class="easyui-linkbutton" iconCls="icon-save" id="Submit">提交</a>
             </div>
-            @*<div id="dlg" class="easyui-dialog" title="人员信息" data-options="iconCls:'icon-save'" style="width:600px;height:400px;padding:10px;" closed="true">
-                <table>
-                    <tr>
-                        <td style="text-align:right;">姓名：</td>
-                        <td><input id="Name" class="easyui-textbox"></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:right;">性别：</td>
-                        <td>
-                            <select id="Gender" class="easyui-combobox" name="state" style="width:60px;"
-                                    data-options="panelHeight:'auto'">
-                                <option value="0">男</option>
-                                <option value="1">女</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:right;">人员类别：</td>
-                        <td>
-                            <select id="Level" class="easyui-combobox" name="state" style="width:240px;"
-                                    data-options="panelHeight:'auto'">
-                                <option value="0">一级注册消防工程师</option>
-                                <option value="1">二级注册消防工程师</option>
-                                <option value="2">建（构）筑物消防员（初级）</option>
-                                <option value="3">建（构）筑物消防员（中级）</option>
-                                <option value="4">建（构）筑物消防员（高级）</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:right;">证书编号：</td>
-                        <td><input id="CertificateNumber" class="easyui-textbox"></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:right;">是否是技术负责人：</td>
-                        <td><input id="IsDirector" type="checkbox" name="ck" value=""></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:right;">身份证号：</td>
-                        <td><input id="IdentificationNumber" class="easyui-textbox"></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:right;">缴金情况：</td>
-                        <td>
-                            <input name="test" type="radio" value="true" checked />是
-                            <input name="test" type="radio" value="false" />否
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:right;">办公电话：</td>
-                        <td><input id="OfficePhone" class="easyui-textbox"></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:right;">手机号码：</td>
-                        <td><input id="MobilePhone" class="easyui-textbox"></td>
-                    </tr>
-                </table>
-                <div style="text-align:right">
-                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" id="BtnAddEmployee">添加</a>
-                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-close'" onclick="$('#dlg').dialog('close')">关闭</a>
-                </div>
-            </div>*@
-
         </div>
     </div>
 </body>
