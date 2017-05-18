@@ -7,16 +7,19 @@ namespace GSXF.Core
     {
         [Key]
         public int ID { get; set; }
+
         /// <summary>
         /// 员工姓名
         /// </summary>
+        [Required]
         public string Name { get; set; }
+
         /// <summary>
         /// 性别
         /// </summary>
         public Gender Gender { get; set; }
 
-        public StaffLevel Level { get; set; }
+        public EmployeeLevel Level { get; set; }
 
         public string CertificateNumber { get; set; }
 
