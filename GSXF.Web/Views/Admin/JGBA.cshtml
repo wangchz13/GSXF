@@ -22,6 +22,10 @@
             $("#front-page").click(function () {
                 $('#tabs').tabs('select', "机构信息");
             });
+            $('#addAddress').click(function () {
+                $("#flag").before('<tr><td>办公场所地址：</td><td colspan="3"><input class="easyui-textbox address" style="width:100%">&nbsp;</td><td>办公场所建筑面积：</td><td><input class="easyui-textbox area" style="height:23px">m2&nbsp;</td><td><a class="removeAddress" href="#" onclick="$(this).parent().parent().remove();">删除</a></td></tr>');
+            });
+            
             var editIndex = undefined;
             
             //添加人员信息到表中
@@ -37,31 +41,68 @@
                     MobilePhone:$("MobilePhone").val()
                 });
             });
+            
             //提交机构备案信息
             $("#Submit").click(function () {
-                var _list = {};
+                submitemployee();
+            });
+
+            function submitemployee() {
+                var _employeelist = {};
                 var rows = $('#dg').datagrid('getRows');
                 for (var i = 0; i < rows.length; i++) {
                     var row = rows[i];
-                    _list["list[" + i + "].Name"] = rows[i].Name;
-                    _list["list[" + i + "].Gender"] = rows[i].Gender;
-                    _list["list[" + i + "].Level"] = rows[i].Level;
-                    _list["list[" + i + "].CertificateNumber"] = rows[i].CertificateNumber;
-                    _list["list[" + i + "].IdentificationNumber"] = rows[i].IdentificationNumber;
-                    _list["list[" + i + "].IsDirector"] = rows[i].IsDirector;
-                    _list["list[" + i + "].OfficePhone"] = rows[i].OfficePhone;
-                    _list["list[" + i + "].MobilePhone"] = rows[i].MobilePhone;
+                    _employeelist["list[" + i + "].Name"] = rows[i].Name;
+                    _employeelist["list[" + i + "].Gender"] = rows[i].Gender;
+                    _employeelist["list[" + i + "].Level"] = rows[i].Level;
+                    _employeelist["list[" + i + "].CertificateNumber"] = rows[i].CertificateNumber;
+                    _employeelist["list[" + i + "].IdentificationNumber"] = rows[i].IdentificationNumber;
+                    _employeelist["list[" + i + "].IsDirector"] = rows[i].IsDirector;
+                    _employeelist["list[" + i + "].OfficePhone"] = rows[i].OfficePhone;
+                    _employeelist["list[" + i + "].MobilePhone"] = rows[i].MobilePhone;
                 }
                 $.ajax({
                     url: '/Home/AddEmployee',
-                    data: _list,
+                    data: _employeelist,
                     dataType: "json",
                     type: "POST",
                     success: function (data) {
-                        alert(data.rows + "," + data.result);
+                        alert("人员信息添加成功");
+                        var _addresslist = {};
+                        var addressrows = $(".address").length;
+                        for (var i = 0; i < addressrows; i++) {
+                            _addresslist["list[" + i + "].Address"] = $(".address")[i].value;
+                            _addresslist["list[" + i + "].Area"] = $(".area")[i].value;
+                        }
+                        $.ajax({
+                            url: '/Home/AddOfficeAddress',
+                            data: _addresslist,
+                            dataType: "json",
+                            type: "POST",
+                            success: function (rows) {
+                                alert("地址信息添加成功");
+                                var _company = $("#jgxxForm").serialize();
+                                $.ajax({
+                                    url: '/Home/AddCompany',
+                                    data: _company,
+                                    dataType: "json",
+                                    type: "POST",
+                                    success: function (rows) {
+                                        alert("公司信息添加成功");
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
-            });
+            }
+
+            function submitaddress() {
+                
+            }
+            function submitcompany() {
+                
+            }
             //初始化人员信息表
             $('#dg').datagrid({
                 columns: [[
@@ -153,12 +194,19 @@
                         field: 'IsDirector',
                         title: '是否是技术负责人',
                         width: 100,
+                        formatter: function (value) {
+                            console.log(value);
+                            console.log(typeof (value));
+                            if (value == 'true')
+                                return '是';
+                            else return '否';
+                        },
                         align: 'center',
                         editor: {
                             type: 'checkbox',
                             options: {
-                                on: '是',
-                                off: '否',
+                                on: 'true',
+                                off: 'false',
                                 required: true
                             }
                         }
@@ -190,40 +238,40 @@
                 singleSelect: true,
                 onClickRow: onClickRow
             });
+            
         });
     </script>
 
 </head>
 <body style="padding:0px;margin:0px;">
     <div class="easyui-tabs" border="false" id="tabs">
-        <div title="机构信息" style="padding:10px">
-            
+        <div title="机构信息" style="padding:10px">      
             <form id="jgxxForm" method="post">
                 <table id="jgxx">
                     <tr>
                         <td>机构名称：</td>
                         <td colspan="3">
-                            <input class="easyui-textbox" style="width:100%;">
+                            <input name="Name" class="easyui-textbox" style="width:100%;">
                         </td>
                     </tr>
                     <tr>
                         <td>资质类别：</td>
                         <td>
-                            <select class="easyui-combobox" name="state" editable="false">
-                                <option value="1">维修保养检测</option>
-                                <option value="2">消防安全评估</option>
+                            <select name="QualificationType" class="easyui-combobox" editable="false">
+                                <option value="0">维修保养检测</option>
+                                <option value="1">消防安全评估</option>
                             </select>
                         </td>
                         <td>资质等级：</td>
                         <td>
-                            <select class="easyui-combobox" name="state"
+                            <select name="QualificationLevel" class="easyui-combobox" 
                                     data-options="panelHeight:'102px'" editable="false">
-                                <option value="1">一级</option>
-                                <option value="2">二级</option>
-                                <option value="3">三级</option>
-                                <option value="4">临时一级</option>
-                                <option value="5">临时二级</option>
-                                <option value="6">临时三级</option>
+                                <option value="0">一级</option>
+                                <option value="1">二级</option>
+                                <option value="2">三级</option>
+                                <option value="3">临时一级</option>
+                                <option value="4">临时二级</option>
+                                <option value="5">临时三级</option>
                             </select>
                         </td>
                     </tr>
@@ -231,50 +279,50 @@
 
                         <td>证书编号：</td>
                         <td colspan="2">
-                            <input class="easyui-textbox" style="width:100%;">
+                            <input name="CertificateNumber" class="easyui-textbox" style="width:100%;">
                         </td>
                         <td style="text-align:right;">证书有效日期：</td>
                         <td>
-                            <input class="easyui-datebox" editable="false">
+                            <input name="CertificateExpiryDate" class="easyui-datebox" editable="false">
                         </td>
                     </tr>
                     <tr>
                         <td>办公场所地址：</td>
-                        <td colspan="3"><input class="easyui-textbox" style="width:100%">&nbsp;</td>
+                        <td colspan="3"><input class="easyui-textbox address" style="width:100%">&nbsp;</td>
                         <td>办公场所建筑面积：</td>
-                        <td><input class="easyui-textbox" style="height:23px">m2&nbsp;</td>
-                        <td><a id="addAddressBtn">新增</a></td>
+                        <td><input class="easyui-textbox area" style="height:23px">m2&nbsp;</td>
+                        <td><a id="addAddress" href="#">新增</a></td>
                     </tr>
 
-                    <tr>
+                    <tr id="flag">
                         <td>办公场所建筑总面积：</td>
                         <td><input class="easyui-textbox">m2</td>
                         <td>注册资金：</td>
-                        <td><input class="easyui-textbox">万元</td>
+                        <td><input name="RegisteredCapital" class="easyui-textbox">万元</td>
                     </tr>
                     <tr>
                         <td>法定代表人：</td>
-                        <td><input class="easyui-textbox"></td>
+                        <td><input name="LegalRepresentative" class="easyui-textbox"></td>
                         <td>办公电话：</td>
-                        <td><input class="easyui-textbox"></td>
+                        <td><input name="LROfficePhone" class="easyui-textbox"></td>
                         <td style="text-align:right">手机号码：</td>
-                        <td><input class="easyui-textbox"></td>
+                        <td><input name="LRMobilePhone" class="easyui-textbox"></td>
                     </tr>
                     <tr>
                         <td>联系人：</td>
-                        <td><input class="easyui-textbox"></td>
+                        <td><input name="Contact" class="easyui-textbox"></td>
                         <td>办公电话：</td>
-                        <td><input class="easyui-textbox"></td>
+                        <td><input name="COfficePhone" class="easyui-textbox"></td>
                         <td style="text-align:right">手机号码：</td>
-                        <td><input class="easyui-textbox"></td>
+                        <td><input name="CMobilePhone" class="easyui-textbox"></td>
                     </tr>
                     <tr>
                         <td>传真：</td>
-                        <td><input class="easyui-textbox"></td>
+                        <td><input name="fax" class="easyui-textbox"></td>
                         <td>邮政编码：</td>
-                        <td><input class="easyui-textbox"></td>
+                        <td><input name="Postcode" class="easyui-textbox"></td>
                         <td style="text-align:right">电子邮件：</td>
-                        <td><input class="easyui-textbox"></td>
+                        <td><input name="Email" class="easyui-textbox"></td>
                     </tr>
                     <tr>
                         <td>人员信息汇总：</td>
@@ -285,8 +333,7 @@
                         <td>待开通（未申请）</td>
                     </tr>
                 </table>
-            </form>
-            
+            </form>   
             <br />
             <div style="width:100px;margin:0 auto; height:50px;">
                 <a href="#" class="easyui-linkbutton" style="float:right;" id="next-page">下一页</a>
@@ -296,7 +343,6 @@
                 1.机构备案申请提交以后可以修改人员信息，其他信息请到消防总队申请修改。<br />
                 2.请尽快开通机构备案申请，申请通过后才能对项目进行登记。
             </div>
-
         </div>
         <div title="人员信息" style="padding:0px;">
             <div id="tb" style="height:auto">
