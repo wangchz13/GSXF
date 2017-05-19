@@ -94,9 +94,9 @@ namespace GSXF.Core
         /// <summary>
         /// 执业开通状态
         /// </summary>
-        public bool Approved { get; set; }
+        public Nullable<bool> Approved { get; set; }
 
 
-        public ICollection<Employee> Emoloyees { get; set; }
+        public ICollection<Employee> Employees { get; set; }
     }
 }
