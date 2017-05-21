@@ -102,4 +102,10 @@ namespace GSXF.Core
         女,
         未知
     }
+
+    public enum InstitutionType
+    {
+        消防机构,
+        服务机构
+    }
 }
