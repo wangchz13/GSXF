@@ -54,18 +54,10 @@
         .done .step-num{
             background-color:limegreen;
         }
-        table#xmdj{
-            border:solid #ccc;
-            border-width:1px 0px 0px 1px;
-            width:100%;
-        }
-        td{
-            border:solid #ccc;
-            border-width:0px 1px 1px 0px;
-            text-align:center;
-        }
+        
         input{
             width:inherit;
+            
         }
         .step-div{
             margin:0 auto;
@@ -122,152 +114,128 @@
     </div>
     <div style="height:80%;width:100%;">
         <div class="easyui-tabs" border="false" id="tabs">
-            <div id="step-1-div" class="step-div" title="1.项目登记">
-                <table id="xmdj">
-                    <tbody>
-                        <tr>
-                            <td colspan="7">
-                                项目登记表
-                            </td>
-                        </tr>
-                        <tr>
-                            <td rowspan="5">
-                                委托<br />
-                                单位<br />
-                                信息
-                            </td>
-                            <td>
-                                委托单位
-                            </td>
-                            <td colspan="5" contenteditable="true"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                项目名称
-                            </td>
-                            <td colspan="3" contenteditable="true"></td>
-                            <td>
-                                项目类型
-                            </td>
-                            <td contenteditable="true"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                项目地区
-                            </td>
-                            <td colspan="5" contenteditable="true">
-                                某某市，某某县（选择填入，不同输入）
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                详细地址
-                            </td>
-                            <td colspan="5" contenteditable="true"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                联系人
-                            </td>
-                            <td contenteditable="true"></td>
-                            <td>
-                                联系电话
-                            </td>
-                            <td contenteditable="true"></td>
-                            <td>
-                                电子邮箱
-                            </td>
-                            <td contenteditable="true"></td>
-                        </tr>
-                        <tr>
-                            <td rowspan="7">
-                                项目<br />
-                                信息
-                            </td>
-                            <td>
-                                检测机构
-                            </td>
-                            <td colspan="3" contenteditable="true"></td>
-                            <td>
-                                资质类型
-                            </td>
-                            <td contenteditable="true"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                服务内容
-                            </td>
-                            <td colspan="5" contenteditable="true"></td>
-                        </tr>
-                        <tr>
-                            <td rowspan="2">
-                                服务范围
-                            </td>
-                            <td>
-                                使用性质
-                            </td>
-                            <td>
-                                火灾危险性
-                            </td>
-                            <td>
-                                单体建筑面积
-                            </td>
-                            <td>
-                                建筑层总数
-                            </td>
-                            <td>
-                                技术服务层数
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <select name="fwfw">
-                                    <option value="0">民用建筑</option>
-                                    <option value="1">工业建筑</option>
-                                    <option value="2">其他</option>
-                                </select>
-                            </td>
-                            <td contenteditable="true"></td>
-                            <td contenteditable="true"></td>
-                            <td contenteditable="true"></td>
-                            <td contenteditable="true"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                合同编号
-                            </td>
-                            <td contenteditable="true"></td>
-                            <td>
-                                合同签订日期
-                            </td>
-                            <td contenteditable="true"></td>
-                            <td>
-                                合同起止日期
-                            </td>
-                            <td contenteditable="true"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                项目负责人
-                            </td>
-                            <td contenteditable="true"></td>
-                            <td>
-                                技术负责人
-                            </td>
-                            <td contenteditable="true"></td>
-                            <td>
-                                联系人
-                            </td>
-                            <td contenteditable="true"></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                备注
-                            </td>
-                            <td colspan="5" contenteditable="true"></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div id="step-1-div" title="1.项目登记">
+                <form>
+                    <fieldset>
+                        <legend>项目信息</legend>
+                        <table>
+                            <tr>
+                                <td>项目名称：</td>
+                                <td>
+                                    <input class="easyui-textbox" style="width:100%" />
+                                </td>
+                                <td>项目类型</td>
+                                <td>
+                                    <select name="ProjectType" class="easyui-combobox" editable="false">
+                                        <option value="0">竣工检测</option>
+                                        <option value="1">年度检测</option>
+                                        <option value="2">维护保养</option>
+                                        <option value="3">安全评估</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>项目地区：</td>
+                            </tr>
+                            <tr>
+                                <td>详细地址：</td>
+                                <td>
+                                    <input class="easyui-textbox" style="width:100%" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>建筑类型：</td>
+                                <td>
+                                    <select name="BuildType" class="easyui-combobox" editable="false">
+                                        <option value="0">公用建筑</option>
+                                        <option value="1">民用建筑</option>
+                                    </select>
+                                </td>
+                                <td>火灾危险性：</td>
+                                <td>
+                                    <select name="FireRisk" class="easyui-combobox" editable="false">
+                                        <option value="0">甲</option>
+                                        <option value="1">已</option>
+                                        <option value="0">丙</option>
+                                        <option value="0">丁</option>
+                                        <option value="0">戊</option>
+                                    </select>
+                                </td>
+                                <td>单体建筑面积：</td>
+                                <td>
+                                    <input class="easyui-textbox" />
+                                </td>
+                                <td>建筑层总数：</td>
+                                <td>
+                                    <input class="easyui-textbox" />
+                                </td>
+                                <td>技术服务层数：</td>
+                                <td>
+                                    <input class="easyui-textbox" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>合同编号：</td>
+                                <td>
+                                    <input class="easyui-textbox" />
+                                </td>
+                                <td>合同签订日期：</td>
+                                <td>
+                                    <input class="easyui-datebox" />
+                                </td>
+                                <td>合同起止日期：</td>
+                                <td>
+                                    <input class="easyui-datebox" /><input class="easyui-datebox" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>项目负责人：</td>
+                                <td>
+                                    <input class="easyui-textbox" />
+                                </td>
+                                <td>技术负责人：</td>
+                                <td>
+                                    <input class="easyui-textbox" />
+                                </td>
+                                <td>联系人：</td>
+                                <td>
+                                    <input class="easyui-textbox" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>备注：</td>
+                                <td>
+                                    <input class="easyui-textbox" />
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    <fieldset>
+                        <legend>委托单位信息</legend>
+                        <table>
+                            <tr>
+                                <td>委托单位：</td>
+                                <td>
+                                    <input class="easyui-textbox" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>联系人：</td>
+                                <td>
+                                    <input class="easyui-textbox" />
+                                </td>
+                                <td>联系电话：</td>
+                                <td>
+                                    <input class="easyui-textbox" />
+                                </td>
+                                <td>电子邮箱：</td>
+                                <td>
+                                    <input class="easyui-textbox" />
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </form>
                 <p>
                     <a href="#" class="easyui-linkbutton">保存</a>
                 </p>

@@ -40,19 +40,21 @@
         </div>
         <div class="border" style="padding-bottom:29px">
             <h4 class="title">系统登录</h4>
-            <div>
+            <form action="/Admin/Login" method="post">
                 <div class="form-group">
-                    <input class="form-control" id="username" placeholder="用户名">
+                    <input class="form-control" name="Name" id="username" placeholder="用户名">
                 </div>
 
                 <div class="form-group">
-                    <input type="password" class="form-control" id="password" placeholder="密　码">
+                    <input type="password" class="form-control" name="Password" id="password" placeholder="密　码">
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-default" id="login">登录</button>
+                    <input type="radio" name="InstitutionType" value=0 checked="checked" />消防机构
+                    <input type="radio" name="InstitutionType" value=1 />服务机构
+                    <button type="submit" class="btn btn-default">登录</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
     <div class="col-lg-5 col-md-5 col-sm-5" style="padding-right:0px;">
@@ -60,7 +62,6 @@
             <h4 class="title">通知公告</h4>
             <div class="list">
                 <ul>
-
                     <li>
                         <a title="注册消防工程师管理规定" href="HomePageNoticeDetail.htm?id=6AE1037A98E04E42B4B14E8998B99818&amp;type=1" target="_blank">
 
