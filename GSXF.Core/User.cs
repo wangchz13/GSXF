@@ -14,10 +14,12 @@ namespace GSXF.Core
 
         public string Password { get; set; }
 
-        public DateTime LastLoginTime { get; set; }
+        public Nullable<DateTime> LastLoginTime { get; set; }
 
         public string LastLoginIP { get; set; }
 
-        public DateTime RegTime { get; set; }
+        public Nullable<DateTime> RegTime { get; set; }
+
+        public InstitutionType institutionType { get; set; }
     }
 }
