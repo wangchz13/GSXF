@@ -17,6 +17,8 @@ namespace GSXF.Web.Controllers
         private static EmployeeManager employeeManager = new EmployeeManager();
         private static OfficeAddressManager officeAddressManager = new OfficeAddressManager();
         private static CompanyManager companyManager = new CompanyManager();
+
+        private static ProjectManager projectManager = new ProjectManager();
         private static int employeeRow = 0;
         private static int officeAddressRow = 0;
         public ActionResult Default()
@@ -68,6 +70,7 @@ namespace GSXF.Web.Controllers
         /// </summary>
         /// <param name="list"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult AddOfficeAddress(List<OfficeAddress> list)
         {
             foreach(var i in list)
@@ -78,6 +81,7 @@ namespace GSXF.Web.Controllers
             return Json(new { rows = list.Count });
         }
 
+        [HttpPost]
         public ActionResult AddCompany(Company company)
         {
             if(employeeRow != 0)
@@ -95,6 +99,12 @@ namespace GSXF.Web.Controllers
             }
             companyManager.Add(company);
             return Json("success");
+        }
+
+        [HttpPost]
+        public ActionResult AddProject(Project project)
+        {
+
         }
     }
 }
