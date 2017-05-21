@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using GSXF.Web.Models;
+using GSXF.Core;
 
 namespace GSXF.Web.Controllers
 {
     public class AdminController : Controller
     {
+
+        private static UserManager userManager = new UserManager();
         /// <summary>
         /// 登录
         /// </summary>
@@ -15,6 +19,32 @@ namespace GSXF.Web.Controllers
         public ActionResult Login()
         {
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult Login(FormCollection form)
+        {
+            string name = form["Name"];
+            string password = form["Password"];
+            int institutionType = int.Parse(form["InstitutionType"]);
+            if (userManager.Verify(name, password, (InstitutionType)institutionType))
+            {
+                var user = userManager.Find(name);
+                Session.Add("User", user);
+                user.LastLoginTime = DateTime.Now;
+                user.LastLoginIP = Request.UserHostAddress;
+                userManager.Update(user);
+
+                if(user.institutionType == InstitutionType.消防机构)
+                {
+                    return RedirectToAction("Index_XFJG", "Admin");
+                }else if(user.institutionType == InstitutionType.服务机构)
+                {
+                    return RedirectToAction("Index_FWJG", "Admin");
+                }
+            }
+
+            return Content("用户名或密码不存在！");
         }
 
         /// <summary>
