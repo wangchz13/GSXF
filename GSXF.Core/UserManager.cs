@@ -6,8 +6,18 @@ using System.Threading.Tasks;
 
 namespace GSXF.Core
 {
+    
     public class UserManager : BaseManager<User>
     {
+        public User Find(string name)
+        {
+            return Find(u => u.Name == name);
+        }
 
+        public bool Verify(string name, string password, InstitutionType institutionType)
+        {
+            var user = Find(u => u.Name == name && u.Password == password && u.institutionType == institutionType);
+            return user != null;
+        }
     }
 }
