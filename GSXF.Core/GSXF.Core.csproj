@@ -107,6 +107,7 @@
     <Compile Include="User.cs" />
     <Compile Include="UserAuthorize.cs" />
     <Compile Include="UserCompany.cs" />
+    <Compile Include="UserCompanyManager.cs" />
     <Compile Include="UserManager.cs" />
     <Compile Include="UserRole.cs" />
     <Compile Include="UserRoleManager.cs" />
