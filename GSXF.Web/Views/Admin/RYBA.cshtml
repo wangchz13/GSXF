@@ -18,17 +18,19 @@
             <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="$('#dlg').dialog('open')">添加</a>
             <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除</a>
         </div>
-        <table class="easyui-datagrid" style="width:100%;height:100%">
+        <table class="easyui-datagrid" style="width:100%;height:100%" data-options="dataType:'json',
+               url:'/Data/MyEmployees'
+               ">
             <thead>
                 <tr>
-                    <th field="firstname" width="80">姓名</th>
-                    <th field="lastname" width="60">性别</th>
-                    <th field="phone" width="120">人员类别</th>
-                    <th field="email" width="100">证书编号</th>
-                    <th field="t" width="100">是否是技术负责人</th>
-                    <th field="tq" width="120">身份证号</th>
-                    <th field="t" width="120">办公电话</th>
-                    <th field="t" width="120">手机号码</th>
+                    <th field="Name" width="80">姓名</th>
+                    <th field="Gender" width="60">性别</th>
+                    <th field="Level" width="120">人员类别</th>
+                    <th field="CertificateNumber" width="100">证书编号</th>
+                    <th field="IsDirector" width="100">是否是技术负责人</th>
+                    <th field="IdentificationNumber" width="120">身份证号</th>
+                    <th field="OfficePhone" width="120">办公电话</th>
+                    <th field="MobilePhone" width="120">手机号码</th>
                 </tr>
             </thead>
 

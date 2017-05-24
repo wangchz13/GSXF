@@ -156,7 +156,9 @@ namespace GSXF.Datalibrary
         /// <returns></returns>
         public IQueryable<T> FindPageList(int pageSize, int pageIndex, out int totalNumber)
         {
-            OrderParam _orderParam = null;
+            OrderParam _orderParam = new OrderParam();
+            _orderParam.PropertyName = "ID";
+            _orderParam.Method = OrderMethod.DESC;
             return FindPageList(pageSize, pageIndex, out totalNumber, _orderParam);
         }
 

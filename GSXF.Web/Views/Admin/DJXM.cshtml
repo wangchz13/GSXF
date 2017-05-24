@@ -81,6 +81,20 @@
             $("#btn-4").click(function () {
 
             });
+
+            $("#submitproject").click(function () {
+                var _project = $("#projectform").serialize();
+                $.ajax({
+                    async: false,
+                    url: '/Home/AddProject',
+                    data: _project,
+                    datatype: "json",
+                    type: "POST",
+                    success: function (data) {
+                        alert(data);
+                    }
+                });
+            });
         });
     </script>
 
@@ -115,18 +129,18 @@
     <div style="height:80%;width:100%;">
         <div class="easyui-tabs" border="false" id="tabs">
             <div id="step-1-div" title="1.项目登记">
-                <form>
+                <form action="/Admin/Login" method="post" id="projectform">
                     <fieldset>
                         <legend>项目信息</legend>
                         <table>
                             <tr>
                                 <td>项目名称：</td>
                                 <td>
-                                    <input class="easyui-textbox" style="width:100%" />
+                                    <input class="easyui-textbox" style="width:100%" name="Name" />
                                 </td>
                                 <td>项目类型</td>
                                 <td>
-                                    <select name="ProjectType" class="easyui-combobox" editable="false">
+                                    <select name="Type" class="easyui-combobox" editable="false">
                                         <option value="0">竣工检测</option>
                                         <option value="1">年度检测</option>
                                         <option value="2">维护保养</option>
@@ -140,7 +154,7 @@
                             <tr>
                                 <td>详细地址：</td>
                                 <td>
-                                    <input class="easyui-textbox" style="width:100%" />
+                                    <input class="easyui-textbox" style="width:100%" name="AddressDetail" />
                                 </td>
                             </tr>
                             <tr>
@@ -163,21 +177,21 @@
                                 </td>
                                 <td>单体建筑面积：</td>
                                 <td>
-                                    <input class="easyui-textbox" />
+                                    <input class="easyui-textbox"  name="Area"/>
                                 </td>
                                 <td>建筑层总数：</td>
                                 <td>
-                                    <input class="easyui-textbox" />
+                                    <input class="easyui-textbox" name="AllLayer" />
                                 </td>
                                 <td>技术服务层数：</td>
                                 <td>
-                                    <input class="easyui-textbox" />
+                                    <input class="easyui-textbox" name="ServiceLayer" />
                                 </td>
                             </tr>
                             <tr>
                                 <td>合同编号：</td>
                                 <td>
-                                    <input class="easyui-textbox" />
+                                    <input class="easyui-textbox" name="ContractNumber"/>
                                 </td>
                                 <td>合同签订日期：</td>
                                 <td>
@@ -191,21 +205,21 @@
                             <tr>
                                 <td>项目负责人：</td>
                                 <td>
-                                    <input class="easyui-textbox" />
+                                    <input class="easyui-textbox"  name="PDirector"/>
                                 </td>
                                 <td>技术负责人：</td>
                                 <td>
-                                    <input class="easyui-textbox" />
+                                    <input class="easyui-textbox" name="TDirector" />
                                 </td>
                                 <td>联系人：</td>
                                 <td>
-                                    <input class="easyui-textbox" />
+                                    <input class="easyui-textbox" name="Contact"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>备注：</td>
                                 <td>
-                                    <input class="easyui-textbox" />
+                                    <input class="easyui-textbox" name="Note"/>
                                 </td>
                             </tr>
                         </table>
@@ -216,29 +230,30 @@
                             <tr>
                                 <td>委托单位：</td>
                                 <td>
-                                    <input class="easyui-textbox" />
+                                    <input class="easyui-textbox" name="Object" />
                                 </td>
                             </tr>
                             <tr>
                                 <td>联系人：</td>
                                 <td>
-                                    <input class="easyui-textbox" />
+                                    <input class="easyui-textbox" name="OContact" />
                                 </td>
                                 <td>联系电话：</td>
                                 <td>
-                                    <input class="easyui-textbox" />
+                                    <input class="easyui-textbox" name="OContactPhone"/>
                                 </td>
                                 <td>电子邮箱：</td>
                                 <td>
-                                    <input class="easyui-textbox" />
+                                    <input class="easyui-textbox" name="OContactEmail"/>
                                 </td>
                             </tr>
                         </table>
                     </fieldset>
+                    <p>
+                        <a href="#" class="easyui-linkbutton" id="submitproject">保存</a>
+                    </p>
                 </form>
-                <p>
-                    <a href="#" class="easyui-linkbutton">保存</a>
-                </p>
+                
             </div>
             <div id="step-2-div" class="step-div" title="2.入场检测">
 

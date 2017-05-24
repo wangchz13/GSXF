@@ -32,6 +32,7 @@ namespace GSXF.Core
 
         public DbSet<ActionRole> ActionRoles { get; set; }
 
+        public DbSet<UserCompany> UserCompanies { get; set; }
 
     } 
 }

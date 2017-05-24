@@ -1,0 +1,33 @@
+﻿
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>GCSCX</title>
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/Content/easyuijs")
+</head>
+<body>
+    <div>
+        <table class="easyui-datagrid" data-options="dataType:'json',
+               url:'/Data/AllEmployees'
+               ">
+            <thead>
+                <tr>
+                    <th field="Name" width="80">姓名</th>
+                    <th field="Gender" width="60">性别</th>
+                    <th field="Level" width="120">人员类别</th>
+                    <th field="CertificateNumber" width="100">证书编号</th>
+                    <th field="IsDirector" width="100">是否是技术负责人</th>
+                    <th field="IdentificationNumber" width="120">身份证号</th>
+                    <th field="OfficePhone" width="120">办公电话</th>
+                    <th field="MobilePhone" width="120">手机号码</th>
+                </tr>
+            </thead>
+
+        </table> 
+    </div>
+</body>
+</html>

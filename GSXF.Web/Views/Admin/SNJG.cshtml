@@ -63,80 +63,19 @@
         <input class="easyui-textbox" style="width:120px" />
         <a href="#" class="easyui-linkbutton" iconCls="icon-search">查询</a>
     </fieldset>
-    <table class="easyui-datagrid" pagination="true">
+    <table class="easyui-datagrid" pagination="true" data-options="url:'/Data/Companies'">
         <thead>
             <tr>
-                <th field="t1" width="300px">机构名称</th>
-                <th field="t2" width="160px">资质类别</th>
-                <th field="t7" width="80px">资质等级</th>
+                <th field="Name" width="300px">机构名称</th>
+                <th field="QualificationType" width="160px">资质类别</th>
+                <th field="QualificationLevel" width="80px">资质等级</th>
                 <th field="t3" width="80px">所属地区</th>
                 <th field="t4" width="200px">服务范围</th>
-                <th field="t5" width="160px">证书编号</th>
-                <th field="t6" width="60px">证书状态</th>
+                <th field="CertificateNumber" width="160px">证书编号</th>
+                <th field="Approved" width="60px">证书状态</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>甘肃津元消防检测维护服务有限公司</td>
-                <td>消防设施维护检测</td>
-                <td>临时一级</td>
-                <td>兰州</td>
-
-                <td>可从事甘肃省内各类建（构）筑物消防设施的检测、维修、保养活动。</td>
-                <td>甘公消技字〔2016〕第002号（临）</td>
-                <td>有效</td>
-            </tr>
-            <tr>
-                <td>天水市康龙消防技术服务有限公司</td>
-                <td>安全评估</td>
-                <td>临时一级</td>
-                <td>天水</td>
-
-                <td>可从事各种类型的区域消防安全评估、社会单位消防安全评估、大型活动消防安全评估、特殊消防设计方案安全评估等活动，以及消防法律法规、消防技术标准、一般火灾隐患整改等方面的咨询活动。</td>
-                <td>甘公消技字〔2015〕第003号（临）</td>
-                <td>有效</td>
-            </tr>
-            <tr>
-                <td>鑫安消防技术咨询有限公司</td>
-                <td>安全评估</td>
-                <td>临时二级</td>
-                <td>白银</td>
-
-                <td>可从事各种类型的区域消防安全评估、社会单位消防安全评估、大型活动消防安全评估、特殊消防设计方案安全评估等活动，以及消防法律法规、消防技术标准、一般火灾隐患整改等方面的咨询活动。</td>
-                <td>甘公消技字〔2013〕第004号（临）</td>
-                <td>有效</td>
-            </tr>
-            <tr>
-                <td>甘肃一方泰消防技术服务有限公司</td>
-                <td>消防设施维护检测</td>
-                <td>临时一级</td>
-                <td>嘉峪关</td>
-
-                <td>可从事甘肃省内各类建（构）筑物消防设施的检测、维修、保养活动。</td>
-                <td>甘公消技字〔2014〕第005号（临）</td>
-                <td>有效</td>
-            </tr>
-            <tr>
-                <td>甘肃思坦消防工程有限公司</td>
-                <td>消防设施维护检测</td>
-                <td>临时一级</td>
-                <td>兰州</td>
-
-                <td>可从事甘肃省内各类建（构）筑物消防设施的检测、维修、保养活动。</td>
-                <td>甘公消技字〔2015〕第006号（临）</td>
-                <td>有效</td>
-            </tr>
-            <tr>
-                <td>甘肃祺智消防检测有限公司	</td>
-                <td>消防设施维护检测</td>
-                <td>临时三级</td>
-                <td>兰州</td>
-
-                <td>可从事甘肃省内各类建（构）筑物消防设施的检测、维修、保养活动。</td>
-                <td>甘公消技字〔2015〕第007号（临）</td>
-                <td>有效</td>
-            </tr>
-        </tbody>
+        
     </table>
 
 </body>

@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace GSXF.Core
 {
@@ -19,11 +21,13 @@ namespace GSXF.Core
         /// <summary>
         /// 资质类型
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public QualificationType QualificationType { get; set; }
 
         /// <summary>
         /// 资质等级
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public QualificationLevel QualificationLevel { get; set; }
 
         /// <summary>
@@ -39,6 +43,7 @@ namespace GSXF.Core
         /// <summary>
         /// 办公地址
         /// </summary>
+        [JsonIgnore]
         public virtual ICollection<OfficeAddress> OfficeAddresses { get; set; }
 
         /// <summary>
@@ -96,7 +101,10 @@ namespace GSXF.Core
         /// </summary>
         public Nullable<bool> Approved { get; set; }
 
+        [JsonIgnore]
+        public virtual ICollection<Employee> Employees { get; set; }
 
-        public ICollection<Employee> Employees { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Project> Projects { get; set; }
     }
 }

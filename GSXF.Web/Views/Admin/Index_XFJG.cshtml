@@ -90,6 +90,17 @@
             <div title="主页" style="padding: 0px; overflow: hidden;" id="home">
                 <div id="container" style="height: 400px;max-width:1100px; margin: 0 auto"></div>
                 <script type="text/javascript">
+                    var count = new Array();
+                    $.ajax({
+                        async: false,
+                        url: '/Data/StatisticsData',
+                        datatype: "json",
+                        type: "GET",
+                        success: function (data) {
+                            count = JSON.parse(data);
+                        }
+                    });
+                    
                     Highcharts.setOptions({
                         lang: {
                             contextButtonTitle: "图表菜单",
@@ -152,19 +163,19 @@
                         },
                         series: [{
                             name: '竣工检测',
-                            data: [49, 71, 106, 129, 144, 176, 135, 148, 216, 194, 95, 54,80,103,60]
+                            data: count[0]
 
                         }, {
                             name: '年度检测',
-                            data: [83, 78, 98, 93, 106, 84, 105, 104, 91, 83, 106, 92,90,64,43]
+                            data: count[1]
 
                         }, {
                             name: '维护保养',
-                            data: [48, 38, 39, 41, 47, 48, 59, 59, 52, 65, 59, 51,25,90,80]
+                            data: count[2]
 
                         }, {
                             name: '安全评估',
-                            data: [42, 33, 34, 39, 52, 75, 57, 60, 47, 39, 46, 51,34,87,92]
+                            data: count[3]
 
                         }]
                     });

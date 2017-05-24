@@ -108,4 +108,19 @@ namespace GSXF.Core
         消防机构,
         服务机构
     }
+
+    public enum BuildType
+    {
+        公用建筑,
+        民用建筑
+    }
+
+    public enum FireRisk
+    {
+        甲,
+        乙,
+        丙,
+        丁,
+        戊
+    }
 }

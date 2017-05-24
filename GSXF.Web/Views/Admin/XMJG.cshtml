@@ -87,174 +87,24 @@
             $(".step-2").attr("title", "入场检测");
             $(".step-3").attr("title", "出具报告");
             $(".step-4").attr("title", "提交备案");
+
+            $.ajax({
+                
+            });
+
         });
     </script>
 
-    <table class="easyui-datagrid"pagination="true">
+    <table class="easyui-datagrid"pagination="true" data-options="url:'/Data/Projects'">
         <thead>
             <tr>
-                <th field="t1" width="300px">项目名称</th>
-                <th field="t2" width="260px">服务机构</th>
-                <th field="t3" width="80px">当前状态</th>
+                <th field="Name" width="300px">项目名称</th>
+                <th field="Object" width="260px">服务机构</th>
+                <th field="Progress" width="80px">当前状态</th>
                 <th field="t4" width="160px">项目进度</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>兰州市翠英大酒店</td>
-                <td>兰州市泰合工贸有限公司</td>
-                <td>出具报告</td>
-
-                <td>
-                    <div id="jd" class="jd_bg">
-                        <div class="circle step-1"></div>
-                        
-                        <div class="circle step-2"></div>
-                        
-                        <div class="circle step-3"></div>
-                        <div class="circle step-4 unover"></div>
-
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>兰州大学信息院飞云楼</td>
-                <td>甘肃省消防检测服务有限公司</td>
-                <td>入场检测</td>
-
-                <td>
-                    <div id="jd" class="jd_bg">
-                        <div class="circle step-1"></div>
-                        <div class="circle step-2"></div>
-                        <div class="circle step-3 unover"></div>
-                        <div class="circle step-4 unover"></div>
-
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>天水盛和大酒店</td>
-                <td>甘肃津元消防检测维护服务有限公司</td>
-                <td>登记项目</td>
-
-                <td>
-                    <div id="jd" class="jd_bg">
-                        <div class="circle step-1"></div>
-                        <div class="circle step-2 unover"></div>
-                        <div class="circle step-3 unover"></div>
-                        <div class="circle step-4 unover"></div>
-
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>兰州市锦江阳光大酒店</td>
-                <td>兰州市泰合工贸有限公司</td>
-                <td>入场检测</td>
-
-                <td>
-                    <div id="jd" class="jd_bg">
-                        <div class="circle step-1"></div>
-                        <div class="circle step-2"></div>
-                        <div class="circle step-3 unover"></div>
-                        <div class="circle step-4 unover"></div>
-
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>兰州东方大酒店</td>
-                <td>甘肃省建筑消防设施监测有限公司</td>
-                <td>出具报告</td>
-
-                <td>
-                    <div id="jd" class="jd_bg">
-                        <div class="circle step-1"></div>
-                        <div class="circle step-2"></div>
-                        <div class="circle step-3"></div>
-                        <div class="circle step-4 unover"></div>
-
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>兰州市段家滩路1220号盛源商务宾馆</td>
-                <td>兰州市泰合工贸有限公司</td>
-                <td>出具报告</td>
-
-                <td>
-                    <div id="jd" class="jd_bg">
-                        <div class="circle step-1"></div>
-
-                        <div class="circle step-2"></div>
-
-                        <div class="circle step-3"></div>
-                        <div class="circle step-4 unover"></div>
-
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>兰州大学信息院飞云楼</td>
-                <td>甘肃省消防检测服务有限公司</td>
-                <td>入场检测</td>
-
-                <td>
-                    <div id="jd" class="jd_bg">
-                        <div class="circle step-1"></div>
-                        <div class="circle step-2"></div>
-                        <div class="circle step-3 unover"></div>
-                        <div class="circle step-4 unover"></div>
-
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>甘肃省人民医院</td>
-                <td>甘肃津元消防检测维护服务有限公司</td>
-                <td>登记项目</td>
-
-                <td>
-                    <div id="jd" class="jd_bg">
-                        <div class="circle step-1"></div>
-                        <div class="circle step-2 unover"></div>
-                        <div class="circle step-3 unover"></div>
-                        <div class="circle step-4 unover"></div>
-
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>甘肃卫生职业学院</td>
-                <td>兰州市泰合工贸有限公司</td>
-                <td>入场检测</td>
-
-                <td>
-                    <div id="jd" class="jd_bg">
-                        <div class="circle step-1"></div>
-                        <div class="circle step-2"></div>
-                        <div class="circle step-3 unover"></div>
-                        <div class="circle step-4 unover"></div>
-
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>中国建设银行（兰州民航支行）</td>
-                <td>甘肃省建筑消防设施监测有限公司</td>
-                <td>出具报告</td>
-
-                <td>
-                    <div id="jd" class="jd_bg">
-                        <div class="circle step-1"></div>
-                        <div class="circle step-2"></div>
-                        <div class="circle step-3"></div>
-                        <div class="circle step-4 unover"></div>
-
-                    </div>
-                </td>
-            </tr>
-        </tbody>
+        
     </table>
     
 </body>

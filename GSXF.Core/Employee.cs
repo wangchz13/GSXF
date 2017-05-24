@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
 namespace GSXF.Core
 {
     public class Employee
@@ -17,8 +20,9 @@ namespace GSXF.Core
         /// <summary>
         /// 性别
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public Gender Gender { get; set; }
-
+        [JsonConverter(typeof(StringEnumConverter))]
         public EmployeeLevel Level { get; set; }
 
         public string CertificateNumber { get; set; }

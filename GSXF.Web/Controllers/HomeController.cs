@@ -19,6 +19,8 @@ namespace GSXF.Web.Controllers
         private static CompanyManager companyManager = new CompanyManager();
 
         private static ProjectManager projectManager = new ProjectManager();
+        private static UserCompanyManager userCompanyManager = new UserCompanyManager();
+
         private static int employeeRow = 0;
         private static int officeAddressRow = 0;
         public ActionResult Default()
@@ -48,6 +50,10 @@ namespace GSXF.Web.Controllers
         }
 
         public ActionResult XMCX()
+        {
+            return View();
+        }
+        public ActionResult GCSCX()
         {
             return View();
         }
@@ -98,13 +104,23 @@ namespace GSXF.Web.Controllers
 
             }
             companyManager.Add(company);
+
             return Json("success");
         }
 
         [HttpPost]
         public ActionResult AddProject(Project project)
         {
+            User user = getCurrentUser();
+            int companyID = userCompanyManager.Find(u => u.UserID == user.ID).CompanyID;
+            project.Company = companyManager.Find(companyID);
+            projectManager.Add(project);
+            return Json("添加项目成功");
+        }
 
+        public User getCurrentUser()
+        {
+            return Session["User"] as User;
         }
     }
 }
