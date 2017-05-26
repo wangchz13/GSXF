@@ -20,5 +20,6 @@ namespace GSXF.Model
 
         public bool IsAllowedAllRoles { get; set; }
 
+        public string Description { get; set; }
     }
 }

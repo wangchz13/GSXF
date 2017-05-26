@@ -170,6 +170,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -372,6 +373,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Data\" />
+    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -389,6 +391,10 @@
     <ProjectReference Include="..\GSXF.Model\GSXF.Model.csproj">
       <Project>{948bd759-51d5-40eb-9f06-faa2d42bf4fb}</Project>
       <Name>GSXF.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GSXF.Security\GSXF.Security.csproj">
+      <Project>{43392fef-7699-46b1-9cd8-fb78136e3944}</Project>
+      <Name>GSXF.Security</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
