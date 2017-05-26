@@ -15,9 +15,9 @@ namespace GSXF.DataBase
             return Find(u => u.Name == name);
         }
 
-        public bool Verify(string name, string password, InstitutionType institutionType)
+        public bool Verify(string name, string password)
         {
-            var user = Find(u => u.Name == name && u.Password == password && u.institutionType == institutionType);
+            var user = Find(u => u.Name == name && u.Password == password);
             return user != null;
         }
     }
