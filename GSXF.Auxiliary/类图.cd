@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GSXF.Auxiliary.OrderParam" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>OrderParam.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GSXF.Auxiliary.Paging&lt;T&gt;">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAEAAAAAAIAAAAAAAAEAAAAAA=</HashCode>
+      <FileName>Paging.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GSXF.Auxiliary.Response" Collapsed="true">
+    <Position X="0.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAAAAAAAAABAAAAAAIAAAAAA=</HashCode>
+      <FileName>Response.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="GSXF.Auxiliary.OrderMethod" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAA=</HashCode>
+      <FileName>OrderParam.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>
