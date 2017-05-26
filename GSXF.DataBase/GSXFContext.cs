@@ -35,5 +35,6 @@ namespace GSXF.DataBase
 
         public DbSet<UserCompany> UserCompanies { get; set; }
 
+        public DbSet<FireControlInstitution> FireControlInstitutions { get; set; }
     } 
 }
