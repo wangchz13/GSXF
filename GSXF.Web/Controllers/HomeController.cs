@@ -5,8 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using GSXF.Auxiliary;
 using Newtonsoft.Json;
-using GSXF.Core;
-
+using GSXF.DataBase;
+using GSXF.Model;
 
 
 namespace GSXF.Web.Controllers
@@ -114,6 +114,7 @@ namespace GSXF.Web.Controllers
             User user = getCurrentUser();
             int companyID = userCompanyManager.Find(u => u.UserID == user.ID).CompanyID;
             project.Company = companyManager.Find(companyID);
+            project.CompanyName = project.Company.Name;
             projectManager.Add(project);
             return Json("添加项目成功");
         }

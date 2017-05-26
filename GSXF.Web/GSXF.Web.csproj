@@ -282,11 +282,8 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\Json\Gender.json" />
-    <None Include="Properties\PublishProfiles\32321321312.pubxml" />
-    <None Include="Properties\PublishProfiles\test.pubxml" />
-    <None Include="Properties\PublishProfiles\test2.pubxml" />
-    <None Include="Properties\PublishProfiles\test3.pubxml" />
-    <None Include="Properties\PublishProfiles\tttttttttttt.pubxml" />
+    <Content Include="Content\注册消防工程师管理规定.pdf" />
+    <None Include="Properties\PublishProfiles\123.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -305,7 +302,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -368,6 +367,7 @@
     <Content Include="Views\Admin\Login.cshtml" />
     <Content Include="Views\Home\XMCX.cshtml" />
     <Content Include="Views\Home\GCSCX.cshtml" />
+    <Content Include="Views\Admin\ZCGCS.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -382,9 +382,13 @@
       <Project>{676c7b47-bf44-46b6-81fe-c197aed17e3f}</Project>
       <Name>GSXF.Auxiliary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GSXF.Core\GSXF.Core.csproj">
+    <ProjectReference Include="..\GSXF.DataBase\GSXF.DataBase.csproj">
+      <Project>{1ef15ea9-4f3a-43c5-b081-7af5c1afda25}</Project>
+      <Name>GSXF.DataBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GSXF.Model\GSXF.Model.csproj">
       <Project>{948bd759-51d5-40eb-9f06-faa2d42bf4fb}</Project>
-      <Name>GSXF.Core</Name>
+      <Name>GSXF.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

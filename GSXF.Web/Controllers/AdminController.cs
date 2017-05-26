@@ -4,7 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using GSXF.Web.Models;
-using GSXF.Core;
+using GSXF.DataBase;
+using GSXF.Model;
 
 namespace GSXF.Web.Controllers
 {
@@ -89,6 +90,11 @@ namespace GSXF.Web.Controllers
         /// </summary>
         /// <returns></returns>
         public ActionResult PJYM()
+        {
+            return View();
+        }
+
+        public ActionResult ZCGCS()
         {
             return View();
         }

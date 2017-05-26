@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using GSXF.Core;
+using GSXF.DataBase;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Linq;
 using GSXF.Auxiliary;
+using GSXF.Model;
 
 namespace GSXF.Web.Controllers
 {
@@ -28,6 +29,12 @@ namespace GSXF.Web.Controllers
         public string GenderList()
         {
             var data = EnumToObject(typeof(Gender));
+            return JsonConvert.SerializeObject(data);
+        }
+
+        public string CityList()
+        {
+            var data = EnumToObject(typeof(City));
             return JsonConvert.SerializeObject(data);
         }
 

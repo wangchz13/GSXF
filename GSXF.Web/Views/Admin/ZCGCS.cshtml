@@ -1,0 +1,52 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/Content/easyuijs")
+    <title>ZCGCS</title>
+</head>
+<body style=" margin:0px;font-size:10px;">
+    <fieldset style="border-width:1px">
+        <legend>查询信息</legend>
+        待补充...
+        <a href="#" class="easyui-linkbutton" iconCls="icon-search">查询</a>
+    </fieldset>
+    <table class="easyui-datagrid" style="width:100%;min-height:400px;" pagination="true" data-options="dataType:'json',
+               url:'/Data/AllEmployees'
+               ">
+        <thead>
+            <tr>
+                <th field="Name" width="80">姓名</th>
+                <th field="Gender" width="60">性别</th>
+                <th field="Level" width="120">证书类别</th>
+                <th field="CertificateNumber" width="100">证书编号</th>
+                <th field="IsDirector" width="100" data-options="formatter: function (value) {
+                            if (value == 'true')
+                                return '是';
+                            else return '否';
+                        }">是否是技术负责人</th>
+                <th field="IdentificationNumber" width="120">身份证号</th>
+                <th field="OfficePhone" width="120">办公电话</th>
+                <th field="MobilePhone" width="120">手机号码</th>
+                <th field="t" width="60"
+                    data-options="formatter:function(value,row){
+                            if(row.CompanyName == null)
+                                return '否';
+                            else return '是';          
+                        }"
+                    >是否注册</th>
+                <th field="CompanyName" width="120">注册公司</th>
+            </tr>
+        </thead>
+
+    </table>
+</body>
+</html>

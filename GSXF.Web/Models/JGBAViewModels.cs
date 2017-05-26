@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using GSXF.Core;
+using GSXF.DataBase;
+using GSXF.Model;
 
 namespace GSXF.Web.Models
 {
