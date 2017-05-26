@@ -13,6 +13,13 @@ namespace GSXF.Web
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.IgnoreRoute("*.pdf");
+
+            routes.MapRoute(
+                name: "User",
+                url: "User/{name}",
+                defaults: new {controller="User",action="Index"}
+            );
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
