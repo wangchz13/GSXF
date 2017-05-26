@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="GSXF.Model.Action" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAAgAAAAAAAAAAAAAAAAAAQAAAEAAAQAAA=</HashCode>
+      <FileName>Action.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GSXF.Model.ActionRole" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAggAAAAAAAAAAAAAAAAAAAAAAAAAAABAA=</HashCode>
+      <FileName>ActionRole.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GSXF.Model.Article" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAgEAAAAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>Article.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GSXF.Model.Category" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAgAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Category.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GSXF.Model.Company" Collapsed="true">
+    <Position X="0.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIGAAAACACgAgAAACAAAgAQACAgAAIIABAIAwAAAAwA=</HashCode>
+      <FileName>Company.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GSXF.Model.Employee" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAgACABAAAAAQAAAAAAEIRAAAABAAAgAA=</HashCode>
+      <FileName>Employee.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GSXF.Model.OfficeAddress" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAAAAAACAAAABQAAAAA=</HashCode>
+      <FileName>OfficeAddress.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GSXF.Model.Project" Collapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACSQAAAAAEggAoCACAABREAACBAAAEAQAABQGAAEA=</HashCode>
+      <FileName>Project.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GSXF.Model.Role" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAggAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Role.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GSXF.Model.User" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAgAgAAAEAAAQAAAAAAAACACAAAAAAAAA=</HashCode>
+      <FileName>User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GSXF.Model.UserCompany" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAgAAAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UserCompany.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GSXF.Model.UserRole" Collapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAgAAAAAAAAAgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UserRole.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="GSXF.Model.QualificationType" Collapsed="true">
+    <Position X="4" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EnumItem.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GSXF.Model.QualificationLevel" Collapsed="true">
+    <Position X="2.25" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIBAAAAAAAAAAAAAAAAgAAAACAA=</HashCode>
+      <FileName>EnumItem.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GSXF.Model.ProjectType" Collapsed="true">
+    <Position X="0.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAIAAgAAgAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>EnumItem.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GSXF.Model.ProjectProgress" Collapsed="true">
+    <Position X="5.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAIAAAAAAAAAIABAAAAAAAAAA=</HashCode>
+      <FileName>EnumItem.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GSXF.Model.City" Collapsed="true">
+    <Position X="2.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAAwACIEAAACAAAQgAAAAgLAgAAAAAA=</HashCode>
+      <FileName>EnumItem.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GSXF.Model.EmployeeLevel" Collapsed="true">
+    <Position X="4" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAACAAAQAAAAAAASAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EnumItem.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GSXF.Model.Gender" Collapsed="true">
+    <Position X="2.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAAAAAIAAAAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>EnumItem.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GSXF.Model.InstitutionType" Collapsed="true">
+    <Position X="4" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAEAAAAAA=</HashCode>
+      <FileName>EnumItem.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GSXF.Model.BuildType" Collapsed="true">
+    <Position X="0.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>EnumItem.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GSXF.Model.FireRisk" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAASAAASAAAAAAAAAAIAA=</HashCode>
+      <FileName>EnumItem.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="GSXF.Model.FireControlInstitution" Collapsed="true">
+    <Position X="5.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IQQbJhAiEoqOsswoPFI4ChOSSIRwOQAIGTkUSwMcOSA=</HashCode>
+      <FileName>EnumItem.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>
