@@ -13,6 +13,9 @@ namespace GSXF.Web.Controllers
     {
 
         private static UserManager userManager = new UserManager();
+        private static UserRoleManager userRoleManager = new UserRoleManager();
+        private static RoleManager roleManager = new RoleManager();
+
         /// <summary>
         /// 登录
         /// </summary>
@@ -28,18 +31,20 @@ namespace GSXF.Web.Controllers
             string name = form["Name"];
             string password = form["Password"];
             int institutionType = int.Parse(form["InstitutionType"]);
-            if (userManager.Verify(name, password, (InstitutionType)institutionType))
+            if (userManager.Verify(name, password))
             {
-                var user = userManager.Find(name);
-                Session.Add("User", user);
-                user.LastLoginTime = DateTime.Now;
-                user.LastLoginIP = Request.UserHostAddress;
+                var user = userManager.Find(name); 
+                user.LoginTime = DateTime.Now;
+                user.LoginIP = Request.UserHostAddress;
                 userManager.Update(user);
+                Session.Add("User", user);
 
-                if(user.institutionType == InstitutionType.消防机构)
+                var _roleID = userRoleManager.Find(u => u.UserID == user.ID).RoleID;
+                var _roleName = roleManager.Find(_roleID).Name;
+                if(_roleName == "消防机构总队")
                 {
                     return RedirectToAction("Index_XFJG", "Admin");
-                }else if(user.institutionType == InstitutionType.服务机构)
+                }else if(_roleName == "服务机构")
                 {
                     return RedirectToAction("Index_FWJG", "Admin");
                 }
