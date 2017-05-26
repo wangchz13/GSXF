@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+
 namespace GSXF.Model
 {
     /// <summary>
@@ -14,12 +15,10 @@ namespace GSXF.Model
 
         public string Password { get; set; }
 
-        public Nullable<DateTime> LastLoginTime { get; set; }
+        public DateTime? LoginTime { get; set; }
 
-        public string LastLoginIP { get; set; }
+        public string LoginIP { get; set; }
 
-        public Nullable<DateTime> RegTime { get; set; }
-
-        public InstitutionType institutionType { get; set; }
+        public DateTime? RegTime { get; set; }
     }
 }
