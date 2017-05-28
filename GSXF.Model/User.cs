@@ -20,5 +20,7 @@ namespace GSXF.Model
         public string LoginIP { get; set; }
 
         public DateTime? RegTime { get; set; }
+
+        public bool IsOnline { get; set; }
     }
 }
