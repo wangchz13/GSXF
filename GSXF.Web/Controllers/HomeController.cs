@@ -11,6 +11,7 @@ using GSXF.Model;
 
 namespace GSXF.Web.Controllers
 {
+    
     public class HomeController : Controller
     {
         private static ArticleManager articleManager = new ArticleManager();
@@ -30,7 +31,6 @@ namespace GSXF.Web.Controllers
 
         public ActionResult Index()
         {
-            articleManager.Add(new Article() { Title = "test" });
             return View();
         }
 
