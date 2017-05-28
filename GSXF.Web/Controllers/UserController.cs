@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -27,29 +24,36 @@ namespace GSXF.Web.Controllers
             var user = Session["User"] as User;
             var roleID = userRoleManager.Find(ur => ur.UserID == user.ID).RoleID;
             var roleName = roleManager.Find(roleID).Name;
-            if (roleName == "Root")
-                return View("ROOT");
-            else if (roleName == "消防机构总队")
-                return View("ZongDui");
-            else if (roleName == "消防机构支队")
-                return View("ZhiDui");
-            else if (roleName == "消防机构大队")
-                return View("ZongDui");
-            else if (roleName == "服务机构")
-                return View("Company");
 
+            if (roleName == "Root")
+                return View("Index1");
+            else if (roleName == "消防机构总队")
+                return View("Index2");
+            else if (roleName == "消防机构支队")
+                return View("Index3");
+            else if (roleName == "消防机构大队")
+                return View("Index4");
+            else if (roleName == "服务机构")
+                return View("Index5");
             return View();
         }
 
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
+            var user = Session["User"] as User;
+            if (user != null)
+                return RedirectToAction("Index");
             return View();
         }
 
         [HttpPost]
         public ActionResult Login(LoginViewModel login, string returnUrl)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(login);
+            }
             Response resp = userManager.Verify(login.Name, login.Password);
             if (resp.Code == 3)
             {
@@ -59,10 +63,6 @@ namespace GSXF.Web.Controllers
                 user.IsOnline = true;
                 userManager.Update(user);
                 Session.Add("User", user);
-                if (!string.IsNullOrEmpty(returnUrl))
-                    return Redirect(returnUrl);
-                else
-                    return RedirectToAction("Index");
             }
             return Json(resp);
         }
@@ -78,33 +78,56 @@ namespace GSXF.Web.Controllers
             Session.Clear();
             return RedirectToAction("Login");
         }
+
+        #region 角色首页
         /// <summary>
         /// 超级管理员页面
         /// </summary>
         /// <returns></returns>
-        public ActionResult ROOT()
+        public ActionResult Index1()
+        {
+            return View();
+        }
+        /// <summary>
+        /// 消防机构总队首页
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Index2()
+        {
+            return View();
+        }
+        /// <summary>
+        /// 消防机构支队首页
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Index3()
+        {
+            return View();
+        }
+        /// <summary>
+        /// 消防机构大队首页
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Index4()
+        {
+            return View();
+        }
+        /// <summary>
+        /// 服务机构首页
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Index5()
         {
             return View();
         }
 
-        public ActionResult ZongDui()
-        {
-            return View();
-        }
+        #endregion
 
-        public ActionResult ZhiDui()
+        #region 后台所有Action
+        public ActionResult MyInfo()
         {
             return View();
         }
-
-        public ActionResult DaDui()
-        {
-            return View();
-        }
-
-        public ActionResult Company()
-        {
-            return View();
-        }
+        #endregion
     }
 }
