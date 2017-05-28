@@ -31,7 +31,7 @@ namespace GSXF.Web.Controllers
             string name = form["Name"];
             string password = form["Password"];
             int institutionType = int.Parse(form["InstitutionType"]);
-            if (userManager.Verify(name, password))
+            if (userManager.Verify(name, password).Code == 3)
             {
                 var user = userManager.Find(name); 
                 user.LoginTime = DateTime.Now;
