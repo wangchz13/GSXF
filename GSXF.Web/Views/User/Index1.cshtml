@@ -1,0 +1,57 @@
+﻿@{
+    Layout = null;
+}
+
+@Styles.Render("~/Content/easyui")
+@Scripts.Render("~/Content/easyuijs")
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>超级管理员首页</title>
+    <link href="~/Content/admin/admin.css" rel="stylesheet" />
+    <script src="~/Content/admin/admin.js"></script>
+    <link href="~/Content/zTree_v3-master/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" />
+    <script src="~/Content/zTree_v3-master/js/jquery.ztree.core.js"></script>
+    <style>
+        #north,#south,#west,#center{
+            overflow:hidden;
+        }
+        #north{
+            height:100px;
+        }
+        #south{
+            height:40px;
+        }
+        #west{
+            width:200px;
+        }
+    </style>
+</head>
+<body class="easyui-layout">
+    <div id="north" region="north" >
+        <div class="top-bg"></div>
+    </div>
+    <div id="south" region="south" border="true" split="true" >
+        <div class="footer">版权所有:甘肃省消防总队</div>
+    </div>
+    <div id="west" region="west" split="true" title="菜单" >
+        <div class="easyui-accordion" style="position:absolute;top:27px;left:0px;right:0px;bottom:0px;">
+            <ul class="easyui-tree">
+                <li>
+                    <span><a target="mainFrame" href=@Url.Action("/")>主页</a></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div id="center" region="center" split="true">
+        <div id="tabs" class="easyui-tabs" fit="true" border="false">
+            <div title="主页" style="padding: 0px; overflow: hidden;" id="home">
+                <a href=@Url.Action("/LoginOut")>注销</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
