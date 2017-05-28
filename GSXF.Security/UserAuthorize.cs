@@ -21,18 +21,22 @@ namespace GSXF.Security
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
             var user = filterContext.HttpContext.Session["User"] as User;
-            if(user == null)
-            {
-                user = userManager.Find(u => u.Name == "Guest");
-            }
             var controller = filterContext.RouteData.Values["controller"].ToString();
             var action = filterContext.RouteData.Values["action"].ToString();
 
             var isAllowed = IsAllowed(user, controller, action);
             if (!isAllowed)
             {
-                filterContext.RequestContext.HttpContext.Response.Write("无权访问");
-                filterContext.RequestContext.HttpContext.Response.End();
+                if(user == null)
+                {
+                    var returnUrl = filterContext.HttpContext.Server.UrlEncode(filterContext.HttpContext.Request.Url.AbsoluteUri);
+                    filterContext.Result = new RedirectResult("/User/Login?returnUrl=" + returnUrl);
+                }
+                else
+                {
+                    filterContext.RequestContext.HttpContext.Response.Write("无权访问");
+                    filterContext.RequestContext.HttpContext.Response.End();
+                }
             }
         }
 
@@ -46,18 +50,16 @@ namespace GSXF.Security
                 return true;
             }
 
-            //Action允许所有人访问，允许访问
+            //Action允许所有人访问
             if (controllerAction.IsAllowedNoneRoles)
             {
                 return true;
             }
 
-            //Action允许有角色的用户访问，允许访问
+            //Action允许所有登录的用户访问
             if (controllerAction.IsAllowedAllRoles)
             {
-                //只要用户有角色就可以访问
-                var roles = userRoleManager.Find(ur => ur.ID == user.ID);
-                return roles != null;
+                return user != null;
             }
             //下面是Action对指定角色允许访问
             //选出Action对应的角色
@@ -66,6 +68,8 @@ namespace GSXF.Security
             {
                 return true;
             }
+            if (user == null) return false;
+
             //找到用户角色，此处不考虑多个角色问题
             var userRole = userRoleManager.Find(ur => ur.ID == user.ID);
 
