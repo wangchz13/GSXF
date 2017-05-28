@@ -282,7 +282,6 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="Content\Json\Gender.json" />
     <Content Include="Content\注册消防工程师管理规定.pdf" />
     <None Include="Properties\PublishProfiles\123.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
@@ -319,24 +318,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\SendCode.cshtml" />
-    <Content Include="Views\Account\VerifyCode.cshtml" />
-    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
-    <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
-    <Content Include="Views\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\Default1.cshtml" />
@@ -370,16 +351,15 @@
     <Content Include="Views\Home\GCSCX.cshtml" />
     <Content Include="Views\Admin\ZCGCS.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\Index1.cshtml" />
+    <Content Include="Views\User\Index2.cshtml" />
+    <Content Include="Views\User\Index3.cshtml" />
+    <Content Include="Views\User\Index4.cshtml" />
+    <Content Include="Views\User\Index5.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
-    <Content Include="Views\User\ROOT.cshtml" />
-    <Content Include="Views\User\ZongDui.cshtml" />
-    <Content Include="Views\User\ZhiDui.cshtml" />
-    <Content Include="Views\User\DaDui.cshtml" />
-    <Content Include="Views\User\Company.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
