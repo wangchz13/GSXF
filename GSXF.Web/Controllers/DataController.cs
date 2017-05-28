@@ -26,19 +26,19 @@ namespace GSXF.Web.Controllers
             return View();
         }
 
-        public string GenderList()
+        public ActionResult GenderList()
         {
             var data = EnumToObject(typeof(Gender));
-            return JsonConvert.SerializeObject(data);
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public string CityList()
+        public ActionResult CityList()
         {
             var data = EnumToObject(typeof(City));
-            return JsonConvert.SerializeObject(data);
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public string EmployeeLevelList()
+        public ActionResult EmployeeLevelList()
         {
             var data = EnumToObject(typeof(EmployeeLevel));
             string str = JsonConvert.SerializeObject(data);
@@ -58,20 +58,20 @@ namespace GSXF.Web.Controllers
                     i["Text"] = "建(构)筑物消防员(高级)";
                 }
             }
-            return JsonConvert.SerializeObject(obj);
+            return Content(JsonConvert.SerializeObject(obj));
         }
 
-        public string StatisticsData()
+        public ActionResult StatisticsData()
         {
-            int[][] res = new int[4][];
-            res[0] = projectManager.GetProjectCount(ProjectType.竣工检测);
-            res[1] = projectManager.GetProjectCount(ProjectType.年度检测);
-            res[2] = projectManager.GetProjectCount(ProjectType.维护保养);
-            res[3] = projectManager.GetProjectCount(ProjectType.安全评估);
-            return JsonConvert.SerializeObject(res);
+            int[][] data = new int[4][];
+            data[0] = projectManager.GetProjectCount(ProjectType.竣工检测);
+            data[1] = projectManager.GetProjectCount(ProjectType.年度检测);
+            data[2] = projectManager.GetProjectCount(ProjectType.维护保养);
+            data[3] = projectManager.GetProjectCount(ProjectType.安全评估);
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public string Projects(int pageSize=0, int pageIndex=0)
+        public ActionResult Projects(int pageSize=0, int pageIndex=0)
         {
             Paging<Project> projectPage = new Paging<Project>();
             if(pageSize != 0 && pageIndex != 0)
@@ -79,8 +79,8 @@ namespace GSXF.Web.Controllers
                 projectPage.PageSize = pageSize;
                 projectPage.PageIndex = pageIndex;
             }
-            var res = projectManager.FindPageList(projectPage).Items;
-            return JsonConvert.SerializeObject(res);
+            var data = projectManager.FindPageList(projectPage).Items;
+            return Json(data, JsonRequestBehavior.AllowGet);
 
         }
 
