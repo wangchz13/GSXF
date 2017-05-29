@@ -13,7 +13,7 @@ namespace GSXF.Security
         {
             SHA256Managed sha256 = new SHA256Managed();
             byte[] cipherText = sha256.ComputeHash(Encoding.Default.GetBytes(plainText));
-            return System.Convert.ToBase64String(cipherText);
+            return Convert.ToBase64String(cipherText);
         }
     }
 }
