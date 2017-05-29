@@ -19,6 +19,8 @@ namespace GSXF.Web.Controllers
         private static CompanyManager companyManager = new CompanyManager();
         private static UserCompanyManager userCompanyManager = new UserCompanyManager();
         private static EmployeeManager employeeManager = new EmployeeManager();
+        private static FireControlInstitutionManager fireManager = new FireControlInstitutionManager();
+
         // GET: Data
         public ActionResult Index()
         {
@@ -127,6 +129,12 @@ namespace GSXF.Web.Controllers
         }
 
 
+
+        public ActionResult test()
+        {
+            var res = fireManager.FindList();
+            return Json(res, JsonRequestBehavior.AllowGet);
+        }
 
 
 
