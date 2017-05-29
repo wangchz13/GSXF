@@ -17,6 +17,17 @@ namespace GSXF.DataBase
             return Find(u => u.Name == name);
         }
 
+        public Response Add(string name, string password)
+        {
+            User user = new User();
+            user.Name = name;
+            user.Password = password;
+            user.RegTime = DateTime.Now;
+            user.IsOnline = false;
+            return Add(user);
+        }
+        
+
         public Response Verify(string name, string password)
         {
             Response _resp = new Response();
