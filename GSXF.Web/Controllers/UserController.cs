@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -22,7 +23,9 @@ namespace GSXF.Web.Controllers
         public ActionResult Index()
         {
             var user = Session["User"] as User;
-            var roleID = userRoleManager.Find(ur => ur.UserID == user.ID).RoleID;
+            if (user == null)
+                return RedirectToAction("Login");
+            var roleID = userRoleManager.FindList(ur => ur.UserID == user.ID).ToList()[0].RoleID;
             var roleName = roleManager.Find(roleID).Name;
 
             if (roleName == "Root")
@@ -50,11 +53,16 @@ namespace GSXF.Web.Controllers
         [HttpPost]
         public ActionResult Login(LoginViewModel login, string returnUrl)
         {
+            Response resp = new Response();
             if (!ModelState.IsValid)
             {
-                return View(login);
+                resp.Code = -1;
+                resp.Message = "数据格式有误，提交失败";
+                return Json(resp);
             }
-            Response resp = userManager.Verify(login.Name, login.Password);
+
+            string password = Encryption.SHA256(login.Password);
+            resp = userManager.Verify(login.Name, password);
             if (resp.Code == 3)
             {
                 var user = userManager.Find(login.Name);
