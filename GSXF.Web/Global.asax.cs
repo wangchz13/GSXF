@@ -41,8 +41,6 @@ namespace GSXF.Web
         protected void Session_End(object sender, EventArgs e)
         {
             User user = Session["User"] as User;
-            //string name = user.Name;
-            //user = userManager.Find(name);
             if(user != null)
             {
                 user.IsOnline = false;

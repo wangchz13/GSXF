@@ -18,7 +18,7 @@ namespace GSXF.Web.Controllers
         private static UserRoleManager userRoleManager = new UserRoleManager();
         private static RoleManager roleManager = new RoleManager();
         private static UserManager userManager = new UserManager();
-
+        private static FireControlInstitutionManager fireManager = new FireControlInstitutionManager();
         // GET: User
         public ActionResult Index()
         {
@@ -27,16 +27,21 @@ namespace GSXF.Web.Controllers
                 return RedirectToAction("Login");
             var roleID = userRoleManager.FindList(ur => ur.UserID == user.ID).ToList()[0].RoleID;
             var roleName = roleManager.Find(roleID).Name;
-
             if (roleName == "Root")
+            {
+                ViewBag.Title = "超级管理员";
                 return View("Index1");
-            else if (roleName == "消防机构总队")
+            }
+            var code = user.Name.Substring(0, 8);
+            ViewBag.Title = fireManager.Find(f => f.Code == code).Name;
+            if (roleName == "消防机构总队")
                 return View("Index2");
-            else if (roleName == "消防机构支队")
+                
+            if (roleName == "消防机构支队")
                 return View("Index3");
-            else if (roleName == "消防机构大队")
+            if (roleName == "消防机构大队")
                 return View("Index4");
-            else if (roleName == "服务机构")
+            if (roleName == "服务机构")
                 return View("Index5");
             return View();
         }
