@@ -34,7 +34,7 @@ namespace GSXF.Web
         /// </summary>
         private static void RoleInit()
         {
-            roleManager.Add(new Role() { Name = "Root", Description = "超级管理员" });
+            roleManager.Add(new Role() { Name = "超级管理员", Description = "超级管理员" });
             roleManager.Add(new Role() { Name = "消防机构总队", Description = "消防机构总队" });
             roleManager.Add(new Role() { Name = "消防机构支队", Description = "消防机构支队" });
             roleManager.Add(new Role() { Name = "消防机构大队", Description = "消防机构大队" });
@@ -89,15 +89,10 @@ namespace GSXF.Web
             var users = userManager.FindList().ToList();
 
             //为超级管理员分配权限
-            User root = userManager.Find(1);
-            foreach(var i in roles)
-            {
-                //超级管理员具备所有权限
-                userRoleManager.Add(root.ID, i.ID);
-            }
+            userRoleManager.Add(1, 1);
 
             //为各消防机构分配权限
-            for(int i = 1; i < users.Count; i++)
+            for (int i = 1; i < users.Count; i++)
             {
                 //算出用户名所对应的机构代码
                 string code = users[i].Name.Substring(0, 8);
