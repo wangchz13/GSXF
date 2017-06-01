@@ -4,6 +4,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using System.Collections.Generic;
 using GSXF.Security;
 using GSXF.DataBase;
 using GSXF.Model;
@@ -19,30 +20,26 @@ namespace GSXF.Web.Controllers
         private static RoleManager roleManager = new RoleManager();
         private static UserManager userManager = new UserManager();
         private static FireControlInstitutionManager fireManager = new FireControlInstitutionManager();
+
         // GET: User
         public ActionResult Index()
         {
             var user = Session["User"] as User;
-            if (user == null)
-                return RedirectToAction("Login");
-            var roleID = userRoleManager.FindList(ur => ur.UserID == user.ID).ToList()[0].RoleID;
-            var roleName = roleManager.Find(roleID).Name;
-            if (roleName == "Root")
-            {
-                ViewBag.Title = "超级管理员";
-                return View("Index1");
-            }
-            var code = user.Name.Substring(0, 8);
-            ViewBag.Title = fireManager.Find(f => f.Code == code).Name;
-            if (roleName == "消防机构总队")
-                return View("Index2");
-                
-            if (roleName == "消防机构支队")
-                return View("Index3");
-            if (roleName == "消防机构大队")
-                return View("Index4");
-            if (roleName == "服务机构")
-                return View("Index5");
+            //if (user == null)
+            //    return RedirectToAction("Login");
+
+            //var roleID = userRoleManager.FindList(ur => ur.UserID == user.ID).ToList()[0].RoleID;
+            //var roleName = roleManager.Find(roleID).Name;
+
+            //if (roleName == "Root")
+            //{
+            //    ViewBag.Title = "超级管理员";
+            //}
+
+            //var code = user.Name.Substring(0, 8);
+            //ViewBag.Title = fireManager.Find(f => f.Code == code).Name;
+
+            ViewBag.User = user;
             return View();
         }
 
@@ -92,7 +89,28 @@ namespace GSXF.Web.Controllers
             return RedirectToAction("Login");
         }
 
-        #region 角色首页
+        public ActionResult Menu()
+        {
+            User user = Session["User"] as User;
+            var roleID = userRoleManager.Find(ur => ur.UserID == user.ID).RoleID;
+            var roleName = roleManager.Find(roleID).Name;
+            ViewBag.Role = roleName;
+            return PartialView();
+        }
+
+        public ActionResult MyInfo()
+        {
+            User user = Session["User"] as User;
+            ViewBag.Name = user.Name;
+            ViewBag.Regtime = user.RegTime;
+            var roleID = userRoleManager.Find(ur => ur.UserID == user.ID).RoleID;
+            var roleName = roleManager.Find(roleID).Name;
+            ViewBag.Role = roleName;
+            return View();
+        }
+
+
+        #region 超级管理员
         /// <summary>
         /// 超级管理员页面
         /// </summary>
@@ -101,22 +119,26 @@ namespace GSXF.Web.Controllers
         {
             return View();
         }
-        /// <summary>
-        /// 消防机构总队首页
-        /// </summary>
-        /// <returns></returns>
+        #endregion
+
+        #region 消防机构总队
+        // 首页
         public ActionResult Index2()
         {
             return View();
         }
-        /// <summary>
-        /// 消防机构支队首页
-        /// </summary>
-        /// <returns></returns>
+
+        
+        #endregion
+
+        #region 消防机构支队
         public ActionResult Index3()
         {
             return View();
         }
+        #endregion
+
+        #region 消防机构大队
         /// <summary>
         /// 消防机构大队首页
         /// </summary>
@@ -125,19 +147,14 @@ namespace GSXF.Web.Controllers
         {
             return View();
         }
+        #endregion
+
+        #region 服务机构
         /// <summary>
         /// 服务机构首页
         /// </summary>
         /// <returns></returns>
         public ActionResult Index5()
-        {
-            return View();
-        }
-
-        #endregion
-
-        #region 后台所有Action
-        public ActionResult MyInfo()
         {
             return View();
         }
