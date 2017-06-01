@@ -71,10 +71,10 @@ namespace GSXF.Security
             if (user == null) return false;
 
             //找到用户角色，此处不考虑多个角色问题
-            var userRole = userRoleManager.Find(ur => ur.ID == user.ID);
+            var userRole = userRoleManager.Find(ur => ur.UserID == user.ID);
 
             //查找Action允许访问的角色
-            var allowedRoles = actionRoleManager.FindList(ar => ar.ActionID == controllerAction.ID).Select(a => a.RoleID).ToList();
+            var allowedRoles = actionRoleManager.FindList(ar => ar.ActionID == controllerAction.ID && ar.IsAllowed==true).Select(a => a.RoleID).ToList();
             if (allowedRoles.Count > 0)
             {
                 foreach (var i in allowedRoles)
@@ -84,7 +84,7 @@ namespace GSXF.Security
                 }
                 return false;
             }
-            return true;
+            return false;
         }
     }
 }
