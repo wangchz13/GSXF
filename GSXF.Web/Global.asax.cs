@@ -30,7 +30,14 @@ namespace GSXF.Web
             {
                 FirstRun.Start();
             }
-            
+
+            //对所有用户进行下线处理
+            var users = userManager.FindList().ToList();
+            foreach(var i in users)
+            {
+                i.IsOnline = false;
+                userManager.Update(i);
+            }
         }
 
         protected void Session_Start(object sender, EventArgs e)

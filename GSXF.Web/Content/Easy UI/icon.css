@@ -67,6 +67,16 @@
 .icon-more{
 	background:url('icons/more.png') no-repeat center center;
 }
+.icon-house{
+    background:url('icons/house.png') no-repeat center center;
+}
+.icon-user{
+    background:url('icons/user.png') no-repeat center center;
+}
+.icon-door_out{
+    background:url('icons/door_out.png') no-repeat center center;
+}
+
 
 
 .icon-mini-add{

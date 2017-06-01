@@ -197,11 +197,13 @@
     <Content Include="Content\Easy UI\icons\cancel.png" />
     <Content Include="Content\Easy UI\icons\clear.png" />
     <Content Include="Content\Easy UI\icons\cut.png" />
+    <Content Include="Content\Easy UI\icons\door_out.png" />
     <Content Include="Content\Easy UI\icons\edit_add.png" />
     <Content Include="Content\Easy UI\icons\edit_remove.png" />
     <Content Include="Content\Easy UI\icons\filesave.png" />
     <Content Include="Content\Easy UI\icons\filter.png" />
     <Content Include="Content\Easy UI\icons\help.png" />
+    <Content Include="Content\Easy UI\icons\house.png" />
     <Content Include="Content\Easy UI\icons\large_chart.png" />
     <Content Include="Content\Easy UI\icons\large_clipart.png" />
     <Content Include="Content\Easy UI\icons\large_picture.png" />
@@ -223,6 +225,7 @@
     <Content Include="Content\Easy UI\icons\sum.png" />
     <Content Include="Content\Easy UI\icons\tip.png" />
     <Content Include="Content\Easy UI\icons\undo.png" />
+    <Content Include="Content\Easy UI\icons\user.png" />
     <Content Include="Content\Easy UI\images\accordion_arrows.png" />
     <Content Include="Content\Easy UI\images\blank.gif" />
     <Content Include="Content\Easy UI\images\calendar_arrows.png" />
@@ -271,6 +274,7 @@
     <Content Include="Content\nav\mynav.css" />
     <Content Include="Content\nav\work.js" />
     <Content Include="Content\search\search.css" />
+    <Content Include="Content\User\index.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -359,6 +363,8 @@
     <Content Include="Views\User\Index4.cshtml" />
     <Content Include="Views\User\Index5.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
+    <Content Include="Views\User\Menu.cshtml" />
+    <Content Include="Views\User\MyInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

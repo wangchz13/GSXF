@@ -20,26 +20,34 @@ namespace GSXF.Web.Controllers
         private static UserCompanyManager userCompanyManager = new UserCompanyManager();
         private static EmployeeManager employeeManager = new EmployeeManager();
         private static FireControlInstitutionManager fireManager = new FireControlInstitutionManager();
+        private static UserManager userManager = new UserManager();
 
-        // GET: Data
-        public ActionResult Index()
-        {
-            
-            return View();
-        }
 
+        #region 下拉菜单
+        /// <summary>
+        /// 性别列表
+        /// </summary>
+        /// <returns></returns>
         public ActionResult GenderList()
         {
             var data = EnumToObject(typeof(Gender));
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// 地区列表
+        /// </summary>
+        /// <returns></returns>
         public ActionResult CityList()
         {
             var data = EnumToObject(typeof(City));
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// 员工等级列表
+        /// </summary>
+        /// <returns></returns>
         public ActionResult EmployeeLevelList()
         {
             var data = EnumToObject(typeof(EmployeeLevel));
@@ -62,7 +70,13 @@ namespace GSXF.Web.Controllers
             }
             return Content(JsonConvert.SerializeObject(obj));
         }
+        #endregion
 
+
+        /// <summary>
+        /// 统计数据
+        /// </summary>
+        /// <returns></returns>
         public ActionResult StatisticsData()
         {
             int[][] data = new int[4][];
@@ -73,36 +87,53 @@ namespace GSXF.Web.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Projects(int pageSize=0, int pageIndex=0)
+        /// <summary>
+        /// 项目信息
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="rows"></param>
+        /// <returns></returns>
+        public ActionResult Projects(int page=0, int rows=0)
         {
-            Paging<Project> projectPage = new Paging<Project>();
-            if(pageSize != 0 && pageIndex != 0)
+            List<Project> projects = new List<Project>();
+            if(page==0 && rows == 0)
             {
-                projectPage.PageSize = pageSize;
-                projectPage.PageIndex = pageIndex;
+                projects = projectManager.FindList().ToList();
             }
-            var data = projectManager.FindPageList(projectPage).Items;
-            return Json(data, JsonRequestBehavior.AllowGet);
-
-        }
-
-        public string Companies(int pageSize = 0, int pageIndex = 0)
-        {
-            Paging<Company> companyPage = new Paging<Company>();
-            if(pageSize != 0 && pageIndex != 0)
+            else
             {
-                companyPage.PageSize = pageSize;
-                companyPage.PageIndex = pageIndex;
+                Paging<Project> projectPage = new Paging<Project>();
+                projectPage.PageIndex = page;
+                projectPage.PageSize = rows;
+                projects = projectManager.FindPageList(projectPage).Items;
             }
-            var res = companyManager.FindPageList(companyPage).Items;
-            return JsonConvert.SerializeObject(res);
+            
+            return Json(projects, JsonRequestBehavior.AllowGet);
         }
 
-        public string AllProjects()
+        /// <summary>
+        /// 服务机构信息
+        /// </summary>
+        /// <param name="pageSize"></param>
+        /// <param name="pageIndex"></param>
+        /// <returns></returns>
+        public ActionResult Companies(int page = 0, int rows = 0)
         {
-            var res = projectManager.FindList().ToList();
-            return JsonConvert.SerializeObject(res);
+            List<Company> companies = new List<Company>();
+            if (page == 0 && rows == 0)
+            {
+                companies = companyManager.FindList().ToList();
+            }
+            else
+            {
+                Paging<Company> companyPage = new Paging<Company>();
+                companyPage.PageIndex = page;
+                companyPage.PageSize = rows;
+                companies = companyManager.FindPageList(companyPage).Items;
+            }
+            return Json(companies, JsonRequestBehavior.AllowGet);
         }
+
 
 
         public string MyProjects()
@@ -122,10 +153,22 @@ namespace GSXF.Web.Controllers
             return JsonConvert.SerializeObject(res);
         }
 
-        public string AllEmployees()
+        public ActionResult Users(int page = 0, int rows = 0)
         {
-            var res = employeeManager.FindList().ToList();
-            return JsonConvert.SerializeObject(res);
+            List<User> users = new List<User>();
+            if(page == 0 && rows == 0)
+            {
+                users = userManager.FindList().ToList();
+            }
+            else
+            {
+                Paging<User> userPage = new Paging<User>();
+                userPage.PageIndex = page;
+                userPage.PageSize = rows;
+                users = userManager.FindPageList(userPage).Items; 
+            }
+            var data = users.Select(u => new { Name = u.Name, LoginTime = u.LoginTime, LoginIP = u.LoginIP, IsOnline = u.IsOnline });
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
 

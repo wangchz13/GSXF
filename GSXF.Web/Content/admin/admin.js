@@ -1,7 +1,9 @@
 ﻿$(document).ready(function () {
 
     $('.easyui-accordion li a').click(function () {
+
         var tabTitle = $(this).text();
+
         var url = $(this).attr("href");
         addTab(tabTitle, url);
         $('.easyui-accordion li div').removeClass("selected");
