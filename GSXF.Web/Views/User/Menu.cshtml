@@ -1,0 +1,44 @@
+﻿@{
+    Layout = null;
+
+
+    if (ViewBag.Role=="超级管理员")
+    {
+        <li data-options="attributes:{'url':'@Url.Action("Index1")'}">
+            <span>主页</span>
+        </li>
+    }
+
+    if (ViewBag.Role== "消防机构总队")
+    {
+        <li data-options="attributes:{'url':'@Url.Action("Index2")'}">
+            <span>主页</span>
+        </li>
+    }
+
+    if (ViewBag.Role== "消防机构支队")
+    {
+        <li data-options="attributes:{'url':'@Url.Action("Index3")'}">
+            <span>主页</span>
+        </li>
+    }
+
+    if (ViewBag.Role=="消防机构大队")
+    {
+        <li data-options="attributes:{'url':'@Url.Action("Index4")'}">
+            <span>主页</span>
+        </li>
+    }
+
+    if (ViewBag.Role== "服务机构")
+    {
+        <li data-options="attributes:{'url':'@Url.Action("Index5")'}">
+            <span>主页</span>
+        </li>
+    }
+
+    <li data-options="attributes:{'url':'@Url.Action("MyInfo")'}">
+        <span>我的信息</span>
+    </li>
+}
+
