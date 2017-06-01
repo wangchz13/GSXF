@@ -158,7 +158,7 @@ namespace GSXF.DataBase
         {
             OrderParam _orderParam = new OrderParam();
             _orderParam.PropertyName = "ID";
-            _orderParam.Method = OrderMethod.DESC;
+            _orderParam.Method = OrderMethod.ASC;
             return FindPageList(pageSize, pageIndex, out totalNumber, _orderParam);
         }
 
