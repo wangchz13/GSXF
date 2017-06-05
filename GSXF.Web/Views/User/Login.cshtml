@@ -31,24 +31,28 @@
                         window.location.href = "/User";
                     }
                 }
-            }); 
+            });
         });
     </script>
 </head>
 <body>
-    <form id="login" action="/User/Login" method="post">
-        <div class="row">
-            <input id="Name" name="Name" class="easyui-textbox" label="账号：" />
+    <div id="div1" style="display:none;margin:0 auto; text-align:center;width:400px;">
+        <form id="login" action="/User/Login" method="post">
+            <div class="row">
+                <input id="Name" name="Name" class="easyui-textbox" label="账号：" />
+            </div>
+            <div class="row">
+                <input id="Password" name="Password" class="easyui-textbox" label="密码：" type="password" />
+            </div>
+        </form>
+        <div style="text-align:center;padding:5px 0">
+            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" style="width:80px">登录</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()" style="width:80px">清除</a>
         </div>
-        <div class="row">
-            <input id="Password" name="Password" class="easyui-textbox" label="密码：" type="password" />
-        </div>
-    </form>
-    <div style="text-align:center;padding:5px 0">
-        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()" style="width:80px">登录</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()" style="width:80px">清除</a>
     </div>
+    
     <script>
+        $('#div1').fadeIn("slow");
         function submitForm() {
             $('#login').form('submit');
         }
