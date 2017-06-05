@@ -16,11 +16,18 @@ namespace GSXF.Web.Controllers
     [UserAuthorize]
     public class UserController : Controller
     {
+        private static ArticleManager articleManager = new ArticleManager();
+        private static EmployeeManager employeeManager = new EmployeeManager();
+        private static OfficeAddressManager officeAddressManager = new OfficeAddressManager();
+        private static CompanyManager companyManager = new CompanyManager();
+        private static UserManager userManager = new UserManager();
+        private static ProjectManager projectManager = new ProjectManager();
+        private static UserCompanyManager userCompanyManager = new UserCompanyManager();
         private static UserRoleManager userRoleManager = new UserRoleManager();
         private static RoleManager roleManager = new RoleManager();
-        private static UserManager userManager = new UserManager();
-        private static FireControlInstitutionManager fireManager = new FireControlInstitutionManager();
 
+        private static int employeeRow = 0;
+        private static int officeAddressRow = 0;
         // GET: User
         public ActionResult Index()
         {
@@ -167,5 +174,110 @@ namespace GSXF.Web.Controllers
             return View();
         }
         #endregion
+
+        /// <summary>
+        /// 添加人员信息
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public ActionResult AddEmployee(List<Employee> list)
+        {
+            foreach (var i in list)
+            {
+                employeeManager.Add(i);
+            }
+            employeeRow = list.Count;
+            return Json("");
+        }
+        /// <summary>
+        /// 添加办公地址信息
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult AddOfficeAddress(List<OfficeAddress> list)
+        {
+            foreach (var i in list)
+            {
+                officeAddressManager.Add(i);
+            }
+            officeAddressRow = list.Count;
+            return Json(1);
+        }
+
+        [HttpPost]
+        public ActionResult AddCompany(Company company)
+        {
+            if (employeeRow != 0)
+            {
+                var employeeList = employeeManager.FindList().OrderByDescending(m => m.ID).Take(employeeRow);
+                company.Employees = employeeList.ToList();
+                employeeRow = 0;
+            }
+            if (officeAddressRow != 0)
+            {
+                var addressList = officeAddressManager.FindList().OrderByDescending(m => m.ID).Take(officeAddressRow);
+                company.OfficeAddresses = addressList.ToList();
+                officeAddressRow = 0;
+
+            }
+            companyManager.Add(company);
+
+            return CreateCompanyAccount(company.ID);
+        }
+
+        [HttpPost]
+        public ActionResult AddProject(Project project)
+        {
+            User user = getCurrentUser();
+            int companyID = userCompanyManager.Find(u => u.UserID == user.ID).CompanyID;
+            project.Company = companyManager.Find(companyID);
+            project.CompanyName = project.Company.Name;
+            projectManager.Add(project);
+            return Json("添加项目成功");
+        }
+
+        public ActionResult CreateCompanyAccount(int companyID)
+        {
+            string name = string.Empty;
+            char[] ver = new Char[4];
+            Random random = new Random();
+            char[] dict = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+            for (int i = 0; i < 4; i++)
+            {
+                ver[i] = dict[random.Next(dict.Length - 1)];
+            }
+            name = new string(ver);
+
+            string password = Verification.Text(6);
+            userManager.Add(name, Encryption.SHA256(password));
+            User user = userManager.Find(name);
+            userRoleManager.Add(user.ID, 5);
+
+            UserCompany uc = new UserCompany();
+            uc.UserID = user.ID;
+            uc.CompanyID = companyID;
+            userCompanyManager.Add(uc);
+
+            return Json(new { Name = name, Password = password });
+        }
+
+
+
+        public ActionResult CreateAcount(string name, int roleID)
+        {
+            string password = Verification.Text(6);
+            userManager.Add(name, Encryption.SHA256(password));
+            User user = userManager.Find(name);
+            userRoleManager.Add(user.ID, roleID);
+            return Json(new { Name = name, Password = password });
+        }
+
+
+        public User getCurrentUser()
+        {
+            return Session["User"] as User;
+        }
+
     }
 }
