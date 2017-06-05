@@ -109,6 +109,14 @@ namespace GSXF.Web.Controllers
             return View();
         }
 
+        public ActionResult JGBA()
+        {
+
+            return View();
+        }
+
+
+
 
         #region 超级管理员
         /// <summary>
