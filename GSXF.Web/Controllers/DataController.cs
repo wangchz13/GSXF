@@ -153,21 +153,10 @@ namespace GSXF.Web.Controllers
             return JsonConvert.SerializeObject(res);
         }
 
-        public ActionResult Users(int page = 0, int rows = 0)
+        public ActionResult Users(string Name )
         {
-            List<User> users = new List<User>();
-            if(page == 0 && rows == 0)
-            {
-                users = userManager.FindList().ToList();
-            }
-            else
-            {
-                Paging<User> userPage = new Paging<User>();
-                userPage.PageIndex = page;
-                userPage.PageSize = rows;
-                users = userManager.FindPageList(userPage).Items; 
-            }
-            var data = users.Select(u => new { Name = u.Name, LoginTime = u.LoginTime, LoginIP = u.LoginIP, IsOnline = u.IsOnline });
+            List<User> users = userManager.FindList().ToList();
+            var data = users.Select(u => new { Name = u.Name, LoginTime = u.LoginTime, LoginIP = u.LoginIP, IsOnline = u.IsOnline });  
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
