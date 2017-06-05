@@ -2,14 +2,14 @@
 @{
     Layout = null;
 }
-
 <!DOCTYPE html>
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>消防机构</title>
-    <script src="~/Scripts/jquery-3.1.1.min.js"></script>
+    <title>消防机构总队</title>
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/Content/easyuijs")
     <script src="~/Content/Highcharts/highcharts.js"></script>
     <script src="~/Content/Highcharts/exporting.js"></script>
     <script type="text/javascript">
@@ -22,18 +22,9 @@
                 type: "GET",
                 success: function (data) {
                     count = data;
-                }
-            });
-
-            Highcharts.setOptions({
-                lang: {
-                    contextButtonTitle: "图表菜单",
-                    printChart: "打印图片",
-                    downloadJPEG: "下载JPEG 图片",
-                    downloadPDF: "下载PDF文档",
-                    downloadPNG: "下载PNG 图片",
-                    downloadSVG: "下载SVG 矢量图",
-                    exportButtonTitle: "导出图片"
+                },
+                error: function () {
+                    $.messager.alert('提示', '请求出错，请联系管理员','error');
                 }
             });
 
@@ -79,6 +70,15 @@
                     shared: true,
                     useHTML: true
                 },
+                lang: {
+                    contextButtonTitle: "图表菜单",
+                    printChart: "打印图片",
+                    downloadJPEG: "下载JPEG 图片",
+                    downloadPDF: "下载PDF文档",
+                    downloadPNG: "下载PNG 图片",
+                    downloadSVG: "下载SVG 矢量图",
+                    exportButtonTitle: "导出图片"
+                },
                 plotOptions: {
                     column: {
                         pointPadding: 0.2,
@@ -88,30 +88,23 @@
                 series: [{
                     name: '竣工检测',
                     data: count[0]
-
                 }, {
                     name: '年度检测',
                     data: count[1]
-
                 }, {
                     name: '维护保养',
                     data: count[2]
-
                 }, {
                     name: '安全评估',
                     data: count[3]
-
                 }]
             });
-        });
-                    
+        });                 
     </script>
-    <style>
-    </style>
 </head>
 
 <body >
-    <div id="chart" style="min-height: 400px;max-width:1100px; margin: 0 auto"></div>
+    <div id="chart" style="height:80%; width:100%; margin: 0 auto"></div>
 </body>
 
 </html>
