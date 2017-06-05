@@ -12,13 +12,55 @@
     <meta name="viewport" content="width=device-width" />
     <title>首页 - @ViewBag.Title</title>
     <link href="~/Content/admin/admin.css" rel="stylesheet" />
-    @*<script src="~/Content/admin/admin.js"></script>*@
     <script>
         $(function () {
+            var tabs = $('#tabs').tabs({
+                fit: true,
+                border: false,
+                tools: [{
+                    iconCls: 'icon-house',
+                    handler: function () {
+                        tabs.tabs('select', 0);
+                    }
+                }, {
+                    iconCls: 'icon-reload',
+                    handler: function () {
+                        var refresh_tab = $('#tabs').tabs('getSelected');
+                        var refresh_iframe = refresh_tab.find('iframe')[0];
+                        refresh_iframe.contentWindow.location.href = refresh_iframe.src;
+                        //$("#tabs").trigger(TOPJUI.eventType.initUI.base);
+
+                        //var index = tabs.tabs('getTabIndex', tabs.tabs('getSelected'));
+                        //console.log(index);
+                        //tabs.tabs('getTab', index).panel('refresh');
+                    }
+                }, {
+                    iconCls: 'icon-no',
+                    handler: function () {
+                        var index = tabs.tabs('getTabIndex', tabs.tabs('getSelected'));
+                        var tab = tabs.tabs('getTab', index);
+                        if (tab.panel('options').closable) {
+                            tabs.tabs('close', index);
+                        }
+                    }
+                }]
+            });
+
             $('#menu').tree({
                 animate: true,
-                onClick: function (node) {
+                onSelect: function (node) {
                     addTab(node.text, node.attributes.url);
+                },
+            });
+
+            var node = $('#menu').tree('find', 'home');
+            $('#menu').tree('select', node.target);
+
+            var tab = $('#tabs').tabs('getSelected');
+            $('#tabs').tabs('update', {
+                tab: tab,
+                options: {
+                    closable: false  
                 }
             });
         });
@@ -98,12 +140,7 @@
 
 
     <div id="center" region="center" split="true">
-        <div id="tab-tools" style="border-top:0;border-right:0">
-            <a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-house'"></a>
-            <a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-reload'"></a>
-            <a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-no'"></a>
-        </div>
-        <div id="tabs" class="easyui-tabs" fit="true" border="false" data-options="tools:'#tab-tools'">
+        <div id="tabs" class="easyui-tabs" fit="true" border="false">
 
         </div>
     </div>
