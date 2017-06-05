@@ -4,33 +4,46 @@
 
     if (ViewBag.Role=="超级管理员")
     {
-        <li data-options="attributes:{'url':'@Url.Action("Index1")'}">
+        <li id="home" data-options="attributes:{'url':'@Url.Action("Index1")'}">
             <span>主页</span>
         </li>
     }
 
     if (ViewBag.Role== "消防机构总队")
+
     {
-        <li data-options="attributes:{'url':'@Url.Action("Index2")'}">
+        <li id="home" data-options="attributes:{'url':'@Url.Action("Index2")'}">
             <span>主页</span>
+        </li>
+
+        <li data-options="attributes:{'url':'@Url.Action("JGBA")'}">
+            <span>机构备案</span>
         </li>
     }
 
-    if (ViewBag.Role== "消防机构支队")
+    if (ViewBag.Role == "消防机构支队")
     {
-        <li data-options="attributes:{'url':'@Url.Action("Index3")'}">
+        <li id="home" data-options="attributes:{'url':'@Url.Action("Index3")'}">
             <span>主页</span>
+        </li>
+
+        <li data-options="attributes:{'url':'@Url.Action("JGBA")'}">
+            <span>机构备案</span>
         </li>
     }
 
-    if (ViewBag.Role=="消防机构大队")
+    if (ViewBag.Role == "消防机构大队")
     {
         <li data-options="attributes:{'url':'@Url.Action("Index4")'}">
             <span>主页</span>
         </li>
+
+        <li data-options="attributes:{'url':'@Url.Action("JGBA")'}">
+            <span>机构备案</span>
+        </li>
     }
 
-    if (ViewBag.Role== "服务机构")
+    if (ViewBag.Role == "服务机构")
     {
         <li data-options="attributes:{'url':'@Url.Action("Index5")'}">
             <span>主页</span>
@@ -40,5 +53,7 @@
     <li data-options="attributes:{'url':'@Url.Action("MyInfo")'}">
         <span>我的信息</span>
     </li>
+
+    
 }
 
