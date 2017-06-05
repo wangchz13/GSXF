@@ -69,7 +69,7 @@ namespace GSXF.Web.Controllers
                 employeeManager.Add(i);
             }
             employeeRow = list.Count;
-            return Json(new { rows = list.Count });
+            return Json("");
         }
         /// <summary>
         /// 添加办公地址信息
@@ -84,7 +84,7 @@ namespace GSXF.Web.Controllers
                 officeAddressManager.Add(i);
             }
             officeAddressRow = list.Count;
-            return Json(new { rows = list.Count });
+            return Json(1);
         }
 
         [HttpPost]
