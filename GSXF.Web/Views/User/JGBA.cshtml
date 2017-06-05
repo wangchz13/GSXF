@@ -15,6 +15,7 @@
 
     <script>
         $(document).ready(function () {
+
             $("#next-page").click(function () {
                 $('#tabs').tabs('select', "人员信息");
             });
@@ -22,7 +23,7 @@
                 $('#tabs').tabs('select', "机构信息");
             });
             $('#addAddress').click(function () {
-                $("#flag").before('<tr><td>办公场所地址：</td><td colspan="3"><input class="easyui-textbox address" style="width:100%">&nbsp;</td><td>办公场所建筑面积：</td><td><input class="easyui-textbox area" style="height:23px">m2&nbsp;</td><td><a class="removeAddress" href="#" onclick="$(this).parent().parent().remove();">删除</a></td></tr>');
+                $("#flag").before('<tr><td>办公场所地址：</td><td colspan="3"><input class="easyui-textbox address" style="width:100%">&nbsp;</td><td>办公场所建筑面积：</td><td><input class="easyui-textbox area">m2&nbsp;</td><td><a class="removeAddress" href="#" onclick="$(this).parent().parent().remove();">删除</a></td></tr>');
             });
 
             var editIndex = undefined;
@@ -83,7 +84,7 @@
                 }
                 $.ajax({
                     async: false,
-                    url: '/Home/AddEmployee',
+                    url: '/User/AddEmployee',
                     data: _employeelist,
                     dataType: "json",
                     type: "POST"
@@ -99,7 +100,7 @@
                 }
                 $.ajax({
                     async: false,
-                    url: '/Home/AddOfficeAddress',
+                    url: '/User/AddOfficeAddress',
                     data: _addresslist,
                     dataType: "json",
                     type: "POST"
@@ -113,7 +114,7 @@
                 console.log(_company);
                 $.ajax({
                     async: false,
-                    url: '/Home/AddCompany',
+                    url: '/User/AddCompany',
                     data: _company,
                     dataType: "json",
                     type: "POST",
@@ -312,7 +313,7 @@
                         <td style="text-align:right">办公场所地址：</td>
                         <td colspan="3"><input class="easyui-textbox address" style="width:100%" required="true">&nbsp;</td>
                         <td style="text-align:right">建筑面积：</td>
-                        <td><input class="easyui-numberbox easyui-validatebox area" style="height:23px" precision="2" max="99999.99" size="8" maxlength="8" required="true">m2&nbsp;</td>
+                        <td><input class="easyui-numberbox easyui-validatebox area" precision="2" max="99999.99" size="8" maxlength="8" required="true">m2&nbsp;</td>
                         <td><a id="addAddress" href="#">新增</a></td>
                     </tr>
 
