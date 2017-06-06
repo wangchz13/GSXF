@@ -42,6 +42,8 @@
                 });
             });
 
+            var name = "";
+            var password = "";
             //提交机构备案信息
             $("#Submit").click(function () {
                 
@@ -62,7 +64,7 @@
                 submitemployee();
                 submitaddress();
                 submitcompany();
-                $.messager.alert('提示', '机构备案成功!', 'info', function () {
+                $.messager.alert('提示', '机构备案成功!<br/><p>账号：<span style="color:#E53333;font-size:18px;">'+name+'</span>   密码：<span style="color:#E53333;font-size:18px;">'+password+'</span></p><p><span style="color:#E53333;">注意：此密码丢失后不可找回，请牢记！</span></p>', 'info', function () {
                     window.location.reload();
                 });
                 
@@ -74,8 +76,11 @@
                 for (var i = 0; i < rows.length; i++) {
                     var row = rows[i];
                     _employeelist["list[" + i + "].Name"] = rows[i].Name;
-                    _employeelist["list[" + i + "].Gender"] = rows[i].Gender;
-                    _employeelist["list[" + i + "].Level"] = rows[i].Level;
+                    _employeelist["list[" + i + "].Gender"] = rows[i].Gender == "" ? 0 : rows[i].Gender;
+                    console.log(rows[i].Gender);
+                    console.log(typeof (rows[i].Gender));
+
+                    _employeelist["list[" + i + "].Level"] = rows[i].Level == "" ? 0 : rows[i].Level;
                     _employeelist["list[" + i + "].CertificateNumber"] = rows[i].CertificateNumber;
                     _employeelist["list[" + i + "].IdentificationNumber"] = rows[i].IdentificationNumber;
                     _employeelist["list[" + i + "].IsDirector"] = rows[i].IsDirector;
@@ -110,15 +115,15 @@
             function submitcompany() {
 
                 var _company = $("#jgxxForm").serialize();
-                
-                console.log(_company);
                 $.ajax({
                     async: false,
                     url: '/User/AddCompany',
                     data: _company,
                     dataType: "json",
                     type: "POST",
-                    success: function (rows) {
+                    success: function (resp) {
+                        name = resp.Data.Name;
+                        password = resp.Data.Password;
                     }
                 });
             }
@@ -129,7 +134,7 @@
                     {
                         field: 'Name',
                         title: '姓名',
-                        width: 80,
+                        width: 120,
                         editor: {
                             type: 'textbox',
                             options: {
@@ -177,7 +182,8 @@
                                 return '建(构)筑物消防员(高级)';
                         },
                         editor:{type:'combobox',
-                            options:{
+                            options: {
+                                value:0,
                                 valueField:'Id',
                                 textField:'Text',
                                 method:'get',
@@ -202,7 +208,7 @@
                     {
                         field: 'IdentificationNumber',
                         title: '身份证号',
-                        width: 100,
+                        width: 160,
                         editor: {
                             type: 'textbox',
                             options: {
@@ -319,7 +325,7 @@
 
                     <tr id="flag">
                         <td style="text-align:right">注册资金：</td>
-                        <td><input name="RegisteredCapital" class="easyui-numberbox" precision="2" max="99999.99" size="8" maxlength="8">万元</td>
+                        <td><input name="RegisteredCapital" class="easyui-numberbox" precision="2" max="99999.99" size="8" maxlength="8" required="true">万元</td>
                     </tr>
                     <tr>
                         <td style="text-align:right">法定代表人：</td>
