@@ -55,10 +55,17 @@
                 }
             });
         });
+        function doSearch() {
+            $('#userdg').datagrid('load', {
+                Name: $('#nameid').val()
+            });
+        }
     </script>
 </head>
 <body>
     <div>
+        <input id="nameid" style="line-height:26px;border:1px solid #ccc">
+        <a href="#" class="easyui-linkbutton" plain="true" onclick="doSearch()">Search</a>
         <table id="userdg" class="easyui-datagrid">
             <thead>
                 <tr>
