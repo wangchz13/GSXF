@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
@@ -28,6 +29,8 @@ namespace GSXF.Web.Controllers
 
         private static int employeeRow = 0;
         private static int officeAddressRow = 0;
+
+
         // GET: User
         public ActionResult Index()
         {
@@ -116,11 +119,7 @@ namespace GSXF.Web.Controllers
             return View();
         }
 
-        public ActionResult JGBA()
-        {
-
-            return View();
-        }
+        
 
 
 
@@ -137,13 +136,31 @@ namespace GSXF.Web.Controllers
         #endregion
 
         #region 消防机构总队
-        // 首页
+        /// <summary>
+        /// 消防机构总队首页
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index2()
         {
             return View();
         }
+        /// <summary>
+        /// 机构备案
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult JGBA()
+        {
 
-        
+            return View();
+        }
+        /// <summary>
+        /// 注册消防工程师备案
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult ZCGCSBA()
+        {
+            return View();
+        }
         #endregion
 
         #region 消防机构支队
@@ -182,12 +199,31 @@ namespace GSXF.Web.Controllers
         /// <returns></returns>
         public ActionResult AddEmployee(List<Employee> list)
         {
+            Response resp = new Response();
+            if (!ModelState.IsValid)
+            {
+                resp.Code = -1;
+                resp.Message = "数据格式有误，提交失败";
+                return Json(resp);
+            }
             foreach (var i in list)
             {
-                employeeManager.Add(i);
+                resp =  employeeManager.Add(i);
             }
             employeeRow = list.Count;
-            return Json("");
+            return Json(resp);
+        }
+        public ActionResult AddZCGCS(Employee e)
+        {
+            Response resp = new Response();
+            if (!ModelState.IsValid)
+            {
+                resp.Code = -1;
+                resp.Message = "数据格式有误，提交失败";
+                return Json(resp);
+            }
+            resp = employeeManager.Add(e);
+            return Json(resp);
         }
         /// <summary>
         /// 添加办公地址信息
@@ -197,17 +233,36 @@ namespace GSXF.Web.Controllers
         [HttpPost]
         public ActionResult AddOfficeAddress(List<OfficeAddress> list)
         {
+            Response resp = new Response();
+            if (!ModelState.IsValid)
+            {
+                resp.Code = -1;
+                resp.Message = "数据格式有误，提交失败";
+                return Json(resp);
+            }
             foreach (var i in list)
             {
-                officeAddressManager.Add(i);
+                resp = officeAddressManager.Add(i);
             }
             officeAddressRow = list.Count;
-            return Json(1);
+            return Json(resp);
         }
 
+        /// <summary>
+        /// 添加服务机构
+        /// </summary>
+        /// <param name="company"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult AddCompany(Company company)
         {
+            Response resp = new Response();
+            if (!ModelState.IsValid)
+            {
+                resp.Code = -1;
+                resp.Message = "数据格式有误，提交失败";
+                return Json(resp);
+            }
             if (employeeRow != 0)
             {
                 var employeeList = employeeManager.FindList().OrderByDescending(m => m.ID).Take(employeeRow);
@@ -219,11 +274,10 @@ namespace GSXF.Web.Controllers
                 var addressList = officeAddressManager.FindList().OrderByDescending(m => m.ID).Take(officeAddressRow);
                 company.OfficeAddresses = addressList.ToList();
                 officeAddressRow = 0;
-
             }
-            companyManager.Add(company);
-
-            return CreateCompanyAccount(company.ID);
+            resp = companyManager.Add(company);
+            resp.Data = CreateCompanyAccount(company.ID);
+            return Json(resp);
         }
 
         [HttpPost]
@@ -237,7 +291,7 @@ namespace GSXF.Web.Controllers
             return Json("添加项目成功");
         }
 
-        public ActionResult CreateCompanyAccount(int companyID)
+        public object CreateCompanyAccount(int companyID)
         {
             string name = string.Empty;
             char[] ver = new Char[4];
@@ -259,7 +313,7 @@ namespace GSXF.Web.Controllers
             uc.CompanyID = companyID;
             userCompanyManager.Add(uc);
 
-            return Json(new { Name = name, Password = password });
+            return new { Name = name, Password = password };
         }
 
 
@@ -277,6 +331,15 @@ namespace GSXF.Web.Controllers
         public User getCurrentUser()
         {
             return Session["User"] as User;
+        }
+
+        public ActionResult ResetPassword(string name,string password)
+        {
+            Response resp = new Response();
+            User user = userManager.Find(name);
+            user.Password = Encryption.SHA256(password);
+            resp = userManager.Update(user);
+            return Json(resp);
         }
 
     }
