@@ -27,7 +27,7 @@ namespace GSXF.Model
         public string CompanyName { get; set; }
 
         /// <summary>
-        /// 被服务机构
+        /// 服务对象
         /// </summary>
         public string Object { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
@@ -63,10 +63,15 @@ namespace GSXF.Model
 
         public string ContractNumber { get; set; }
 
+        /// <summary>
+        /// 报告备案时间
+        /// </summary>
         public DateTime RecordDate { get; set; }
         [JsonConverter(typeof(StringEnumConverter))]
         public ProjectProgress Progress { get; set; }
 
         public string Note { get; set; }
+
+        public bool Result { get; set; }
     }
 }
