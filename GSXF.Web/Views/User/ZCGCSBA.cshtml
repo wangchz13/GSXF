@@ -1,0 +1,116 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>注册工程师备案</title>
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/Content/easyuijs")
+    <style>
+        tr{
+            height:34px;
+        }
+    </style>
+    <script>
+        $(function () {
+            $('#Submit').click(function () {
+                if (!$('#form').form('validate')) {
+                    $.messager.alert('提示', '存在无效字段，请检查', 'info');
+                    return;
+                }
+                var e = $('#form').serialize();
+                $.ajax({
+                    async: false,
+                    url: '/User/AddZCGCS',
+                    data: e,
+                    dataType: "json",
+                    type: "POST",
+                    success: function (resp) {
+                        $.messager.alert('提示', '备案成功!', 'info', function () {
+                            window.location.reload();
+                        });
+                    }
+
+                });
+
+            });
+        });
+    </script>
+</head>
+<body>
+    <div>
+        <form id="form" method="post">
+            <table style="margin:0 auto;">
+                <tr>
+                    <td style="text-align:right">
+                        姓名：
+                    </td>
+                    <td>
+                        <input name="Name" class="easyui-textbox easyui-validatebox"
+                               data-options="required:true,width:100" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:right">
+                        性别：
+                    </td>
+                    <td>
+                        <select name="Gender" class="easyui-combobox"
+                                data-options="panelHeight:'auto'" editable="false">
+                            <option value="0">男</option>
+                            <option value="1">女</option>
+                            <option value="2">未知</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:right">
+                        证书类别：
+                    </td>
+                    <td>
+                        <select name="Level" class="easyui-combobox"
+                                data-options="panelHeight:'102px'" editable="false">
+                            <option value="0">一级注册消防工程师</option>
+                            <option value="1">二级注册消防工程师</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:right">
+                        证书编号：
+                    </td>
+                    <td>
+                        <input name="CertificateNumber" class="easyui-textbox easyui-validatebox"
+                               data-options="required:true,width:180" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:right">
+                        身份证号：
+                    </td>
+                    <td>
+                        <input name="IdentificationNUmber" class="easyui-textbox easyui-validatebox"
+                               data-options="required:true,width:180" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:right">
+                        手机号码：
+                    </td>
+                    <td>
+                        <input name="MobilePhone" class="easyui-numberbox" maxlength="11" width="180">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div style="margin:0 auto;width:200px;">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-save" id="Submit">提交</a>
+        </div>
+    </div>
+</body>
+</html>
