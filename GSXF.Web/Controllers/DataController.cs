@@ -45,7 +45,7 @@ namespace GSXF.Web.Controllers
         }
 
         /// <summary>
-        /// 员工等级列表
+        /// 员工证书等级列表
         /// </summary>
         /// <returns></returns>
         public ActionResult EmployeeLevelList()
@@ -88,26 +88,52 @@ namespace GSXF.Web.Controllers
         }
 
         /// <summary>
-        /// 项目信息
+        /// 查询项目
         /// </summary>
-        /// <param name="page"></param>
-        /// <param name="rows"></param>
         /// <returns></returns>
-        public ActionResult Projects(int page=0, int rows=0)
+        public ActionResult Projects()
         {
-            List<Project> projects = new List<Project>();
-            if(page==0 && rows == 0)
+            IQueryable<Project> projects = projectManager.FindList();
+            string type = Request.QueryString["Type"];
+            string city = Request.QueryString["City"];
+            string lTime = Request.QueryString["lTime"];
+            string rTime = Request.QueryString["rTime"];
+            string result = Request.QueryString["Result"];
+            string name = Request.QueryString["Name"];
+
+            //按项目类型查询
+            if(type!= null && type!= "-1")
             {
-                projects = projectManager.FindList().ToList();
+                projects = projects.Where(p => p.Type == (ProjectType)int.Parse(type));
             }
-            else
+
+            //按所属地区查询
+            if(city!=null && city != "-1")
             {
-                Paging<Project> projectPage = new Paging<Project>();
-                projectPage.PageIndex = page;
-                projectPage.PageSize = rows;
-                projects = projectManager.FindPageList(projectPage).Items;
+                projects = projects.Where(p => p.City == (City)int.Parse(city));
             }
-            
+
+            //按报告备案时间查询
+            if(lTime != null && lTime != "")
+            {
+                projects = projects.Where(p => p.RecordDate >= Convert.ToDateTime(lTime));
+            }
+            if(rTime !=null && rTime != "")
+            {
+                projects = projects.Where(p => p.RecordDate <= Convert.ToDateTime(rTime));
+            }
+
+            //按检测结果查询
+            if(result!=null && result != "-1")
+            {
+                projects = projects.Where(p => result == "0" ? p.Result == true : p.Result == false);
+            }
+
+            //按项目名称查询
+            if(name !=null && name != "")
+            {
+                projects = projects.Where(p => p.Name.Contains(name));
+            }
             return Json(projects, JsonRequestBehavior.AllowGet);
         }
 
@@ -153,9 +179,14 @@ namespace GSXF.Web.Controllers
             return JsonConvert.SerializeObject(res);
         }
 
-        public ActionResult Users(string Name )
+        public ActionResult Users()
         {
-            List<User> users = userManager.FindList().ToList();
+            var users = userManager.FindList();
+            string name = Request.QueryString["Name"];
+            if (name != null)
+            {
+                users = users.Where(c => c.Name.Contains(name));
+            }  
             var data = users.Select(u => new { Name = u.Name, LoginTime = u.LoginTime, LoginIP = u.LoginIP, IsOnline = u.IsOnline });  
             return Json(data, JsonRequestBehavior.AllowGet);
         }
