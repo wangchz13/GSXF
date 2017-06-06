@@ -366,6 +366,7 @@
     <Content Include="Views\User\Menu.cshtml" />
     <Content Include="Views\User\MyInfo.cshtml" />
     <Content Include="Views\User\JGBA.cshtml" />
+    <Content Include="Views\User\ZCGCSBA.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
