@@ -1,0 +1,453 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>项目登记</title>
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/Content/easyuijs")
+    <style>
+        .step-wrap {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .step-wrap .item {
+            display: inline-block;
+            color: #5a5a5a;
+            font-size: 14px;
+            position: relative;
+            width: 200px;
+        }
+        .step-num-wrap {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            background: #bcbcbc;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: inline-block;
+            position: relative;
+            z-index: 2;
+        }
+        .step-wrap .item + .item:before {
+            display: inline-block;
+            width: 200px;
+            height: 2px;
+            background: #bcbcbc;
+            content: "";
+            position: absolute;
+            top: 20px;
+            left: -120px;
+        }
+        .done .step-num {
+            background-color: limegreen;
+        }
+        .step-div {
+            margin: 0 auto;
+            text-align: center;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#btn-1").click(function () {
+                $('#step-1-div').hide();
+                $('#step-2-div').show();
+            });
+            $("#btn-2").click(function () {
+                $('#step-2-div').hide();
+                $('#step-3-div').show();
+            });
+            $("#btn-3").click(function () {
+                $('#step-3-div').hide();
+                $('#step-4-div').show();
+            });
+            $("#btn-4").click(function () {
+
+            });
+
+            $("#submitproject").click(function () {
+                if (!$('#projectform').form('validate')) {
+                    $.messager.alert('提示', '项目信息存在无效字段，请检查', 'info');
+                    return;
+                }
+                var project = $("#projectform").serialize();
+                $.ajax({
+                    async: false,
+                    url: '/User/AddProject',
+                    data: project,
+                    datatype: "json",
+                    type: "POST",
+                    success: function (data) {
+                        $.messager.alert('提示', '项目登记成功!', 'info', function () {
+                            window.location.reload();
+                        });
+                    }
+                });
+            });
+            function option(value, text) {
+                this.value = value;
+                this.text = text;
+            }
+            var jigou = ["甘肃省公安消防总队", "兰州市公安消防支队", "兰州市公安消防支队城关区大队", "兰州市公安消防支队七里河区大队", "兰州市公安消防支队安宁区大队", "兰州市公安消防支队西固区大队", "兰州市公安消防支队红古区大队", "榆中县公安消防大队", "皋兰县公安消防大队", "永登县公安消防大队", "嘉峪关市公安消防支队", "嘉峪关市公安消防支队长城区大队", "嘉峪关市公安消防支队雄关区大队", "嘉峪关市公安消防支队镜铁区大队", "金昌市公安消防支队", "金昌市公安消防支队金川区大队", "永昌县公安消防大队", "河西堡公安消防大队", "白银市公安消防支队", "白银市公安消防支队白银区大队", "平川区大队", "靖远县公安消防大队", "景泰县公安消防大队", "会宁县公安消防大队", "天水市公安消防支队", "天水市公安消防支队秦州区大队", "天水市公安消防支队麦积区大队", "秦安县公安消防大队", "甘谷县公安消防大队", "武山县公安消防大队", "清水县公安消防大队", "张川县公安消防大队", "酒泉市公安消防支队", "酒泉市公安消防支队肃州区大队", "敦煌市公安消防大队", "玉门市公安消防大队", "金塔县公安消防大队", "瓜州县公安消防大队", "肃北县公安消防大队", "阿克塞县公安消防大队", "七里镇公安消防大队", "酒泉市公安消防支队玉门油田大队", "张掖市公安消防支队", "张掖市公安消防支队甘州区大队", "高台县公安消防大队", "临泽县公安消防大队", "肃南县公安消防大队", "民乐县公安消防大队", "山丹县公安消防大队", "武威市公安消防支队", "武威市公安消防支队凉州区大队", "天祝藏族自治县公安消防大队", "古浪县公安消防大队", "民勤县公安消防大队", "定西市公安消防支队", "定西市公安消防支队安定区大队", "通渭县公安消防大队", "陇西县公安消防大队", "渭源县公安消防大队", "临洮县公安消防大队", "漳县公安消防大队", "岷县公安消防大队", "陇南市公安消防支队", "陇南市公安消防支队武都区大队", "宕昌公安消防大队", "文县公安消防大队", "康县公安消防大队","成县公安消防大队", "徽县公安消防大队", "西和公安消防大队", "礼县公安消防大队", "两当公安消防大队","平凉市公安消防支队", "平凉市公安消防支队崆峒区大队", "静宁县公安消防大队", "庄浪县公安消防大队", "华亭县公安消防大队", "崇信县公安消防大队", "泾川县公安消防大队", "灵台县公安消防大队", "庆阳市公安消防支队", "庆阳市公安消防支队西峰区大队", "庆城县公安消防大队", "环县公安消防大队", "华池县公安消防大队", "合水县公安消防大队", "宁县公安消防大队", "正宁县公安消防大队", "镇原县公安消防大队", "临夏回族自治州公安消防支队", "临夏市公安消防大队", "临夏县公安消防大队", "康乐县公安消防大队", "永靖县公安消防大队", "广河县公安消防大队", "和政县公安消防大队", "东乡族自治县公安消防大队", "积石山保安族东乡族撒拉族自治县公安消防大队", "甘南州公安消防支队", "合作市公安消防大队", "夏河县公安消防大队", "碌曲县公安消防大队", "玛曲县公安消防大队", "迭部县公安消防大队", "舟曲县公安消防大队", "临潭县公安消防大队", "卓尼县公安消防大队", "兰州新区公安消防支队"];
+            var hash = [[2, 3, 4, 5, 6, 7, 8, 9, 10], [11, 12, 13, 14], [15, 16, 17, 18], [19, 20, 21, 22, 23, 24], [25, 26, 27, 28, 29, 30, 31, 32], [33, 34, 35, 36, 37, 38, 39, 40, 41, 42], [43, 44, 45, 46, 47, 48, 49], [50, 51, 52, 53, 54], [55, 56, 57, 58, 59, 60, 61, 62], [63, 64, 65, 66, 67, 68, 69, 70, 71, 72], [73, 74, 75, 76, 77, 78, 79, 80], [81, 82, 83, 84, 85, 86, 87, 88, 89], [90, 91, 92, 93, 94, 95, 96, 97, 98], [99, 100, 101, 102, 103, 104, 105, 106, 107], [108]];
+
+            for (var i = 0; i < hash.length; i++) {
+                for (var j = 0; j < hash[i].length; j++) {
+                    hash[i][j] = new option(hash[i][j], jigou[hash[i][j] - 1]);
+                }
+            }
+
+            $("#city").combobox({
+                onSelect: function (record) {
+                    var id = record.value;
+                    $("#jg").combobox("loadData", hash[id]);
+                    var data = $('#jg').combobox('getData');
+                    $('#jg').combobox('select', data[0].value);
+                }
+            });
+
+            $("#jg").combobox({
+                width:'240',
+                editable: false,
+                panelHeight: 'auto',
+                valueField: 'value',
+                textField:'text',
+            });
+
+
+            $('#jg').combobox('select', 2);
+        });
+        
+    </script>
+
+</head>
+<body>
+    <div class="step-wrap">
+        <div class="item">
+            <div class="step-num-wrap">
+                <div class="step-num">1</div>
+            </div>
+            <h3 class="step-title">项目登记</h3>
+        </div>
+        <div class="item">
+            <div class="step-num-wrap">
+                <div class="step-num">2</div>
+            </div>
+            <h3 class="step-title">入场检测</h3>
+        </div>
+        <div class="item">
+            <div class="step-num-wrap">
+                <div class="step-num">3</div>
+            </div>
+            <h3 class="step-title">出具报告</h3>
+        </div>
+        <div class="item">
+            <div class="step-num-wrap">
+                <div class="step-num">4</div>
+            </div>
+            <h3 class="step-title">提交备案</h3>
+        </div>
+    </div>
+
+    <div style="height:80%;width:100%;">
+        <div class="easyui-tabs" border="false" id="tabs">
+            <div id="step-1-div" title="1.项目登记">
+                <form action="/Admin/Login" method="post" id="projectform">
+                    <fieldset>
+                        <legend>项目信息</legend>
+                        <table>
+                            <tr>
+                                <td>项目名称：</td>
+                                <td> 
+                                    <input name="Name"  class="easyui-textbox" />
+                                </td>
+                                <td>项目类型</td>
+                                <td>
+                                    <select name="Type" class="easyui-combobox" editable="false">
+                                        <option value="0">竣工检测</option>
+                                        <option value="1">年度检测</option>
+                                        <option value="2">维护保养</option>
+                                        <option value="3">安全评估</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>项目地区：</td>
+                                <td>
+                                    所属地区:
+                                    <select class="easyui-combobox" name="City" id="city" style="width:80px;"
+                                            data-options="panelHeight:'102px'" editable="false">
+                                        <option value="0">兰州</option>
+                                        <option value="1">嘉峪关</option>
+                                        <option value="2">金昌</option>
+                                        <option value="3">白银</option>
+                                        <option value="4">天水</option>
+                                        <option value="5">酒泉</option>
+                                        <option value="6">张掖</option>
+                                        <option value="7">武威</option>
+                                        <option value="8">定西</option>
+                                        <option value="9">陇南</option>
+                                        <option value="10">平凉</option>
+                                        <option value="11">庆阳</option>
+                                        <option value="12">临夏</option>
+                                        <option value="13">甘南</option>
+                                        <option value="14">兰州新区</option>
+                                    </select>
+                                </td>
+                                <td>管辖单位:</td>
+                                <td>
+                                    <select class="easyui-combobox" name="jg" id="jg">
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>详细地址：</td>
+                                <td>
+                                    <input class="easyui-textbox" name="AddressDetail" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>建筑类型：</td>
+                                <td>
+                                    <select name="BuildType" class="easyui-combobox" editable="false">
+                                        <option value="0">公用建筑</option>
+                                        <option value="1">民用建筑</option>
+                                    </select>
+                                </td>
+                                <td>火灾危险性：</td>
+                                <td>
+                                    <select name="FireRisk" class="easyui-combobox" editable="false">
+                                        <option value="-1">无</option>
+                                        <option value="0">甲</option>
+                                        <option value="1">已</option>
+                                        <option value="2">丙</option>
+                                        <option value="3">丁</option>
+                                        <option value="4">戊</option>
+                                    </select>
+                                </td>
+                                <td>单体建筑面积：</td>
+                                <td>
+                                    <input class="easyui-textbox" name="Area" />
+                                </td>
+                                <td>建筑层总数：</td>
+                                <td>
+                                    <input class="easyui-textbox" name="AllLayer" />
+                                </td>
+                                <td>技术服务层数：</td>
+                                <td>
+                                    <input class="easyui-textbox" name="ServiceLayer" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>合同编号：</td>
+                                <td>
+                                    <input class="easyui-textbox" name="ContractNumber" />
+                                </td>
+                                <td>合同签订日期：</td>
+                                <td>
+                                    <input class="easyui-datebox" name="RecordDate" />
+                                </td>
+                                <td>合同起止日期：</td>
+                                <td>
+                                    <input class="easyui-datebox" /><input class="easyui-datebox" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>项目负责人：</td>
+                                <td>
+                                    <input class="easyui-textbox" name="PDirector" />
+                                </td>
+                                <td>技术负责人：</td>
+                                <td>
+                                    <input class="easyui-textbox" name="TDirector" />
+                                </td>
+                                <td>联系人：</td>
+                                <td>
+                                    <input class="easyui-textbox" name="Contact" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>备注：</td>
+                                <td>
+                                    <input class="easyui-textbox" name="Note" />
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    <fieldset>
+                        <legend>委托单位信息</legend>
+                        <table>
+                            <tr>
+                                <td>委托单位：</td>
+                                <td>
+                                    <input class="easyui-textbox" name="Object" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>联系人：</td>
+                                <td>
+                                    <input class="easyui-textbox" name="OContact" />
+                                </td>
+                                <td>联系电话：</td>
+                                <td>
+                                    <input class="easyui-textbox" name="OContactPhone" />
+                                </td>
+                                <td>电子邮箱：</td>
+                                <td>
+                                    <input class="easyui-textbox" name="OContactEmail" />
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    <p>
+                        <a href="#" class="easyui-linkbutton" id="submitproject">保存</a>
+                    </p>
+                </form>
+
+            </div>
+            <div id="step-2-div" class="step-div" title="2.入场检测">
+
+                <table class="easyui-datagrid" pagination="true">
+                    <thead>
+                        <tr>
+                            <th field="t1" width="300px">项目名称</th>
+                            <th field="t4" width="80px">检测时间</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>宝鸡如家酒店有限公司广园路店</td>
+                            <td contenteditable="true"></td>
+                        </tr>
+                        <tr>
+                            <td>英才网络教育咨询有限公司高新校区装修工程</td>
+                            <td>2015-09-23</td>
+                        </tr>
+                        <tr>
+                            <td>盛和大酒店</td>
+                            <td>2015-09-23</td>
+                        </tr>
+                        <tr>
+                            <td>宝鸡如家酒店有限公司广园路店</td>
+                            <td>2015-09-23</td>
+                        </tr>
+                        <tr>
+                            <td>汉滨区悦动生态健身俱乐部装修工程</td>
+                            <td>2015-09-23</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <a href="#" class="easyui-linkbutton">保存并继续</a>
+            </div>
+            <div id="step-3-div" class="step-div" title="3.出具报告">
+                <div style="margin:0 auto;">
+                    <table class="easyui-datagrid" pagination="true">
+                        <thead>
+                            <tr>
+                                <th field="t1" width="300px">项目名称</th>
+                                <th field="t4" width="80px">检测时间</th>
+                                <th field="t5" width="200px">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>宝鸡如家酒店有限公司广园路店</td>
+                                <td contenteditable="true"></td>
+                                <td>
+                                    <a href="#">生成报告</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>英才网络教育咨询有限公司高新校区装修工程</td>
+                                <td>2015-09-23</td>
+                                <td>
+                                    <a href="#">生成报告</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>盛和大酒店</td>
+                                <td>2015-09-23</td>
+                                <td>
+                                    <a href="#">生成报告</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>宝鸡如家酒店有限公司广园路店</td>
+                                <td>2015-09-23</td>
+                                <td>
+                                    <a href="#">生成报告</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>汉滨区悦动生态健身俱乐部装修工程</td>
+                                <td>2015-09-23</td>
+                                <td>
+                                    <a href="#">生成报告</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="step-4-div" class="step-div" title="4.提交备案">
+                <table class="easyui-datagrid" pagination="true">
+                    <thead>
+                        <tr>
+                            <th field="t1" width="300px">项目名称</th>
+                            <th field="t4" width="80px">检测时间</th>
+                            <th field="t5" width="200px">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>宝鸡如家酒店有限公司广园路店</td>
+                            <td contenteditable="true"></td>
+                            <td>
+                                <a href="#">提交备案</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>英才网络教育咨询有限公司高新校区装修工程</td>
+                            <td>2015-09-23</td>
+                            <td>
+                                <a href="#">提交备案</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>盛和大酒店</td>
+                            <td>2015-09-23</td>
+                            <td>
+                                <a href="#">提交备案</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>宝鸡如家酒店有限公司广园路店</td>
+                            <td>2015-09-23</td>
+                            <td>
+                                <a href="#">提交备案</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>汉滨区悦动生态健身俱乐部装修工程</td>
+                            <td>2015-09-23</td>
+                            <td>
+                                <a href="#">提交备案</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

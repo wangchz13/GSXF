@@ -12,6 +12,7 @@ namespace GSXF.DataBase
         /// <returns></returns>
         public override Response Add(Employee entity)
         {
+
             return base.Add(entity);
         }
     }

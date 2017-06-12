@@ -1,4 +1,8 @@
 ﻿
+@{
+    Layout = null;
+}
+
 <!DOCTYPE html>
 
 <html>
@@ -119,7 +123,7 @@
         <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doSearch()">查询</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-reload" onclick="doReset()">重置查询</a>
     </p>
-    <table id="projectdg" class="easyui-datagrid">
+        <table id="projectdg" class="easyui-datagrid">
         <thead>
             <tr>
                 <th field="Name" width="300px">项目名称</th>
@@ -135,7 +139,7 @@
     <script>
         function formatdate(val, row) {
             return val.substring(0, 10);
-
+            
         }
 
         function formatresult(val,row) {

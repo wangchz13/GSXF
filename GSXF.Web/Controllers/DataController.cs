@@ -21,7 +21,8 @@ namespace GSXF.Web.Controllers
         private static EmployeeManager employeeManager = new EmployeeManager();
         private static FireControlInstitutionManager fireManager = new FireControlInstitutionManager();
         private static UserManager userManager = new UserManager();
-
+        private static RoleManager roleManager = new RoleManager();
+        private static UserRoleManager userRoleManager = new UserRoleManager();
 
         #region 下拉菜单
         /// <summary>
@@ -104,29 +105,34 @@ namespace GSXF.Web.Controllers
             //按项目类型查询
             if(type!= null && type!= "-1")
             {
-                projects = projects.Where(p => p.Type == (ProjectType)int.Parse(type));
+                ProjectType pType = (ProjectType)int.Parse(type);
+                projects = projects.Where(p => p.Type == pType);
             }
 
             //按所属地区查询
             if(city!=null && city != "-1")
             {
-                projects = projects.Where(p => p.City == (City)int.Parse(city));
+                City c = (City)int.Parse(city);
+                projects = projects.Where(p => p.City ==c);
             }
 
             //按报告备案时间查询
             if(lTime != null && lTime != "")
             {
-                projects = projects.Where(p => p.RecordDate >= Convert.ToDateTime(lTime));
+                DateTime begin = Convert.ToDateTime(lTime);
+                projects = projects.Where(p => p.RecordDate >= begin);
             }
             if(rTime !=null && rTime != "")
             {
-                projects = projects.Where(p => p.RecordDate <= Convert.ToDateTime(rTime));
+                DateTime end = Convert.ToDateTime(rTime);
+                projects = projects.Where(p => p.RecordDate <= end);
             }
 
             //按检测结果查询
             if(result!=null && result != "-1")
             {
-                projects = projects.Where(p => result == "0" ? p.Result == true : p.Result == false);
+                bool r = result == "0" ? true : false;
+                projects = projects.Where(p => p.Result == r);
             }
 
             //按项目名称查询
@@ -134,7 +140,30 @@ namespace GSXF.Web.Controllers
             {
                 projects = projects.Where(p => p.Name.Contains(name));
             }
-            return Json(projects, JsonRequestBehavior.AllowGet);
+            User user = Session["User"] as User;
+            string roleName = getUserRoleName(user);
+            if(roleName == "服务机构")
+            {
+                int companyID = userCompanyManager.Find(ur => ur.UserID == user.ID).CompanyID;
+                projects = projects.Where(p => p.Company.ID == companyID);
+            }
+
+
+
+            return Content(JsonConvert.SerializeObject(projects));
+        }
+
+        public string WorkingProjects()
+        {
+            IQueryable<Project> projects = projectManager.FindList(p => p.Progress != ProjectProgress.提交备案);
+            User user = Session["User"] as User;
+            string roleName = getUserRoleName(user);
+            if(roleName == "服务机构")
+            {
+                int companyID = userCompanyManager.Find(ur => ur.UserID == user.ID).CompanyID;
+                projects = projects.Where(p => p.Company.ID == companyID);
+            }
+            return JsonConvert.SerializeObject(projects);
         }
 
         /// <summary>
@@ -143,21 +172,29 @@ namespace GSXF.Web.Controllers
         /// <param name="pageSize"></param>
         /// <param name="pageIndex"></param>
         /// <returns></returns>
-        public ActionResult Companies(int page = 0, int rows = 0)
+        public ActionResult Companies()
         {
-            List<Company> companies = new List<Company>();
-            if (page == 0 && rows == 0)
+            var companies = companyManager.FindList();
+            string qt = Request.QueryString["QualificationType"];
+            string ql = Request.QueryString["QualificationLevel"];
+            string name = Request.QueryString["Name"];
+            if(qt!=null && qt != "-1")
             {
-                companies = companyManager.FindList().ToList();
+                QualificationType t = (QualificationType)int.Parse(qt);
+                companies = companies.Where(c => c.QualificationType == t);
             }
-            else
+
+            if(ql!=null && ql != "-1")
             {
-                Paging<Company> companyPage = new Paging<Company>();
-                companyPage.PageIndex = page;
-                companyPage.PageSize = rows;
-                companies = companyManager.FindPageList(companyPage).Items;
+                QualificationLevel l = (QualificationLevel)int.Parse(ql);
+                companies = companies.Where(c => c.QualificationLevel == l);
             }
-            return Json(companies, JsonRequestBehavior.AllowGet);
+
+            if(name != null && name != "")
+            {
+                companies = companies.Where(c => c.Name.Contains(name));
+            }
+            return Content(JsonConvert.SerializeObject(companies));
         }
 
 
@@ -168,6 +205,45 @@ namespace GSXF.Web.Controllers
             int companyID = userCompanyManager.Find(ur => ur.UserID == user.ID).CompanyID;
             var res = projectManager.FindList(p => p.Company.ID == companyID).ToList();
             return JsonConvert.SerializeObject(res);
+        }
+
+        public string Employees()
+        {
+            var employees = employeeManager.FindList();
+            string name = Request.QueryString["Name"];
+            string level = Request.QueryString["Level"];
+            string cn = Request.QueryString["CertificateNumber"];
+            string idn = Request.QueryString["IdentificationNumber"];
+            if(name!=null && name != "")
+            {
+                employees = employees.Where(e => e.Name.Contains(name));
+            }
+            if(level != null && level!= "-1")
+            {
+                EmployeeLevel el = (EmployeeLevel)int.Parse(level);
+                employees = employees.Where(e => e.Level == el);
+            }
+            if(cn != null && cn != "")
+            {
+                employees = employees.Where(e => e.CertificateNumber == cn);
+            }
+            if(idn != null && idn != "")
+            {
+                employees = employees.Where(e => e.IdentificationNumber == idn);
+            }
+
+            User user = Session["User"] as User;
+            if (user != null)
+            {
+                string roleName = getUserRoleName(user);
+                if(roleName == "消防机构总队")
+                {
+                    employees = employees.Where(e => e.Level == EmployeeLevel.一级注册消防工程师 || e.Level == EmployeeLevel.二级注册消防工程师 || e.Level==EmployeeLevel.临时注册消防工程师);
+                }
+
+            }
+
+            return JsonConvert.SerializeObject(employees);
         }
 
         public string MyEmployees()
@@ -220,6 +296,14 @@ namespace GSXF.Web.Controllers
                 Text = text
             }).ToArray();
             return data;
+        }
+
+        public string getUserRoleName(User user)
+        {
+            if (user == null)
+                return string.Empty;
+            int roleID = userRoleManager.Find(ur => ur.UserID == user.ID).RoleID;
+            return roleManager.Find(r => r.ID == roleID).Name;
         }
     }
 }

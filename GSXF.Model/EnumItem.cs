@@ -90,7 +90,8 @@ namespace GSXF.Model
         /// <summary>
         /// 建（构）筑物消防员（高级）
         /// </summary>
-        高级
+        高级,
+        临时注册消防工程师
     }
 
     /// <summary>
@@ -117,6 +118,7 @@ namespace GSXF.Model
 
     public enum FireRisk
     {
+        无 = -1,
         甲,
         乙,
         丙,

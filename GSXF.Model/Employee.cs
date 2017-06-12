@@ -1,5 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -34,9 +38,11 @@ namespace GSXF.Model
         public string OfficePhone { get; set; }
 
         public string MobilePhone { get; set; }
+
         [JsonIgnore]
         public virtual Company Company { get; set; }
 
         public string CompanyName { get; set; }
+
     }
 }

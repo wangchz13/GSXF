@@ -15,5 +15,8 @@ namespace GSXF.Model
         public string Name { get; set; }
 
         public string Code { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Project> Projects { get; set; }
     }
 }

@@ -275,6 +275,7 @@
     <Content Include="Content\nav\work.js" />
     <Content Include="Content\search\search.css" />
     <Content Include="Content\User\index.js" />
+    <Content Include="Content\User\login.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -367,6 +368,12 @@
     <Content Include="Views\User\MyInfo.cshtml" />
     <Content Include="Views\User\JGBA.cshtml" />
     <Content Include="Views\User\ZCGCSBA.cshtml" />
+    <Content Include="Views\User\XMCX.cshtml" />
+    <Content Include="Views\User\JGCX.cshtml" />
+    <Content Include="Views\User\ZCGCSCX.cshtml" />
+    <Content Include="Views\User\XMDJ.cshtml" />
+    <Content Include="Views\User\XMJG.cshtml" />
+    <Content Include="Views\User\RYBA.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

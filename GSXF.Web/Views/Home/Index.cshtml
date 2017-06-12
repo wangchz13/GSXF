@@ -1,16 +1,15 @@
-﻿<script type="text/javascript">
+﻿
+
+@Styles.Render("~/Content/easyui")
+@Scripts.Render("~/Content/easyuijs")
+
+
+<script type="text/javascript">
     $(document).ready(function () {
-        $('#login').click(function () {
-            var usr = document.getElementById("username").value;
-            var pwd = document.getElementById("password").value;
-            if (usr == pwd) {
-                if (usr == "test1")
-                    window.open("/Admin/Index_XFJG");
-                else if (usr == "test2")
-                    window.open("/Admin/Index_FWJG");
+        $('#login').form({
+            success: function (data) {
+                window.location.href = "/User/Login";
             }
-            else
-                alert("用户名或密码错误！");
         });
     });
 </script>
@@ -42,7 +41,7 @@
         </div>
         <div class="border" style="padding-bottom:29px">
             <h4 class="title">系统登录</h4>
-            <form action="/Admin/Login" method="post">
+            <form action="/User/Login" method="post" id="login">
                 <div class="form-group">
                     <input class="form-control" name="Name" id="username" placeholder="用户名">
                 </div>
@@ -52,8 +51,6 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="radio" name="InstitutionType" value=0 checked="checked" />消防机构
-                    <input type="radio" name="InstitutionType" value=1 />服务机构
                     <button type="submit" class="btn btn-default">登录</button>
                 </div>
             </form>
@@ -72,23 +69,23 @@
                     </li>
 
                     <li>
-                        <a title="关于继续实行消防技术服务机构临时资质管理的通知" href="HomePageNoticeDetail.htm?id=136E3F7D21DF426FA1B08EFAFA9EC68D&amp;type=1" target="_blank" se_prerender_url="complete">
+                        <a title="公布第二次社会消防技术服务机构临时资质评审结果" href=" ~/Content/公布第二次社会消防技术服务机构临时资质评审结果.pdf" target="_blank">
 
-                            关于继续实行消防技术服务机构临时资质管理的通知
+                            公布第二次社会消防技术服务机构临时资质评审结果
                         </a>
                     </li>
 
                     <li>
-                        <a title="关于公布取得消防技术服务机构临时一级检测维保资质单位名单的通知" href="HomePageNoticeDetail.htm?id=7D557DBA11AA4703977B049780321E95&amp;type=1" target="_blank" se_prerender_url="complete">
-                            关于公布取得消防技术服务机构临时一级检测维保资质单位名...
+                        <a title="公布第一次社会消防技术服务机构临时资质评审结果" href=" ~/Content/公布第一次社会消防技术服务机构临时资质评审结果.pdf" target="_blank" >
+                            公布第一次社会消防技术服务机构临时资质评审结果
 
                         </a>
                     </li>
 
                     <li>
-                        <a title="关于公布第二批取得消防技术服务机构临时资质单位名单的通知" href="HomePageNoticeDetail.htm?id=4C82EC330B8842878E081C607AD8EE67&amp;type=1" target="_blank" se_prerender_url="complete">
+                        <a title="开展办理临时社会消防技术服务机构资质相关工作的通知" href=" ~/Content/开展办理临时社会消防技术服务机构资质相关工作的通知.pdf" target="_blank" >
 
-                            关于公布第二批取得消防技术服务机构临时资质单位名单的通...
+                            开展办理临时社会消防技术服务机构资质相关工作的通知
                         </a>
                     </li>
                     <li>
@@ -102,31 +99,30 @@
             <div class="list">
                 <ul>
                     <li>
-                        <a title="注册消防工程师资格考试实施办法" href="#" target="_blank" se_prerender_url="loading">
+                        <a title="社会消防技术服务管理规定公安部129号" href="~/Content/相关法规社会消防技术服务管理规定公安部129号.pdf" target="_blank">
 
+                            社会消防技术服务管理规定公安部129号
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="社会消防技术服务管理规定公安部129号" href="~/Content/相关法规公安部令第136号.pdf" target="_blank">
+
+                            社会消防技术服务管理规定公安部136号
+
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="注册消防工程师制度暂行规定" href=" ~/Content/相关法规注册消防工程师制度暂行规定.pdf" target="_blank">
+
+                            注册消防工程师制度暂行规定
+
+                        </a>
+                    </li>
+                    <li>
+                        <a title="注册消防工程师资格考试实施办法.pdf" href=" ~/Content/相关法规注册消防工程师资格考试实施办法.pdf" target="_blank">
                             注册消防工程师资格考试实施办法
-
-                        </a>
-                    </li>
-
-                    <li>
-                        <a title="注册消防工程师资格考试实施办法" href="#" target="_blank">
-
-                            注册消防工程师资格考试实施办法
-
-                        </a>
-                    </li>
-
-                    <li>
-                        <a title="（已废止）社会消防技术服务管理规定（公安部令第129号）" href="HomePageNoticeDetail.htm?id=FE8FE575C8614D4D8D327C14C45641FB&amp;type=3" target="_blank">
-
-                            （已废止）社会消防技术服务管理规定（公安部令第129号）
-
-                        </a>
-                    </li>
-                    <li>
-                        <a title="社会消防技术服务管理规定（公安部令第129号，2016年1月14日公安部令第136号修订）" href="HomePageNoticeDetail.htm?id=71F4E7D784F54397AF7A3FDAB80A998D&amp;type=3" target="_blank">
-                            社会消防技术服务管理规定（公安部令第129号，2016年1月...
                         </a>
                     </li>
                     <li>
@@ -144,34 +140,33 @@
                 <ul>
 
                     <li>
-                        <a title="建筑消防设施检测技术规程（GA503-2004）" href="HomePageNoticeDetail.htm?id=28C79182D204486C85B4A72F89BC5741&amp;type=4" target="_blank">
+                        <a title="技术标准建设工程消防验收评定规则（GA836-2009）" href=" ~/Content/技术标准建设工程消防验收评定规则（GA836-2009）.pdf" target="_blank">
 
 
-                            建筑消防设施检测技术规程（GA503-2004）
+                            技术标准建设工程消防验收评定规则
                         </a>
                     </li>
 
                     <li>
-                        <a title="建筑消防设施的维护管理（GB25201-2010）" href="HomePageNoticeDetail.htm?id=17FA8D6C4E654546A8C02565AE74D5E0&amp;type=4" target="_blank">
+                        <a title="建筑消防设施的维护管理" href=" ~/Content/技术标准建筑消防设施的维护管理.pdf" target="_blank">
 
 
-                            建筑消防设施的维护管理（GB25201-2010）
+                            建筑消防设施的维护管理
                         </a>
                     </li>
 
                     <li>
-                        <a title="消防技术服务机构设备配备（GA1157-2014）" href="HomePageNoticeDetail.htm?id=60BB6E5CF9264F19BB685EE77DE6DC92&amp;type=4" target="_blank" se_prerender_url="complete">
+                        <a title="技术标准建筑消防设施检测技术规程（GA503-2004)" href=" ~/Content/技术标准建筑消防设施检测技术规程（GA503-2004).pdf" target="_blank" >
 
 
-                            消防技术服务机构设备配备（GA1157...
+                            建筑消防设施检测技术规程
                         </a>
                     </li>
 
                     <li>
-                        <a title="（已废止）水喷雾灭火系统设计规范（GB50219－95）" href="HomePageNoticeDetail.htm?id=4A97579E47AD46FCB2761F5516AFFC15&amp;type=4" target="_blank" se_prerender_url="complete">
+                        <a title="消防技术服务机构设备配备" href=" ~/Content/技术标准消防技术服务机构设备配备.pdf" target="_blank" >
+                            消防技术服务机构设备配备
 
-
-                            （已废止）水喷雾灭火系统设计规范...
                         </a>
                     </li>
                     <li>
@@ -185,37 +180,37 @@
             <div class="list">
                 <ul>
                     <li>
-                        <span style="font-family:宋体;float: left; "></span> <a title="消防设施维护保养检测临时一级资质申请条件及材料要求" href="HomePageNoticeDetail.htm?id=E240F421D56D46E3BBF174B552A85105&amp;type=2" target="_blank" se_prerender_url="complete">
+                        <a title="消防工程相关专业'新旧对照表" href=" ~/Content/办事指南消防工程相关专业'新旧对照表.pdf" target="_blank" >
 
 
-                            消防设施维护保养检测临时一级资质申请条...
-
-                        </a>
-                    </li>
-
-                    <li>
-                        <span style="font-family:宋体;float: left; "></span> <a title="消防设施维护保养检测临时二级资质申请条件及材料要求" href="HomePageNoticeDetail.htm?id=DB82DF02C64843238A7A164B4E775C1B&amp;type=2" target="_blank" se_prerender_url="complete">
-
-
-                            消防设施维护保养检测临时二级资质申请条...
+                            消防工程相关专业'新旧对照表
 
                         </a>
                     </li>
 
                     <li>
-                        <span style="font-family:宋体;float: left; "></span> <a title="消防设施维护保养检测临时三级资质申请条件及材料要求" href="HomePageNoticeDetail.htm?id=07EAF8E19EEA4B05AB9E27301C14CA6A&amp;type=2" target="_blank">
+                        <a title="办事指南消防设施维护保养检测临时三级资质申请条件及材料要求" href=" ~/Content/办事指南消防设施维护保养检测临时三级资质申请条件及材料要求.pdf" target="_blank" >
 
 
-                            消防设施维护保养检测临时三级资质申请条...
+                            消防设施维护保养检测临时三级...
 
                         </a>
                     </li>
 
                     <li>
-                        <a title="“消防工程相关专业”新旧对照表" href="HomePageNoticeDetail.htm?id=E23807F92F3C48B1A40905780027092A&amp;type=2" target="_blank">
+                       <a title="办事指南消防设施维护保养检测临时二级资质申请条件及材料要求" href=" ~/Content/办事指南消防设施维护保养检测临时二级资质申请条件及材料要求.pdf" target="_blank">
 
 
-                            “消防工程相关专业”新旧对照表
+                           消防设施维护保养检测临时二级...
+
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="办事指南消防设施维护保养检测临时一级资质申请条件及材料要求"href=" ~/Content/办事指南消防设施维护保养检测临时一级资质申请条件及材料要求.pdf" target="_blank">
+
+
+                            消防设施维护保养检测临时一级...
 
                         </a>
                     </li>

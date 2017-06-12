@@ -9,59 +9,97 @@
 
     @Styles.Render("~/Content/easyui")
     @Scripts.Render("~/Content/easyuijs")
+
+    <script>
+        $(function () {
+            $('#dg').datagrid({
+                height: 'auto',
+                rownumbers: true,
+                singleSelect: true,
+                pagination: true,
+                pageList: [10, 20, 30, 50, 100, 200],
+                url: '/Data/Companies',
+                method: 'get',
+                loadFilter: function (data) {
+                    if (typeof data.length == 'number' && typeof data.splice == 'function') {    // 判断数据是否是数组
+                        data = {
+                            total: data.length,
+                            rows: data
+                        }
+                    }
+                    var dg = $(this);
+                    var opts = dg.datagrid('options');
+                    var pager = dg.datagrid('getPager');
+                    pager.pagination({
+                        onSelectPage: function (pageNum, pageSize) {
+                            opts.pageNumber = pageNum;
+                            opts.pageSize = pageSize;
+                            pager.pagination('refresh', {
+                                pageNumber: pageNum,
+                                pageSize: pageSize
+                            });
+                            dg.datagrid('loadData', data);
+                        }
+                    });
+                    if (!data.originalRows) {
+                        data.originalRows = (data.rows);
+                    }
+                    var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);
+                    var end = start + parseInt(opts.pageSize);
+                    data.rows = (data.originalRows.slice(start, end));
+                    return data;
+                }
+            });
+        });
+        function doSearch() {
+            $('#dg').datagrid('load', {
+                QualificationType: $('#qt').val(),
+                QualificationLevel: $('#ql').val(),
+                Name: $('#name').val()
+            });
+        }
+        function doReset() {
+            $('#qt').combobox('setValue', '-1');
+            $('#ql').combobox('setValue', '-1');
+            $('#name').textbox('setValue', '');
+            doSearch();
+        }
+
+    </script>
 </head>
 <body style=" margin:0px;font-size:10px;">
         资质类型:
-        <select class="easyui-combobox" name="state" style="width:102px;"
+        <select class="easyui-combobox" id="qt" style="width:102px;"
                 data-options="panelHeight:'auto'" editable="false">
-            <option value="0">全部</option>
-            <option value="2">维修保养检测</option>
-            <option value="3">消防安全评估</option>
+            <option value="-1">全部</option>
+            <option value="0">维修保养检测</option>
+            <option value="1">消防安全评估</option>
         </select>
         资质等级:
-        <select class="easyui-combobox" name="state" style="width:102px;"
+        <select class="easyui-combobox" id="ql" style="width:102px;"
                 data-options="panelHeight:'102px'" editable="false">
-            <option value="0">全部</option>
-            <option value="1">一级</option>
-            <option value="2">二级</option>
-            <option value="3">三级</option>
-            <option value="4">临时一级</option>
-            <option value="5">临时二级</option>
-            <option value="6">临时三级</option>
-        </select>
-        所属地区:
-        <select class="easyui-combobox" name="state" style="width:80px;"
-                data-options="panelHeight:'102px'" editable="false">
-            <option value="0">全部</option>
-            <option value="0">兰州</option>
-            <option value="1">天水</option>
-            <option value="2">金昌</option>
-            <option value="3">白银</option>
-            <option value="4">武威</option>
-            <option value="5">平凉</option>
-            <option value="6">酒泉</option>
-            <option value="7">庆阳</option>
-            <option value="8">定西</option>
-            <option value="9">陇南</option>
-            <option value="10">临夏</option>
-            <option value="11">嘉峪关</option>
-            <option value="12">甘南</option>
-            <option value="13">张掖</option>
-            <option value="14">兰州新区</option>
+            <option value="-1">全部</option>
+            <option value="0">一级</option>
+            <option value="1">二级</option>
+            <option value="2">三级</option>
+            <option value="3">临时一级</option>
+            <option value="4">临时二级</option>
+            <option value="5">临时三级</option>
         </select>
         机构名称:
         <input class="easyui-textbox" style="width:120px" />
-        <a href="#" class="easyui-linkbutton" iconCls="icon-search">查询</a>
-    <table class="easyui-datagrid" pagination="true" data-options="url:'/Data/Companies'">
+    <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doSearch()">查询</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-reload" onclick="doReset()">重置查询</a>
+    <table class="easyui-datagrid" id="dg">
         <thead>
             <tr>
                 <th field="Name" width="300px">机构名称</th>
                 <th field="QualificationType" width="160px">资质类别</th>
                 <th field="QualificationLevel" width="80px">资质等级</th>
-                <th field="City" width="80px">所属地区</th>
-                <th field="t4" width="200px">服务范围</th>
                 <th field="CertificateNumber" width="160px">证书编号</th>
-                <th field="Approved" width="60px">证书状态</th>
+                <th field="tt" width="60px" data-options="formatter:function(){
+                    return '有效';
+                    }">证书状态</th>
             </tr>
         </thead>
 

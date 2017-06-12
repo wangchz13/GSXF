@@ -15,6 +15,9 @@
         <li id="home" data-options="attributes:{'url':'@Url.Action("Index2")'}">
             <span>主页</span>
         </li>
+        <li data-options="attributes:{'url':'@Url.Action("XMJG")'}">
+            <span>项目监管</span>
+        </li>
         <li data-options="attributes:{'url':'@Url.Action("JGBA")'}">
             <span>机构备案</span>
         </li>
@@ -62,8 +65,17 @@
 
     if (ViewBag.Role == "服务机构")
     {
-        <li data-options="attributes:{'url':'@Url.Action("Index5")'}">
+        <li id="home" data-options="attributes:{'url':'@Url.Action("Index5")'}">
             <span>主页</span>
+        </li>
+        <li data-options="attributes:{'url':'@Url.Action("XMDJ")'}">
+            <span>项目登记</span>
+        </li>
+        <li data-options="attributes:{'url':'@Url.Action("XMCX")'}">
+            <span>项目查询</span>
+        </li>
+        <li data-options="attributes:{'url':'@Url.Action("RYBA")'}">
+            <span>人员备案</span>
         </li>
     }
 

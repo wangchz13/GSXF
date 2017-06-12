@@ -14,6 +14,7 @@
     @Scripts.Render("~/Content/easyuijs")
 
     <script>
+        var resp;
         $(document).ready(function () {
 
             $("#next-page").click(function () {
@@ -62,6 +63,12 @@
                 }
 
                 submitemployee();
+                if (resp.Code == -2) {
+                    $.messager.alert('提示', resp.Message, 'info', function () {
+                        window.location.reload();
+                    });
+                    return;
+                }
                 submitaddress();
                 submitcompany();
                 $.messager.alert('提示', '机构备案成功!<br/><p>账号：<span style="color:#E53333;font-size:18px;">'+name+'</span>   密码：<span style="color:#E53333;font-size:18px;">'+password+'</span></p><p><span style="color:#E53333;">注意：此密码丢失后不可找回，请牢记！</span></p>', 'info', function () {
@@ -92,7 +99,10 @@
                     url: '/User/AddEmployee',
                     data: _employeelist,
                     dataType: "json",
-                    type: "POST"
+                    type: "POST",
+                    success: function (data) {
+                        resp = data;
+                    }
                 });
             }
 
@@ -180,6 +190,8 @@
                                 return '建(构)筑物消防员(中级)';
                             else if(value == 4)
                                 return '建(构)筑物消防员(高级)';
+                            else if (value == 5)
+                                return '临时注册消防工程师';
                         },
                         editor:{type:'combobox',
                             options: {
@@ -331,7 +343,7 @@
                         <td style="text-align:right">法定代表人：</td>
                         <td><input name="LegalRepresentative" class="easyui-textbox"></td>
                         <td>办公电话：</td>
-                        <td><input name="LROfficePhone" class="easyui-numberbox"></td>
+                        <td><input name="LROfficePhone" class="easyui-textbox"></td>
                         <td style="text-align:right">手机号码：</td>
                         <td><input name="LRMobilePhone" class="easyui-numberbox" maxlength="11"></td>
                     </tr>
@@ -339,7 +351,7 @@
                         <td style="text-align:right">联系人：</td>
                         <td><input name="Contact" class="easyui-textbox"></td>
                         <td>办公电话：</td>
-                        <td><input name="COfficePhone" class="easyui-numberbox"></td>
+                        <td><input name="COfficePhone" class="easyui-textbox"></td>
                         <td style="text-align:right">手机号码：</td>
                         <td><input name="CMobilePhone" class="easyui-numberbox" maxlength="11"></td>
                     </tr>

@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace GSXF.Model
 {
@@ -16,6 +18,7 @@ namespace GSXF.Model
         /// </summary>
         public float Area { get; set; }
 
+        [JsonIgnore]
         public virtual Company Company { get; set; }
     }
 }
