@@ -19,3 +19,23 @@
     text-align:center;
     line-height:35px;
 }
+
+#north, #south, #west {
+    overflow: hidden;
+}
+
+#north {
+    height: 100px;
+}
+
+#south {
+    height: 40px;
+}
+
+#west {
+    width: 200px;
+}
+.top-bg a{
+    color:white;
+    font-size:14px;
+}

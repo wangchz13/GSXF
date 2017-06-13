@@ -77,6 +77,7 @@ namespace GSXF.Model
     /// </summary>
     public enum EmployeeLevel
     {
+        临时注册消防工程师,
         一级注册消防工程师,
         二级注册消防工程师,
         /// <summary>
@@ -91,7 +92,7 @@ namespace GSXF.Model
         /// 建（构）筑物消防员（高级）
         /// </summary>
         高级,
-        临时注册消防工程师
+        
     }
 
     /// <summary>
@@ -102,12 +103,6 @@ namespace GSXF.Model
         男,
         女,
         未知
-    }
-
-    public enum InstitutionType
-    {
-        消防机构,
-        服务机构
     }
 
     public enum BuildType
@@ -125,6 +120,4 @@ namespace GSXF.Model
         丁,
         戊
     }
-
-    
 }

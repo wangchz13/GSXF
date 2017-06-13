@@ -15,7 +15,6 @@ namespace GSXF.Security
     {
         private static UserManager userManager = new UserManager();
         private static ActionManager actionManager = new ActionManager();
-        private static UserRoleManager userRoleManager = new UserRoleManager();
         private static ActionRoleManager actionRoleManager = new ActionRoleManager();
 
         public override void OnAuthorization(AuthorizationContext filterContext)
@@ -71,7 +70,7 @@ namespace GSXF.Security
             if (user == null) return false;
 
             //找到用户角色，此处不考虑多个角色问题
-            var userRole = userRoleManager.Find(ur => ur.UserID == user.ID);
+            var userRole = user.Role;
 
             //查找Action允许访问的角色
             var allowedRoles = actionRoleManager.FindList(ar => ar.ActionID == controllerAction.ID && ar.IsAllowed==true).Select(a => a.RoleID).ToList();
@@ -79,7 +78,7 @@ namespace GSXF.Security
             {
                 foreach (var i in allowedRoles)
                 {
-                    if (i == userRole.RoleID)
+                    if (i == userRole.ID)
                         return true;
                 }
                 return false;

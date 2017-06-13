@@ -1,18 +1,10 @@
-﻿using System;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Optimization;
-using System.Web.Routing;
-using System.Data;
+﻿using System.Web;
 using System.IO;
 using System.Text;
 using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using GSXF.DataBase;
 using GSXF.Model;
-using GSXF.Security;
 
 namespace GSXF.Web
 {
@@ -21,7 +13,6 @@ namespace GSXF.Web
         private static UserManager userManager = new UserManager();
         private static FireControlInstitutionManager fireManager = new FireControlInstitutionManager();
         private static RoleManager roleManager = new RoleManager();
-        private static UserRoleManager userRoleManager = new UserRoleManager();
         public static void  Start()
         {
             RoleInit();
@@ -70,14 +61,14 @@ namespace GSXF.Web
         private static void UserInit()
         {
             //添加超级管理员账号
-            userManager.Add("Root",Encryption.SHA256("root"));
+            userManager.Add("Root","root");
 
             //添加各消防机构账号
             var fireList = fireManager.FindList().ToList();
             foreach(var i in fireList)
             {
                 string name = i.Code + "00";
-                string password = Encryption.SHA256(name);
+                string password = name;
                 userManager.Add(name, password);
             }
         }
@@ -89,7 +80,7 @@ namespace GSXF.Web
             var users = userManager.FindList().ToList();
 
             //为超级管理员分配权限
-            userRoleManager.Add(1, 1);
+            users[0].Role = roles[0];
 
             //为各消防机构分配权限
             for (int i = 1; i < users.Count; i++)
@@ -105,14 +96,14 @@ namespace GSXF.Web
 
                 if(type == "总队")
                 {
-                    userRoleManager.Add(users[i].ID, 2);
+                    users[i].Role = roles[1];
                 }else if (type == "支队")
                 {
-                    userRoleManager.Add(users[i].ID, 3);
+                    users[i].Role = roles[2];
                 }
                 else if (type == "大队")
                 {
-                    userRoleManager.Add(users[i].ID, 4);
+                    users[i].Role = roles[3];
                 }
             }
         }

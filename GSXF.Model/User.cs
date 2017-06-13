@@ -22,5 +22,7 @@ namespace GSXF.Model
         public DateTime? RegTime { get; set; }
 
         public bool IsOnline { get; set; }
+
+        public virtual Role Role { get; set; }
     }
 }

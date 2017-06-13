@@ -57,7 +57,7 @@
                     $.messager.alert('提示', '请先保存表单','info');
                     return;
                 }
-                if (!$('#jgxxForm').form('validate')) {
+                if (!$('#form').form('validate')) {
                     $.messager.alert('提示', '机构信息存在无效字段，请检查', 'info');
                     return;
                 }
@@ -84,9 +84,6 @@
                     var row = rows[i];
                     _employeelist["list[" + i + "].Name"] = rows[i].Name;
                     _employeelist["list[" + i + "].Gender"] = rows[i].Gender == "" ? 0 : rows[i].Gender;
-                    console.log(rows[i].Gender);
-                    console.log(typeof (rows[i].Gender));
-
                     _employeelist["list[" + i + "].Level"] = rows[i].Level == "" ? 0 : rows[i].Level;
                     _employeelist["list[" + i + "].CertificateNumber"] = rows[i].CertificateNumber;
                     _employeelist["list[" + i + "].IdentificationNumber"] = rows[i].IdentificationNumber;
@@ -96,7 +93,7 @@
                 }
                 $.ajax({
                     async: false,
-                    url: '/User/AddEmployee',
+                    url: '/Data/addEmployees',
                     data: _employeelist,
                     dataType: "json",
                     type: "POST",
@@ -110,12 +107,12 @@
                 var _addresslist = {};
                 var addressrows = $(".address").length;
                 for (var i = 0; i < addressrows; i++) {
-                    _addresslist["list[" + i + "].Address"] = $(".address")[i].value;
+                    _addresslist["list[" + i + "].Name"] = $(".address")[i].value;
                     _addresslist["list[" + i + "].Area"] = $(".area")[i].value;
                 }
                 $.ajax({
                     async: false,
-                    url: '/User/AddOfficeAddress',
+                    url: '/Data/addOfficeAddress',
                     data: _addresslist,
                     dataType: "json",
                     type: "POST"
@@ -124,10 +121,10 @@
 
             function submitcompany() {
 
-                var _company = $("#jgxxForm").serialize();
+                var _company = $("#form").serialize();
                 $.ajax({
                     async: false,
-                    url: '/User/AddCompany',
+                    url: '/Data/addCompany',
                     data: _company,
                     dataType: "json",
                     type: "POST",
@@ -168,7 +165,7 @@
                                 valueField:'Id',
                                 textField:'Text',
                                 method:'get',
-                                url:'/Data/GenderList',
+                                url:'/Data/getGenderList',
                                 required:true,
                                 editable:false,
                                 panelHeight:'auto'
@@ -199,7 +196,7 @@
                                 valueField:'Id',
                                 textField:'Text',
                                 method:'get',
-                                url:'/Data/EmployeeLevelList',
+                                url:'/Data/getEmployeeLevelList',
                                 required:true,
                                 editable:false,
                                 panelHeight:'auto'
@@ -278,8 +275,8 @@
         });
     </script>
     <style>
-        tr{
-           height:30px;
+        #jgxx tr{
+           height:32px;
         }
         
     </style>
@@ -287,7 +284,7 @@
 <body style="margin:0px;">
     <div class="easyui-tabs" border="false" id="tabs">
         <div title="机构信息" style="padding:10px">
-            <form id="jgxxForm" method="post">
+            <form id="form" method="post">
                 <table id="jgxx">
                     <tr>
                         <td style="text-align:right">机构名称：</td>
@@ -298,15 +295,15 @@
                     <tr>
                         <td style="text-align:right">资质类别：</td>
                         <td>
-                            <select name="QualificationType" class="easyui-combobox" editable="false" panelHeight="auto">
+                            <select name="Type1" class="easyui-combobox" editable="false" panelHeight="auto">
                                 <option value="0">维修保养检测</option>
                                 <option value="1">消防安全评估</option>
                             </select>
                         </td>
                         <td style="text-align:right">资质等级：</td>
                         <td>
-                            <select name="QualificationLevel" class="easyui-combobox"
-                                    data-options="panelHeight:'102px'" editable="false">
+                            <select name="Level1" class="easyui-combobox"
+                                    data-options="panelHeight:'auto'" editable="false">
                                 <option value="0">一级</option>
                                 <option value="1">二级</option>
                                 <option value="2">三级</option>
@@ -315,16 +312,13 @@
                                 <option value="5">临时三级</option>
                             </select>
                         </td>
-                    </tr>
-                    <tr>
-
                         <td style="text-align:right">证书编号：</td>
-                        <td colspan="3">
-                            <input name="CertificateNumber" class="easyui-textbox easyui-validatebox" required="true" style="width:100%">
+                        <td>
+                            <input name="Number1" class="easyui-textbox easyui-validatebox" required="true" >
                         </td>
                         <td style="text-align:right;">证书有效日期：</td>
                         <td>
-                            <input name="CertificateExpiryDate" class="easyui-datebox" editable="false" required="true" style="width:92px;">
+                            <input name="ExpiryDate1" class="easyui-datebox" editable="false" required="true">
                         </td>
                     </tr>
                     <tr>
@@ -337,28 +331,28 @@
 
                     <tr id="flag">
                         <td style="text-align:right">注册资金：</td>
-                        <td><input name="RegisteredCapital" class="easyui-numberbox" precision="2" max="99999.99" size="8" maxlength="8" required="true">万元</td>
+                        <td><input name="Fund" class="easyui-numberbox" precision="2" max="99999.99" size="8" maxlength="8" required="true">万元</td>
                     </tr>
                     <tr>
                         <td style="text-align:right">法定代表人：</td>
-                        <td><input name="LegalRepresentative" class="easyui-textbox"></td>
-                        <td>办公电话：</td>
-                        <td><input name="LROfficePhone" class="easyui-textbox"></td>
+                        <td><input name="Delegate" class="easyui-textbox" ></td>
+                        <td style="text-align:right">办公电话：</td>
+                        <td><input name="DelegateOfficePhone" class="easyui-textbox"></td>
                         <td style="text-align:right">手机号码：</td>
-                        <td><input name="LRMobilePhone" class="easyui-numberbox" maxlength="11"></td>
+                        <td><input name="DelegateMobilePhone" class="easyui-numberbox" maxlength="11"></td>
                     </tr>
                     <tr>
                         <td style="text-align:right">联系人：</td>
                         <td><input name="Contact" class="easyui-textbox"></td>
-                        <td>办公电话：</td>
-                        <td><input name="COfficePhone" class="easyui-textbox"></td>
+                        <td style="text-align:right">办公电话：</td>
+                        <td><input name="ContactOfficePhone" class="easyui-textbox"></td>
                         <td style="text-align:right">手机号码：</td>
-                        <td><input name="CMobilePhone" class="easyui-numberbox" maxlength="11"></td>
+                        <td><input name="ContactMobilePhone" class="easyui-numberbox" maxlength="11"></td>
                     </tr>
                     <tr>
                         <td style="text-align:right">传真：</td>
                         <td><input name="fax" class="easyui-textbox"></td>
-                        <td>邮政编码：</td>
+                        <td style="text-align:right">邮政编码：</td>
                         <td><input name="Postcode" class="easyui-textbox"></td>
                         <td style="text-align:right">电子邮件：</td>
                         <td><input name="Email" class="easyui-textbox" validType="email"></td>

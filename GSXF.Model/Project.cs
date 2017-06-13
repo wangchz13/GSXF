@@ -19,18 +19,6 @@ namespace GSXF.Model
         /// </summary>
         public string Name { get; set; }
         /// <summary>
-        /// 所属服务机构
-        /// </summary>
-        [JsonIgnore]
-        public virtual Company Company { get; set; }
-
-        public string CompanyName { get; set; }
-
-        /// <summary>
-        /// 服务对象
-        /// </summary>
-        public string Object { get; set; }
-        /// <summary>
         /// 项目类型
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
@@ -40,6 +28,13 @@ namespace GSXF.Model
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public City City { get; set; }
+        [JsonIgnore]
+        public virtual FireControlInstitution FireControlInstitution { get; set; }
+        /// <summary>
+        /// 详细地址
+        /// </summary>
+        public string Address { get; set; }
+
         /// <summary>
         /// 建筑类型
         /// </summary>
@@ -62,61 +57,64 @@ namespace GSXF.Model
         /// 服务层数
         /// </summary>
         public string ServiceLayer { get; set; }
+
         /// <summary>
-        /// 无
-        /// </summary>
-        public string ProjectCity { get; set; }
-        /// <summary>
-        /// 详细地址
-        /// </summary>
-        public string AddressDetail { get; set; }
-        /// <summary>
-        /// 联系人
-        /// </summary>
-        public string Contact { get; set; }
-        /// <summary>
-        /// 项目负责人
-        /// </summary>
-        public string PDirector { get; set; }
-        /// <summary>
-        /// 技术负责人
-        /// </summary>
-        public string TDirector { get; set; }
-        /// <summary>
-        /// 委托单位联系人
-        /// </summary>
-        public string OContact { get; set; }
-        /// <summary>
-        /// 委托单位电话
-        /// </summary>
-        public string OContactPhone { get; set; }
-        /// <summary>
-        /// 委托单位邮件
-        /// </summary>
-        public string OContactEmail { get; set; }
-        /// <summary>
-        /// 联系人电话
+        /// 合同编号
         /// </summary>
         public string ContractNumber { get; set; }
         /// <summary>
-        /// 报告备案时间
+        /// 合同签订日期
         /// </summary>
-        public DateTime RecordDate { get; set; }
+        public DateTime SignDate { get; set; }
+
+        public DateTime StartDate { get; set; }
+
+        public DateTime EndDate { get; set; }
+
+        public string ProjectHead { get; set; }
+
+        public string TechHead { get; set; }
+
         /// <summary>
-        /// 项目进度
+        /// 联系人
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
-        public ProjectProgress Progress { get; set; }
+        public string ProjectContact { get; set; }
         /// <summary>
         /// 备注
         /// </summary>
         public string Note { get; set; }
         /// <summary>
+        /// 服务对象
+        /// </summary>
+        public string Object { get; set; }
+        /// <summary>
+        /// 委托单位联系人
+        /// </summary>
+        public string ObjectContact { get; set; }
+        /// <summary>
+        /// 委托单位电话
+        /// </summary>
+        public string ObjectContactPhone { get; set; }
+        /// <summary>
+        /// 委托单位邮件
+        /// </summary>
+        public string ObjectEmail { get; set; }
+        /// <summary>
+        /// 所属服务机构
+        /// </summary>
+        [JsonIgnore]
+        public virtual Company Company { get; set; }
+        /// <summary>
+        /// 项目进度
+        /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
+        public ProjectProgress Progress { get; set; }
+        
+        /// <summary>
         /// 检测结果
         /// </summary>
         public bool Result { get; set; }
 
-        [JsonIgnore]
-        public virtual FireControlInstitution FireControlInstitution { get; set; }
+        public DateTime RecordDate { get; set; }
     }
 }

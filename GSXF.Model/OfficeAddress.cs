@@ -12,7 +12,7 @@ namespace GSXF.Model
         /// <summary>
         /// 地址
         /// </summary>
-        public string Address { get; set; }
+        public string Name { get; set; }
         /// <summary>
         /// 面积
         /// </summary>

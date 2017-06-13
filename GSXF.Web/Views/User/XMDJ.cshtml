@@ -81,7 +81,7 @@
                 var project = $("#projectform").serialize();
                 $.ajax({
                     async: false,
-                    url: '/User/AddProject',
+                    url: '/Data/addProject',
                     data: project,
                     datatype: "json",
                     type: "POST",
@@ -211,7 +211,7 @@
                             <tr>
                                 <td>详细地址：</td>
                                 <td>
-                                    <input class="easyui-textbox" name="AddressDetail" />
+                                    <input class="easyui-textbox" name="Address" />
                                 </td>
                             </tr>
                             <tr>
@@ -253,25 +253,25 @@
                                 </td>
                                 <td>合同签订日期：</td>
                                 <td>
-                                    <input class="easyui-datebox" name="RecordDate" />
+                                    <input class="easyui-datebox" name="SignDate" />
                                 </td>
                                 <td>合同起止日期：</td>
                                 <td>
-                                    <input class="easyui-datebox" /><input class="easyui-datebox" />
+                                    <input class="easyui-datebox" name="StartDate"/><input class="easyui-datebox" name="EndDate"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td>项目负责人：</td>
                                 <td>
-                                    <input class="easyui-textbox" name="PDirector" />
+                                    <input class="easyui-textbox" name="ProjectHead" />
                                 </td>
                                 <td>技术负责人：</td>
                                 <td>
-                                    <input class="easyui-textbox" name="TDirector" />
+                                    <input class="easyui-textbox" name="TechHead" />
                                 </td>
                                 <td>联系人：</td>
                                 <td>
-                                    <input class="easyui-textbox" name="Contact" />
+                                    <input class="easyui-textbox" name="ProjectContact" />
                                 </td>
                             </tr>
                             <tr>
@@ -294,15 +294,15 @@
                             <tr>
                                 <td>联系人：</td>
                                 <td>
-                                    <input class="easyui-textbox" name="OContact" />
+                                    <input class="easyui-textbox" name="ObjectContact" />
                                 </td>
                                 <td>联系电话：</td>
                                 <td>
-                                    <input class="easyui-textbox" name="OContactPhone" />
+                                    <input class="easyui-textbox" name="ObjectContactPhone" />
                                 </td>
                                 <td>电子邮箱：</td>
                                 <td>
-                                    <input class="easyui-textbox" name="OContactEmail" />
+                                    <input class="easyui-textbox" name="ObjectEmail" />
                                 </td>
                             </tr>
                         </table>

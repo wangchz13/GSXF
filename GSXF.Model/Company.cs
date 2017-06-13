@@ -19,52 +19,52 @@ namespace GSXF.Model
         public string Name { get; set; }
 
         /// <summary>
-        /// 资质类型
+        /// 资质类型1
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
-        public QualificationType QualificationType { get; set; }
+        public QualificationType Type1 { get; set; }
 
         /// <summary>
-        /// 资质等级
+        /// 资质等级1
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
-        public QualificationLevel QualificationLevel { get; set; }
+        public QualificationLevel Level1 { get; set; }
 
-        /// <summary>
-        /// 证书编号
-        /// </summary>
-        public string CertificateNumber { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public QualificationType ? Type2 { get; set; }
 
-        /// <summary>
-        /// 证书有效期
-        /// </summary>
-        public Nullable<DateTime> CertificateExpiryDate { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public QualificationLevel ? Level2 { get; set; }
 
-        /// <summary>
-        /// 办公地址
-        /// </summary>
-        [JsonIgnore]
-        public virtual ICollection<OfficeAddress> OfficeAddresses { get; set; }
+        public string Number1 { get; set; }
+
+        public DateTime ExpiryDate1 { get; set; }
+
+        public string Number2 { get; set; }
+
+        public DateTime ? ExpiryDate2 { get; set; }
+
+
 
         /// <summary>
         /// 注册资金
         /// </summary>
-        public float RegisteredCapital { get; set; }
+        public float Fund { get; set; }
 
         /// <summary>
         /// 法定代表人
         /// </summary>
-        public string LegalRepresentative { get; set; }
+        public string Delegate { get; set; }
 
         /// <summary>
         /// 法代办公电话
         /// </summary>
-        public string LROfficePhone { get; set; }
+        public string DelegateOfficePhone { get; set; }
 
         /// <summary>
         /// 法代移动电话
         /// </summary>
-        public string LRMobilePhone { get; set; }
+        public string DelegateMobilePhone { get; set; }
 
         /// <summary>
         /// 联系人
@@ -74,12 +74,12 @@ namespace GSXF.Model
         /// <summary>
         /// 联系人办公电话
         /// </summary>
-        public string COfficePhone { get; set; }
+        public string ContactOfficePhone { get; set; }
 
         /// <summary>
         /// 联系人移动电话
         /// </summary>
-        public string CMobilePhone { get; set; }
+        public string ContactMobilePhone { get; set; }
 
         /// <summary>
         /// 传真
@@ -96,15 +96,13 @@ namespace GSXF.Model
         /// </summary>
         public string Email { get; set; }
 
-        /// <summary>
-        /// 执业开通状态
-        /// </summary>
-        public Nullable<bool> Approved { get; set; }
-
         [JsonIgnore]
         public virtual ICollection<Employee> Employees { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<Project> Projects { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<OfficeAddress> OfficeAddresses { get; set; }
     }
 }

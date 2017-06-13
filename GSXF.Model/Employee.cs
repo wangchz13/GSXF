@@ -33,8 +33,6 @@ namespace GSXF.Model
 
         public string IdentificationNumber { get; set; }
 
-        public bool IsDirector { get; set; }
-
         public string OfficePhone { get; set; }
 
         public string MobilePhone { get; set; }
@@ -42,7 +40,6 @@ namespace GSXF.Model
         [JsonIgnore]
         public virtual Company Company { get; set; }
 
-        public string CompanyName { get; set; }
 
     }
 }

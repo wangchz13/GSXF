@@ -29,8 +29,6 @@ namespace GSXF.DataBase
 
         public DbSet<Action> Actions { get; set; }
 
-        public DbSet<UserRole> UserRoles { get; set; }
-
         public DbSet<ActionRole> ActionRoles { get; set; }
 
         public DbSet<UserCompany> UserCompanies { get; set; }
