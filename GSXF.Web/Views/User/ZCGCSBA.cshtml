@@ -26,7 +26,7 @@
                 var e = $('#form').serialize();
                 $.ajax({
                     async: false,
-                    url: '/User/AddZCGCS',
+                    url: '/Data/addEmployee',
                     data: e,
                     dataType: "json",
                     type: "POST",
@@ -75,9 +75,9 @@
                     <td>
                         <select name="Level" class="easyui-combobox"
                                 data-options="panelHeight:'102px'" editable="false">
-                            <option value="0">一级注册消防工程师</option>
-                            <option value="1">二级注册消防工程师</option>
-                            <option value="5">临时注册消防工程师</option>
+                            <option value="0">临时注册消防工程师</option>
+                            <option value="1">一级注册消防工程师</option>
+                            <option value="2">二级注册消防工程师</option>
                         </select>
                     </td>
                 </tr>
@@ -95,7 +95,7 @@
                         身份证号：
                     </td>
                     <td>
-                        <input name="IdentificationNUmber" class="easyui-textbox easyui-validatebox"
+                        <input name="IdentificationNumber" class="easyui-textbox easyui-validatebox"
                                data-options="required:true,width:180" />
                     </td>
                 </tr>

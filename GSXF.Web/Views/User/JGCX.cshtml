@@ -20,6 +20,7 @@
     <script>
         $(function () {
             $('#companydg').datagrid({
+                width:'100%',
                 height: 'auto',
                 rownumbers: true,
                 singleSelect: true,
@@ -27,35 +28,7 @@
                 pageList: [10, 20, 30, 50, 100, 200],
                 url: '/Data/Companies',
                 method: 'get',
-                loadFilter: function (data) {
-                    if (typeof data.length == 'number' && typeof data.splice == 'function') {    // 判断数据是否是数组
-                        data = {
-                            total: data.length,
-                            rows: data
-                        }
-                    }
-                    var dg = $(this);
-                    var opts = dg.datagrid('options');
-                    var pager = dg.datagrid('getPager');
-                    pager.pagination({
-                        onSelectPage: function (pageNum, pageSize) {
-                            opts.pageNumber = pageNum;
-                            opts.pageSize = pageSize;
-                            pager.pagination('refresh', {
-                                pageNumber: pageNum,
-                                pageSize: pageSize
-                            });
-                            dg.datagrid('loadData', data);
-                        }
-                    });
-                    if (!data.originalRows) {
-                        data.originalRows = (data.rows);
-                    }
-                    var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);
-                    var end = start + parseInt(opts.pageSize);
-                    data.rows = (data.originalRows.slice(start, end));
-                    return data;
-                }
+                loadFilter: loadFilter
             });
         });
         function doSearch() {
@@ -73,8 +46,9 @@
         }
 
     </script>
+    <link href="~/Content/User/ipage.css" rel="stylesheet" />
 </head>
-<body style=" margin:0px;font-size:10px;">
+<body>
     <p style="margin-left:10px;">
         资质类型:
         <select name="QualificationType" id="qt" class="easyui-combobox" style="width:102px;"
@@ -95,17 +69,16 @@
             <option value="5">临时三级</option>
         </select>
         机构名称:
-        <input name="Name" id="name" class="easyui-textbox" style="width:120px" />
+        <input name="Name" id="name" class="easyui-textbox" style="width:240px" />
         <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doSearch()">查询</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-reload" onclick="doReset()">重置查询</a>
     </p>
-    <table id="companydg" class="easyui-datagrid" pagination="true" data-options="url:'/Data/Companies'">
+    <table id="companydg">
         <thead>
             <tr>
                 <th field="Name" width="300px">机构名称</th>
                 <th field="QualificationType" width="160px">资质类别</th>
                 <th field="QualificationLevel" width="80px">资质等级</th>
-                <th field="t4" width="200px">服务范围</th>
                 <th field="CertificateNumber" width="160px">证书编号</th>
                 <th field="tt" width="60px" data-options="formatter:function(){
                     return '有效';
