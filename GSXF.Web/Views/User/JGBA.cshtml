@@ -24,9 +24,18 @@
                 $('#tabs').tabs('select', "机构信息");
             });
             $('#addAddress').click(function () {
-                $("#flag").before('<tr><td>办公场所地址：</td><td colspan="3"><input class="easyui-textbox address" style="width:100%">&nbsp;</td><td>办公场所建筑面积：</td><td><input class="easyui-textbox area">m2&nbsp;</td><td><a class="removeAddress" href="#" onclick="$(this).parent().parent().remove();">删除</a></td></tr>');
+                $("#flag").before('<tr><td>办公场所地址：</td><td colspan="3"><input class="easyui-textbox address" style="width:100%" required="true"></td><td>建筑面积：</td><td><input class="easyui-numberbox easyui-validatebox area" precision="2" max="99999.99" size="8" maxlength="8" required="true">m2</td><td><a class="removeAddress" href="#" onclick="$(this).parent().parent().remove();">删除</a></td></tr>');
+                $.parser.parse();
             });
 
+            $('#addzizhi').click(function () {
+                if ($('#zizhi').length >0) {
+                    return;
+                }
+                $("#flag1").before('<tr id="zizhi"><td style="text-align:right">资质类别：</td><td><select name="Type2" class="easyui-combobox" editable="false" panelHeight="auto"><option value="0">维修保养检测</option><option value="1">消防安全评估</option></select></td><td style="text-align:right">资质等级：</td><td><select name="Level2" class="easyui-combobox" editable="false" panelHeight="auto"><option value="0">一级</option><option value="1">二级</option><option value="2">三级</option><option value="3">临时一级</option><option value="4">临时二级</option><option value="5">临时三级</option></select></td><td style="text-align:right">证书编号：</td><td><input name="Number2" class="easyui-textbox easyui-validatebox" required="true" ></td><td style="text-align:right;">证书有效日期：</td><td><input name="ExpiryDate2" class="easyui-datebox" editable="false" required="true" style="width:96px"></td><td><a href="#" onclick="$(this).parent().parent().remove();">删除</a></td></tr>');
+                $.parser.parse();
+                
+            });
             var editIndex = undefined;
 
             //添加人员信息到表中
@@ -154,9 +163,9 @@
                         title: '性别',
                         width:60,
                         formatter:function(value){
-                            if(value == 0)
+                            if(value == 0 || value == '男')
                                 return '男';
-                            else if(value == 1)
+                            else if(value == 1 || value=='女')
                                 return '女';
                             else return '未知';
                         },
@@ -177,18 +186,18 @@
                         title: '人员类别',
                         width:160,
                         formatter:function(value){
-                            if(value == 0)
-                                return '一级注册消防工程师';
-                            else if(value == 1)
-                                return '二级注册消防工程师';
-                            else if(value == 2)
-                                return '建(构)筑物消防员(初级)';
-                            else if(value == 3)
-                                return '建(构)筑物消防员(中级)';
-                            else if(value == 4)
-                                return '建(构)筑物消防员(高级)';
-                            else if (value == 5)
+                            if (value == 0 || value == '临时注册消防工程师')
                                 return '临时注册消防工程师';
+                            else if(value == 1 ||value=='一级注册消防工程师')
+                                return '一级注册消防工程师';
+                            else if(value == 2 || value=='二级注册消防工程师')
+                                return '二级注册消防工程师';
+                            else if(value == 3)
+                                return '建(构)筑物消防员(初级)';
+                            else if(value == 4)
+                                return '建(构)筑物消防员(中级)';
+                            else if (value == 5)
+                                return '建(构)筑物消防员(高级)';
                         },
                         editor:{type:'combobox',
                             options: {
@@ -226,44 +235,11 @@
                         }
                     },
                     {
-                        field: 'IsDirector',
-                        title: '是否是技术负责人',
-                        width: 100,
-                        formatter: function (value) {
-                            if (value == 'true')
-                                return '是';
-                            else return '否';
-                        },
-                        align: 'center',
-                        editor: {
-                            type: 'checkbox',
-                            options: {
-                                on: 'true',
-                                off: 'false',
-                                required: true
-                            }
-                        }
-                    },
-                    {
-                        field: 'OfficePhone',
-                        title: '办公电话',
-                        width: 120,
-                        editor: {
-                            type: 'textbox',
-                            options: {
-                                required: true
-                            }
-                        }
-                    },
-                    {
                         field: 'MobilePhone',
                         title: '手机号码',
                         width: 120,
                         editor: {
-                            type: 'textbox',
-                            options: {
-                                required: true
-                            }
+                            type: 'textbox'
                         }
                     }
                 ]],
@@ -272,7 +248,121 @@
                 onClickRow: onClickRow
             });
 
+            $('#win').window({
+                title:'导入人员',
+                width: '80%',
+                height: 431,
+                modal: true,
+                shadow: true,
+                closed: true,
+                footer: '#footer'
+            });
+            $('#windg').datagrid({
+                width:'100%',
+                height: '308px',
+                rownumbers: true,
+                singleSelect: true,
+                pagination: true,
+                pageList: [10, 20, 30, 50, 100, 200],
+                url: '/Data/getEmployees',
+                method: 'get',
+                loadFilter: loadFilter,
+            });
+
         });
+    </script>
+    <script type="text/javascript">
+        var editIndex = undefined;
+        function endEditing() {
+            if (editIndex == undefined) { return true; }
+            if ($('#dg').datagrid('validateRow', editIndex)) {
+                $('#dg').datagrid('endEdit', editIndex);
+                editIndex = undefined;
+                return true;
+            } else {
+                return false;
+            }
+        }
+        function onClickRow(index) {
+            if (editIndex != index) {
+                if (endEditing()) {
+                    $('#dg').datagrid('selectRow', index)
+                            .datagrid('beginEdit', index);
+                    editIndex = index;
+                } else {
+                    $('#dg').datagrid('selectRow', editIndex);
+                }
+            }
+        }
+        function append() {
+            if (endEditing()) {
+                $('#dg').datagrid('appendRow', { IsDirector: '是' });
+                editIndex = $('#dg').datagrid('getRows').length - 1;
+                $('#dg').datagrid('selectRow', editIndex)
+                        .datagrid('beginEdit', editIndex);
+            }
+        }
+        function removeit() {
+            if (editIndex == undefined) { return }
+            $('#dg').datagrid('cancelEdit', editIndex)
+                    .datagrid('deleteRow', editIndex);
+            editIndex = undefined;
+        }
+        function accept() {
+            if (endEditing()) {
+                $('#dg').datagrid('acceptChanges');
+            }
+        }
+        function reject() {
+            $('#dg').datagrid('rejectChanges');
+            editIndex = undefined;
+        }
+
+        function importbtn() {
+            if (endEditing() == false) {
+                $.messager.alert('提示', '请先保存正在编辑的内容', 'info');
+                return;
+            }
+            $('#win').window('open');
+        }
+
+        function importing() {
+            var row = $('#windg').datagrid('getSelected');
+            if (row == null) {
+                $.messager.alert('提示', '请先选中行', 'info');
+                return;
+            }
+            if (row.CompanyName != '无') {
+                $.messager.alert('提示', '此人员已在其他公司注册，导入失败', 'info');
+                return;
+            }
+            var rows = $('#dg').datagrid('getData').rows;
+            for (var i = 0; i < rows.length; i++) {
+                if (rows[i].IdentificationNumber == row.IdentificationNumber) {
+                    $.messager.alert('提示', '此人员已经添加', 'info');
+                    return;
+                }
+            }
+
+            $('#dg').datagrid('appendRow', row);
+
+        }
+
+        function doSearch() {
+            $('#windg').datagrid('load', {
+                Level: $('#level').val(),
+                CertificateNumber: $('#cn').val(),
+                IdentificationNumber: $('#idn').val(),
+                Name: $('#name').val()
+            });
+        }
+        function doReset() {
+            $('#level').combobox('setValue', '-1');
+            $('#cn').textbox('setValue', '');
+            $('#idn').textbox('setValue', '');
+            $('#name').textbox('setValue', '');
+            doSearch();
+        }
     </script>
     <style>
         #jgxx tr{
@@ -282,7 +372,7 @@
     </style>
 </head>
 <body style="margin:0px;">
-    <div class="easyui-tabs" border="false" id="tabs">
+    <div class="easyui-tabs" border="false" id="tabs" style="width:100%">
         <div title="机构信息" style="padding:10px">
             <form id="form" method="post">
                 <table id="jgxx">
@@ -318,14 +408,15 @@
                         </td>
                         <td style="text-align:right;">证书有效日期：</td>
                         <td>
-                            <input name="ExpiryDate1" class="easyui-datebox" editable="false" required="true">
+                            <input name="ExpiryDate1" class="easyui-datebox" editable="false" required="true" style="width:96px">
                         </td>
+                        <td><a id="addzizhi" href="#">新增</a></td>
                     </tr>
-                    <tr>
+                    <tr id="flag1">
                         <td style="text-align:right">办公场所地址：</td>
-                        <td colspan="3"><input class="easyui-textbox address" style="width:100%" required="true">&nbsp;</td>
+                        <td colspan="3"><input class="easyui-textbox address" style="width:100%" required="true"></td>
                         <td style="text-align:right">建筑面积：</td>
-                        <td><input class="easyui-numberbox easyui-validatebox area" precision="2" max="99999.99" size="8" maxlength="8" required="true">m2&nbsp;</td>
+                        <td><input class="easyui-numberbox easyui-validatebox area" precision="2" max="99999.99" size="8" maxlength="8" required="true">m2</td>
                         <td><a id="addAddress" href="#">新增</a></td>
                     </tr>
 
@@ -381,58 +472,48 @@
                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">添加</a>|
                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除</a>|
                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept()">保存</a>|
-                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">撤销</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">撤销</a>|
+                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-user',plain:true" onclick="importbtn()">导入</a>
             </div>
             <table id="dg" class="easyui-datagrid" style="width:98%;height:400px;margin:0 auto;"></table>
 
-            <script type="text/javascript">
-                var editIndex = undefined;
-                function endEditing() {
-                    if (editIndex == undefined) { return true; }
-                    if ($('#dg').datagrid('validateRow', editIndex)) {
-                        $('#dg').datagrid('endEdit', editIndex);
-                        editIndex = undefined;
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-                function onClickRow(index) {
-                    if (editIndex != index) {
-                        if (endEditing()) {
-                            $('#dg').datagrid('selectRow', index)
-                                    .datagrid('beginEdit', index);
-                            editIndex = index;
-                        } else {
-                            $('#dg').datagrid('selectRow', editIndex);
-                        }
-                    }
-                }
-                function append() {
-                    if (endEditing()) {
-                        $('#dg').datagrid('appendRow', { IsDirector: '是' });
-                        editIndex = $('#dg').datagrid('getRows').length - 1;
-                        $('#dg').datagrid('selectRow', editIndex)
-                                .datagrid('beginEdit', editIndex);
-                    }
-                }
-                function removeit() {
-                    if (editIndex == undefined) { return }
-                    $('#dg').datagrid('cancelEdit', editIndex)
-                            .datagrid('deleteRow', editIndex);
-                    editIndex = undefined;
-                }
-                function accept() {
-                    if (endEditing()) {
-                        $('#dg').datagrid('acceptChanges');
-                    }
-                }
-                function reject() {
-                    $('#dg').datagrid('rejectChanges');
-                    editIndex = undefined;
-                }
-            </script>
-
+            <div id="win">
+                <p style="margin-left:10px;">
+                    证书类别:
+                    <select name="Level" id="level" class="easyui-combobox" style="width:140px;"
+                            data-options="panelHeight:'auto'" editable="false">
+                        <option value="-1">全部</option>
+                        <option value="0">临时注册消防工程师</option>
+                        <option value="1">一级注册消防工程师</option>
+                        <option value="2">二级注册消防工程师</option>
+                    </select>
+                    证书编号:
+                    <input name="CertificateNumber" id="cn" class="easyui-textbox" style="width:160px" />
+                    身份证号：
+                    <input name="IdentificationNumber" id="idn" class="easyui-textbox" style="width:140px" />
+                    姓名：
+                    <input name="Name" id="name" class="easyui-textbox" style="width:60px" />
+                    <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doSearch()">查询</a>
+                    <a href="#" class="easyui-linkbutton" iconCls="icon-reload" onclick="doReset()">重置</a>
+                </p>
+                <div>
+                    <table id="windg" class="easyui-datagrid" style="width:100%;height:auto">
+                        <thead>
+                            <tr>
+                                <th field="Name" width="80">姓名</th>
+                                <th field="Gender" width="40">性别</th>
+                                <th field="Level" width="130">证书类别</th>
+                                <th field="CertificateNumber" width="240">证书编号</th>
+                                <th field="IdentificationNumber" width="160px">身份证号</th>
+                                <th field="CompanyName" width="200">注册公司</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <div id="footer" style="padding:5px;text-align:center;">
+                <a href="#" class="easyui-linkbutton" iconCls="icon-save" onclick="importing()">导入</a>
+            </div>
             <div style="margin:0 auto;width:200px;">
                 <a href="#" class="easyui-linkbutton" id="front-page">上一页</a>
                 <a href="#" class="easyui-linkbutton" iconCls="icon-save" id="Submit">提交</a>
