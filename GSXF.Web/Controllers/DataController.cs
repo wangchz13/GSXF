@@ -10,6 +10,8 @@ using GSXF.Security;
 
 namespace GSXF.Web.Controllers
 {
+
+    [UserAuthorize]
     public class DataController : Controller
     {
         private static ProjectManager projectManager = new ProjectManager();
@@ -369,7 +371,18 @@ namespace GSXF.Web.Controllers
                 employees = employees.Where(e => e.Level == EmployeeLevel.一级注册消防工程师 || e.Level == EmployeeLevel.二级注册消防工程师 || e.Level==EmployeeLevel.临时注册消防工程师);
             }
 
-            return Content(JsonConvert.SerializeObject(employees));
+            var data = employees.Select(e => new
+            {
+                ID = e.ID,
+                Name = e.Name,
+                Gender = e.Gender.ToString(),
+                Level = e.Level.ToString(),
+                CertificateNumber = e.CertificateNumber,
+                IdentificationNumber = e.IdentificationNumber,
+                CompanyName = e.Company == null?"无":e.Company.Name
+            });
+
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -382,7 +395,42 @@ namespace GSXF.Web.Controllers
         public ActionResult getEmployee(int employeeID=0)
         {
             Employee employee = employeeManager.Find(employeeID);
-            return Content(JsonConvert.SerializeObject(employee));
+            if(employee != null)
+            {
+                var data = new
+                {
+                    ID = employee.ID,
+                    Name = employee.Name,
+                    Gender = employee.Gender.ToString(),
+                    Level = employee.Level.ToString(),
+                    CertificateNumber = employee.CertificateNumber,
+                    IdentificationNumber = employee.IdentificationNumber,
+                    MobilePhone = employee.MobilePhone,
+                    CompanyName = employee.Company==null?"无":employee.Company.Name
+                };
+                return Json(data, JsonRequestBehavior.AllowGet);
+            }
+            return Json("找不到此人员",JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult setEmployee(Employee e, string companyName)
+        {
+            Employee employee = employeeManager.Find(e.ID);
+            
+            employee.Name = e.Name;
+            employee.Gender = e.Gender;
+            employee.Level = e.Level;
+            employee.CertificateNumber = e.CertificateNumber;
+            employee.IdentificationNumber = e.IdentificationNumber;
+            employee.MobilePhone = e.MobilePhone;
+            if(companyName == "0")
+            {
+                employee.Company = null;
+            }
+
+            var data = employeeManager.Update(employee);
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -402,14 +450,14 @@ namespace GSXF.Web.Controllers
             }
 
             Employee e = employeeManager.Find(i => i.IdentificationNumber == employee.IdentificationNumber);
-            if (employee != null)
+            if (e != null)
             {
                 resp.Code = -2;
                 resp.Message = "检测到身份证号为【" + employee.IdentificationNumber + "】的人员已备案，备案失败！";
                 return Json(resp);
             }
             resp = employeeManager.Add(employee);
-            return Json(resp);
+            return Json("123");
 
         }
 
@@ -460,6 +508,12 @@ namespace GSXF.Web.Controllers
             return Json(resp);
         }
 
+        [HttpPost]
+        public ActionResult deleteEmployee(int employeeID)
+        {
+            var data = employeeManager.Delete(employeeID);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
         
         public ActionResult getUsers()
         {
