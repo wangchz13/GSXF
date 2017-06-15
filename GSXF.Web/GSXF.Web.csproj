@@ -275,6 +275,8 @@
     <Content Include="Content\search\search.css" />
     <Content Include="Content\User\index.css" />
     <Content Include="Content\User\index.js" />
+    <Content Include="Content\User\ipage.css" />
+    <Content Include="Content\User\loadfilter.js" />
     <Content Include="Content\User\login.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
