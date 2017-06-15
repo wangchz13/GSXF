@@ -4,9 +4,11 @@ using GSXF.DataBase;
 using GSXF.Model;
 using GSXF.Web.Models;
 using GSXF.Auxiliary;
+using GSXF.Security;
 
 namespace GSXF.Web.Controllers
 {
+    [UserAuthorize]
     public class UserController : Controller
     {
         private static UserManager userManager = new UserManager();
@@ -21,6 +23,7 @@ namespace GSXF.Web.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public ActionResult Login()
         {
             var user = Session["User"] as User;
@@ -30,6 +33,7 @@ namespace GSXF.Web.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult Login(LoginViewModel login)
         {
             Response resp = new Response();
