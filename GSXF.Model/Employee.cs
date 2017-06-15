@@ -33,8 +33,6 @@ namespace GSXF.Model
 
         public string IdentificationNumber { get; set; }
 
-        public string OfficePhone { get; set; }
-
         public string MobilePhone { get; set; }
 
         [JsonIgnore]
