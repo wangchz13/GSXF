@@ -13,7 +13,7 @@
     @Scripts.Render("~/Content/easyuijs")
 </head>
 <body>
-    <table class="easyui-datagrid" pagination="true" title="当前项目" data-options="dataType:'json',
+    <table class="easyui-datagrid" pagination="true" title="当前项目" data-options="dataType:'json',method: 'get',
                        url:'/Data/getWorkingProjects'
                        ">
         <thead>

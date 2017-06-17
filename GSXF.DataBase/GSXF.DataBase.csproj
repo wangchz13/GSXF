@@ -57,6 +57,7 @@
     <Compile Include="CompanyManager.cs" />
     <Compile Include="ContextFactory.cs" />
     <Compile Include="EmployeeManager.cs" />
+    <Compile Include="FileManager.cs" />
     <Compile Include="FireControlInstitutionManager.cs" />
     <Compile Include="GSXFContext.cs" />
     <Compile Include="OfficeAddressManager.cs" />

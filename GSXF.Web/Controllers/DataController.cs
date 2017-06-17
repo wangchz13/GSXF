@@ -117,6 +117,7 @@ namespace GSXF.Web.Controllers
             string rTime = Request.QueryString["rTime"];
             string result = Request.QueryString["Result"];
             string name = Request.QueryString["Name"];
+            string progress = Request.QueryString["Progress"];
 
             //按项目类型查询
             if(type!= null && type!= "-1")
@@ -157,7 +158,13 @@ namespace GSXF.Web.Controllers
                 projects = projects.Where(p => p.Name.Contains(name));
             }
 
-            User user = userManager.Find(userID);
+            if(progress != null && progress!= ""){
+                var p = int.Parse(progress);
+                ProjectProgress pp = (ProjectProgress)p;
+                projects = projects.Where(project => project.Progress == pp);
+            }
+
+            User user = Session["User"] as User;
             string roleName = string.Empty;
             if (user != null)
             {
@@ -205,6 +212,17 @@ namespace GSXF.Web.Controllers
         public ActionResult getWorkingProjects()
         {
             IQueryable<Project> projects = projectManager.FindList(p => p.Progress != ProjectProgress.提交备案);
+
+            //选出处于某个进度的项目
+            string progress = Request.QueryString["Progress"];
+            if (progress != null && progress != "")
+            {
+                var p = int.Parse(progress);
+                ProjectProgress pp = (ProjectProgress)p;
+                projects = projects.Where(project => project.Progress == pp);
+            }
+
+
             User user = Session["User"] as User;
             string roleName = user.Role.Name;
 
@@ -213,6 +231,15 @@ namespace GSXF.Web.Controllers
                 int companyID = userCompanyManager.Find(ur => ur.UserID == user.ID).CompanyID;
                 projects = projects.Where(p => p.Company.ID == companyID);
             }
+
+
+
+
+
+
+
+
+
 
             var data = projects.Select(p => new
             {
@@ -249,6 +276,7 @@ namespace GSXF.Web.Controllers
             int fireID = int.Parse(jg);
             project.FireControlInstitution = fireManager.Find(fireID);
             project.RecordDate = DateTime.Now;
+            project.Progress = ProjectProgress.入场检测;
             resp = projectManager.Add(project);
             resp.Data = null;
             return Json(resp);

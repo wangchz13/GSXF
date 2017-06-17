@@ -116,5 +116,12 @@ namespace GSXF.Model
         public bool Result { get; set; }
 
         public DateTime RecordDate { get; set; }
+
+
+        public virtual File DataFile { get; set; }
+
+        public virtual File ReportFile { get; set; }
+
+        public DateTime? rcjcsj { get; set; }
     }
 }

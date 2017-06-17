@@ -30,11 +30,6 @@ namespace GSXF.Web.Controllers
             return View();
         }
 
-        public ActionResult Test()
-        {
-            return View();
-        }
-
         public ActionResult JGCX()
         {
             return View();
@@ -46,6 +41,33 @@ namespace GSXF.Web.Controllers
         }
         public ActionResult GCSCX()
         {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult test()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult test(FormCollection form)
+        {
+            if(Request.Files.Count == 0)
+            {
+                return View();
+            }
+            var file = Request.Files[0];
+            if(file.ContentLength == 0)
+            {
+                return View();
+            }
+            var fileName = file.FileName;
+            
+            var filePath = Server.MapPath(string.Format("~/{0}", "Upload"));
+
+            var path = string.Format(filePath + "\\{0}", fileName);
+            file.SaveAs(path);
             return View();
         }
     }

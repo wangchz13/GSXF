@@ -88,6 +88,7 @@
     <Compile Include="Category.cs" />
     <Compile Include="Company.cs" />
     <Compile Include="EnumItem.cs" />
+    <Compile Include="File.cs" />
     <Compile Include="FireControlInstitution.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Employee.cs" />

@@ -11,67 +11,43 @@
     <title>项目登记</title>
     @Styles.Render("~/Content/easyui")
     @Scripts.Render("~/Content/easyuijs")
-    <style>
-        .step-wrap {
-            text-align: center;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-        .step-wrap .item {
-            display: inline-block;
-            color: #5a5a5a;
-            font-size: 14px;
-            position: relative;
-            width: 200px;
-        }
-        .step-num-wrap {
-            width: 40px;
-            height: 40px;
-            line-height: 40px;
-            background: #bcbcbc;
-            border-radius: 50%;
-            color: #fff;
-            font-size: 16px;
-            margin-bottom: 10px;
-            display: inline-block;
-            position: relative;
-            z-index: 2;
-        }
-        .step-wrap .item + .item:before {
-            display: inline-block;
-            width: 200px;
-            height: 2px;
-            background: #bcbcbc;
-            content: "";
-            position: absolute;
-            top: 20px;
-            left: -120px;
-        }
-        .done .step-num {
-            background-color: limegreen;
-        }
-        .step-div {
-            margin: 0 auto;
-            text-align: center;
-        }
-    </style>
+
+    <link href="~/Content/User/ipage.css" rel="stylesheet" />
+    
     <script>
         $(document).ready(function () {
-            $("#btn-1").click(function () {
-                $('#step-1-div').hide();
-                $('#step-2-div').show();
-            });
-            $("#btn-2").click(function () {
-                $('#step-2-div').hide();
-                $('#step-3-div').show();
-            });
-            $("#btn-3").click(function () {
-                $('#step-3-div').hide();
-                $('#step-4-div').show();
-            });
-            $("#btn-4").click(function () {
 
+            $('#rcjcdg').datagrid({
+                width: '100%',
+                height: 'auto',
+                rownumbers: true,
+                singleSelect: true,
+                pagination: true,
+                pageList: [10, 20, 30, 50, 100, 200],
+                url: '/Data/getProjects/?Progress=0',
+                method: 'get',
+                loadFilter: loadFilter
             });
+
+            $('#cjbgdg').datagrid({
+                width: '100%',
+                height: 'auto',
+                rownumbers: true,
+                singleSelect: true,
+                pagination: true,
+                pageList: [10, 20],
+                url: '/Data/getProjects/?Progress=1',
+                method: 'get',
+                loadFilter:loadFilter
+            });
+
+            $('#win1').window({
+                title: '提交材料',
+                modal: true,
+                shadow: true,
+                closed: true
+            });
+
 
             $("#submitproject").click(function () {
                 if (!$('#projectform').form('validate')) {
@@ -115,7 +91,7 @@
             });
 
             $("#jg").combobox({
-                width:'240',
+                width:'168',
                 editable: false,
                 panelHeight: 'auto',
                 valueField: 'value',
@@ -125,51 +101,105 @@
 
             $('#jg').combobox('select', 2);
         });
-        
+        function rcjc(data) {
+            $('#pid').val(data);
+            $('#win1').window('open');
+        }
+
+        function cjbg(data) {
+            $('#pid1').val(data);
+            $('#win2').window('open');
+        }
+
+        //导入文件
+        function rcjcupload() {
+            if (!$('#rcjcForm').form('validate')) {
+                $.messager.alert('提示', '表单无效，请检查', 'info');
+                return;
+            }
+
+             var formData = new FormData($("#rcjcForm")[0]);
+             console.log(formData);
+             formData.append("id", $('#pid').val());
+             formData.append("date", $('#pdate').val())
+             $.ajax({
+                 url: '/User/rcjc',
+                 type: 'POST',
+                 data: formData,
+                 async: false,
+                 cache: false,
+                 contentType: false,
+                 processData: false,
+                 success: function (data) {
+                     if (data.Code < 0) {
+                         $.messager.alert('提示', data.Message, 'info');
+                         return;
+                     } else {
+                         $.messager.alert('提示', 上传成功, 'info');
+                         $('#win1').window('close');
+                     }
+                     
+                 },
+                 error:function(data){
+                     alert(data);
+             }
+             });
+        }
+
+
+
+        function cjbgupload() {
+
+            var formData = new FormData($("#cjbgForm")[0]);
+            formData.append("id", $('#pid1').val());
+            $.ajax({
+                url: '/User/cjbg',
+                type: 'POST',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.Code < 0) {
+                        $.messager.alert('提示', data.Message, 'info');
+                        return;
+                    } else {
+                        $.messager.alert('提示', 上传成功, 'info');
+                        $('#win2').window('close');
+                    }
+
+                },
+                error: function (data) {
+                    alert(data);
+                }
+            });
+        }
     </script>
 
-</head>
-<body>
-    <div class="step-wrap">
-        <div class="item">
-            <div class="step-num-wrap">
-                <div class="step-num">1</div>
-            </div>
-            <h3 class="step-title">项目登记</h3>
-        </div>
-        <div class="item">
-            <div class="step-num-wrap">
-                <div class="step-num">2</div>
-            </div>
-            <h3 class="step-title">入场检测</h3>
-        </div>
-        <div class="item">
-            <div class="step-num-wrap">
-                <div class="step-num">3</div>
-            </div>
-            <h3 class="step-title">出具报告</h3>
-        </div>
-        <div class="item">
-            <div class="step-num-wrap">
-                <div class="step-num">4</div>
-            </div>
-            <h3 class="step-title">提交备案</h3>
-        </div>
-    </div>
+    <style>
+        #step-1-div tr{
+            height:32px;
+        }
+    </style>
 
-    <div style="height:80%;width:100%;">
-        <div class="easyui-tabs" border="false" id="tabs">
-            <div id="step-1-div" title="1.项目登记">
-                <form action="/Admin/Login" method="post" id="projectform">
+</head>
+<body style="margin:0;">
+    
+
+    <div >
+        <div class="easyui-tabs" border="false" id="tabs" style="width:100%;">
+            <div id="step-1-div" title="1.项目登记" style="width:100%">
+                <form id="projectform">
                     <fieldset>
                         <legend>项目信息</legend>
                         <table>
                             <tr>
-                                <td>项目名称：</td>
-                                <td> 
-                                    <input name="Name"  class="easyui-textbox" />
+                                <td style="text-align:right">项目名称：</td>
+                                <td colspan="3"> 
+                                    <input name="Name"  class="easyui-textbox" style="width:100%" />
                                 </td>
-                                <td>项目类型</td>
+                                <td style="text-align:right">项目类型：</td>
                                 <td>
                                     <select name="Type" class="easyui-combobox" editable="false">
                                         <option value="0">竣工检测</option>
@@ -180,11 +210,12 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>项目地区：</td>
-                                <td>
+                                <td style="text-align:right">
                                     所属地区:
+                                </td>
+                                <td>
                                     <select class="easyui-combobox" name="City" id="city" style="width:80px;"
-                                            data-options="panelHeight:'102px'" editable="false">
+                                            data-options="panelHeight:'auto'" editable="false">
                                         <option value="0">兰州</option>
                                         <option value="1">嘉峪关</option>
                                         <option value="2">金昌</option>
@@ -202,27 +233,24 @@
                                         <option value="14">兰州新区</option>
                                     </select>
                                 </td>
-                                <td>管辖单位:</td>
+                                <td style="text-align:right">管辖单位:</td>
                                 <td>
-                                    <select class="easyui-combobox" name="jg" id="jg">
-                                    </select>
+                                    <select class="easyui-combobox" name="jg" id="jg"></select>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>详细地址：</td>
-                                <td>
+                                <td style="text-align:right">详细地址：</td>
+                                <td colspan="2">
                                     <input class="easyui-textbox" name="Address" />
                                 </td>
                             </tr>
                             <tr>
-                                <td>建筑类型：</td>
+                                <td style="text-align:right">建筑类型：</td>
                                 <td>
                                     <select name="BuildType" class="easyui-combobox" editable="false">
                                         <option value="0">公用建筑</option>
                                         <option value="1">民用建筑</option>
                                     </select>
                                 </td>
-                                <td>火灾危险性：</td>
+                                <td style="text-align:right">火灾危险性：</td>
                                 <td>
                                     <select name="FireRisk" class="easyui-combobox" editable="false">
                                         <option value="-1">无</option>
@@ -233,51 +261,51 @@
                                         <option value="4">戊</option>
                                     </select>
                                 </td>
-                                <td>单体建筑面积：</td>
+                                <td style="text-align:right">单体建筑面积：</td>
                                 <td>
-                                    <input class="easyui-textbox" name="Area" />
+                                    <input class=" easyui-numberbox" name="Area" style="width:60px" />
                                 </td>
-                                <td>建筑层总数：</td>
+                                <td style="text-align:right">建筑层总数：</td>
                                 <td>
-                                    <input class="easyui-textbox" name="AllLayer" />
+                                    <input class="easyui-textbox" name="AllLayer" style="width:60px"/>
                                 </td>
-                                <td>技术服务层数：</td>
+                                <td style="text-align:right">技术服务层数：</td>
                                 <td>
-                                    <input class="easyui-textbox" name="ServiceLayer" />
+                                    <input class="easyui-textbox" name="ServiceLayer" style="width:60px"/>
                                 </td>
                             </tr>
                             <tr>
-                                <td>合同编号：</td>
+                                <td style="text-align:right">合同编号：</td>
                                 <td>
                                     <input class="easyui-textbox" name="ContractNumber" />
                                 </td>
-                                <td>合同签订日期：</td>
+                                <td style="text-align:right">合同签订日期：</td>
                                 <td>
-                                    <input class="easyui-datebox" name="SignDate" />
+                                    <input class="easyui-datebox" name="SignDate" style="width:96px;" />
                                 </td>
-                                <td>合同起止日期：</td>
-                                <td>
-                                    <input class="easyui-datebox" name="StartDate"/><input class="easyui-datebox" name="EndDate"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>项目负责人：</td>
-                                <td>
-                                    <input class="easyui-textbox" name="ProjectHead" />
-                                </td>
-                                <td>技术负责人：</td>
-                                <td>
-                                    <input class="easyui-textbox" name="TechHead" />
-                                </td>
-                                <td>联系人：</td>
-                                <td>
-                                    <input class="easyui-textbox" name="ProjectContact" />
+                                <td style="text-align:right">合同起止日期：</td>
+                                <td colspan="2">
+                                    <input class="easyui-datebox" name="StartDate" style="width:96px;"/>-<input class="easyui-datebox" name="EndDate" style="width:96px;"/>
                                 </td>
                             </tr>
                             <tr>
-                                <td>备注：</td>
+                                <td style="text-align:right">项目负责人：</td>
                                 <td>
-                                    <input class="easyui-textbox" name="Note" />
+                                    <input class="easyui-textbox" name="ProjectHead" style="width:80px" />
+                                </td>
+                                <td style="text-align:right">技术负责人：</td>
+                                <td>
+                                    <input class="easyui-textbox" name="TechHead" style="width:80px" />
+                                </td>
+                                <td style="text-align:right">联系人：</td>
+                                <td>
+                                    <input class="easyui-textbox" name="ProjectContact" style="width:80px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:right">备注：</td>
+                                <td colspan="9">
+                                    <input class="easyui-textbox" name="Note" style="width:100%"/>
                                 </td>
                             </tr>
                         </table>
@@ -314,88 +342,71 @@
 
             </div>
             <div id="step-2-div" class="step-div" title="2.入场检测">
-
-                <table class="easyui-datagrid" pagination="true">
+                <table class="easyui-datagrid" id="rcjcdg">
                     <thead>
                         <tr>
-                            <th field="t1" width="300px">项目名称</th>
-                            <th field="t4" width="80px">检测时间</th>
+                            <th field="Name" width="300px">项目名称</th>
+                            <th field="ewq" data-options="width:100,formatter:formatter1">操作</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>宝鸡如家酒店有限公司广园路店</td>
-                            <td contenteditable="true"></td>
-                        </tr>
-                        <tr>
-                            <td>英才网络教育咨询有限公司高新校区装修工程</td>
-                            <td>2015-09-23</td>
-                        </tr>
-                        <tr>
-                            <td>盛和大酒店</td>
-                            <td>2015-09-23</td>
-                        </tr>
-                        <tr>
-                            <td>宝鸡如家酒店有限公司广园路店</td>
-                            <td>2015-09-23</td>
-                        </tr>
-                        <tr>
-                            <td>汉滨区悦动生态健身俱乐部装修工程</td>
-                            <td>2015-09-23</td>
-                        </tr>
-                    </tbody>
                 </table>
 
-                <a href="#" class="easyui-linkbutton">保存并继续</a>
+                <div class="easyui-window" id="win1" title="文件上传" style="width:400px;height:160px;padding:2px;" closed="true">
+                    <form id="rcjcForm" method="post" enctype="multipart/form-data">
+                        <p>
+                            入场检测时间：
+                            <input id="pid" style="display:none" />
+                            <input class="easyui-datebox" id="pdate" required="true" />
+                        </p>
+                        <p>
+                            上传材料：
+                            <input type="file" name="file" required="true"/>
+                        </p>
+                        <a class="easyui-linkbutton" onclick="rcjcupload()">上传并保存</a>
+                    </form>
+                </div>
             </div>
+
+            
+
+
+            <script>
+                function formatter1(value, row, index) {
+                    return '<a href="#" onclick="rcjc(' + row.ID + ')">提交材料</a>';
+                }
+
+                
+            </script>
+
             <div id="step-3-div" class="step-div" title="3.出具报告">
                 <div style="margin:0 auto;">
-                    <table class="easyui-datagrid" pagination="true">
+                    <table class="easyui-datagrid" pagination="true" id="cjbgdg">
                         <thead>
                             <tr>
-                                <th field="t1" width="300px">项目名称</th>
-                                <th field="t4" width="80px">检测时间</th>
-                                <th field="t5" width="200px">操作</th>
+                                <th field="Name" width="300px">项目名称</th>
+                                <th field="ewqewq" data-options="width:100,formatter:formatter2">操作</th>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>宝鸡如家酒店有限公司广园路店</td>
-                                <td contenteditable="true"></td>
-                                <td>
-                                    <a href="#">生成报告</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>英才网络教育咨询有限公司高新校区装修工程</td>
-                                <td>2015-09-23</td>
-                                <td>
-                                    <a href="#">生成报告</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>盛和大酒店</td>
-                                <td>2015-09-23</td>
-                                <td>
-                                    <a href="#">生成报告</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>宝鸡如家酒店有限公司广园路店</td>
-                                <td>2015-09-23</td>
-                                <td>
-                                    <a href="#">生成报告</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>汉滨区悦动生态健身俱乐部装修工程</td>
-                                <td>2015-09-23</td>
-                                <td>
-                                    <a href="#">生成报告</a>
-                                </td>
-                            </tr>
-                        </tbody>
+                        </thead>   
                     </table>
+
+                    <script>
+                function formatter2(value, row, index) {
+                    return '<a href="#" onclick="cjbg(' + row.ID + ')">提交报告</a>';
+                }
+
+
+                    </script>
+
+                    <div class="easyui-window" id="win2" title="提交报告" style="width:400px;height:160px;padding:2px;" closed="true">
+                        <form id="cjbgForm" method="post" enctype="multipart/form-data">
+                            <p>
+                                <input id="pid1" style="display:none" />
+                                提交报告：
+                                <input type="file" name="file" required="true" />
+                            </p>
+                            <a class="easyui-linkbutton" onclick="cjbgupload()">上传报告</a>
+                        </form>
+                    </div>
                 </div>
             </div>
             <div id="step-4-div" class="step-div" title="4.提交备案">
@@ -407,43 +418,7 @@
                             <th field="t5" width="200px">操作</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>宝鸡如家酒店有限公司广园路店</td>
-                            <td contenteditable="true"></td>
-                            <td>
-                                <a href="#">提交备案</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>英才网络教育咨询有限公司高新校区装修工程</td>
-                            <td>2015-09-23</td>
-                            <td>
-                                <a href="#">提交备案</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>盛和大酒店</td>
-                            <td>2015-09-23</td>
-                            <td>
-                                <a href="#">提交备案</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>宝鸡如家酒店有限公司广园路店</td>
-                            <td>2015-09-23</td>
-                            <td>
-                                <a href="#">提交备案</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>汉滨区悦动生态健身俱乐部装修工程</td>
-                            <td>2015-09-23</td>
-                            <td>
-                                <a href="#">提交备案</a>
-                            </td>
-                        </tr>
-                    </tbody>
+                    
                 </table>
             </div>
         </div>

@@ -1,41 +1,21 @@
-﻿@model GSXF.Web.Models.JGBAViewModel
-
+﻿
 @{
     Layout = null;
 }
-
-@{ 
-    foreach(var item in Model.Company)
-}
-
-
 
 <!DOCTYPE html>
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>View</title>
+    <title>test</title>
 </head>
 <body>
-    @using (Html.BeginForm()) 
-    {
-        @Html.AntiForgeryToken()
-        
-        <div class="form-horizontal">
-            <h4>JGBAViewModel</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" />
-                </div>
-            </div>
-        </div>
-    }
-    
-    <div>
-        @Html.ActionLink("Back to List", "Index")
+    <div> 
+        <form action="/Home/test" enctype="multipart/form-data" method="post">
+            <input type="file" name="qqq" />
+            <input type="submit" name="Submit" value="上传" />
+        </form>
     </div>
 </body>
 </html>
