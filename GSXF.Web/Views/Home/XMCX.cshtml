@@ -21,7 +21,7 @@
                 singleSelect: true,
                 pagination: true,
                 pageList: [10, 20, 30, 50, 100, 200],
-                url: '/Data/Projects',
+                url: '/Data/getProjects',
                 method: 'get',
                 loadFilter: function (data) {
                     if (typeof data.length == 'number' && typeof data.splice == 'function') {    // 判断数据是否是数组
@@ -77,6 +77,11 @@
     </script>
 </head>
 <body style=" margin:0px;font-size:10px;">
+    <ol class="breadcrumb">
+        <li>当前位置：</li>
+        <li><span class="glyphicon glyphicon-home"></span>  @Html.ActionLink("首页", "Index", "Home")</li>
+        <li class="active">项目查询</li>
+    </ol>
     <p style="margin-left:10px;">
         项目类型:
         <select class="easyui-combobox" name="Type" id="type" style="width:102px;"

@@ -8,7 +8,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>JGBA</title>
+    <title>机构备案</title>
 
     @Styles.Render("~/Content/easyui")
     @Scripts.Render("~/Content/easyuijs")
@@ -24,8 +24,8 @@
                 $('#tabs').tabs('select', "机构信息");
             });
             $('#addAddress').click(function () {
-                $("#flag").before('<tr><td>办公场所地址：</td><td colspan="3"><input class="easyui-textbox address" style="width:100%" required="true"></td><td>建筑面积：</td><td><input class="easyui-numberbox easyui-validatebox area" precision="2" max="99999.99" size="8" maxlength="8" required="true">m2</td><td><a class="removeAddress" href="#" onclick="$(this).parent().parent().remove();">删除</a></td></tr>');
-                $.parser.parse();
+                $("#flag").before('<tr class="newaddress"><td>办公场所地址：</td><td colspan="3"><input class="easyui-textbox address" style="width:100%" required="true"></td><td>建筑面积：</td><td><input class="easyui-numberbox easyui-validatebox area" precision="2" max="99999.99" size="8" maxlength="8" required="true">m2</td><td><a class="removeAddress" href="#" onclick="$(this).parent().parent().remove();">删除</a></td></tr>');
+                $.parser.parse('.newaddress');
             });
 
             $('#addzizhi').click(function () {
@@ -33,9 +33,10 @@
                     return;
                 }
                 $("#flag1").before('<tr id="zizhi"><td style="text-align:right">资质类别：</td><td><select name="Type2" class="easyui-combobox" editable="false" panelHeight="auto"><option value="0">维修保养检测</option><option value="1">消防安全评估</option></select></td><td style="text-align:right">资质等级：</td><td><select name="Level2" class="easyui-combobox" editable="false" panelHeight="auto"><option value="0">一级</option><option value="1">二级</option><option value="2">三级</option><option value="3">临时一级</option><option value="4">临时二级</option><option value="5">临时三级</option></select></td><td style="text-align:right">证书编号：</td><td><input name="Number2" class="easyui-textbox easyui-validatebox" required="true" ></td><td style="text-align:right;">证书有效日期：</td><td><input name="ExpiryDate2" class="easyui-datebox" editable="false" required="true" style="width:96px"></td><td><a href="#" onclick="$(this).parent().parent().remove();">删除</a></td></tr>');
-                $.parser.parse();
-                
+                $.parser.parse('#zizhi'); 
             });
+
+
             var editIndex = undefined;
 
             //添加人员信息到表中
@@ -59,7 +60,7 @@
                 
                 var data = $('#dg').datagrid('getData');
                 if (data.total == 0) {
-                    $.messager.alert('提示', '请填写人员信息', 'info');
+                    $.messager.alert('提示', '人员信息不能为空', 'info');
                     return;
                 }
                 if (endEditing() == false) {
@@ -72,15 +73,21 @@
                 }
 
                 submitemployee();
-                if (resp.Code == -2) {
-                    $.messager.alert('提示', resp.Message, 'info', function () {
+                if (resp.Code != 1) {
+                    $.messager.alert('提示', '出现错误：'+resp.Message, 'info', function () {
                         window.location.reload();
                     });
                     return;
                 }
                 submitaddress();
+                if (resp.Code != 1) {
+                    $.messager.alert('提示', '出现错误：' + resp.Message, 'info', function () {
+                        window.location.reload();
+                    });
+                    return;
+                }
                 submitcompany();
-                $.messager.alert('提示', '机构备案成功!<br/><p>账号：<span style="color:#E53333;font-size:18px;">'+name+'</span>   密码：<span style="color:#E53333;font-size:18px;">'+password+'</span></p><p><span style="color:#E53333;">注意：此密码丢失后不可找回，请牢记！</span></p>', 'info', function () {
+                $.messager.alert('提示', '机构备案成功!<br/><br/><p>账号：<span style="color:#E53333;font-size:18px;">' + name + '</p><p></span>   密码：<span style="color:#E53333;font-size:18px;">' + password + '</span></p>', 'info', function () {
                     window.location.reload();
                 });
                 
@@ -95,9 +102,7 @@
                     _employeelist["list[" + i + "].Gender"] = rows[i].Gender == "" ? 0 : rows[i].Gender;
                     _employeelist["list[" + i + "].Level"] = rows[i].Level == "" ? 0 : rows[i].Level;
                     _employeelist["list[" + i + "].CertificateNumber"] = rows[i].CertificateNumber;
-                    _employeelist["list[" + i + "].IdentificationNumber"] = rows[i].IdentificationNumber;
-                    _employeelist["list[" + i + "].IsDirector"] = rows[i].IsDirector;
-                    _employeelist["list[" + i + "].OfficePhone"] = rows[i].OfficePhone;
+                    _employeelist["list[" + i + "].IdentificationNumber"] = rows[i].IdentificationNumber.toUpperCase();
                     _employeelist["list[" + i + "].MobilePhone"] = rows[i].MobilePhone;
                 }
                 $.ajax({
@@ -124,7 +129,10 @@
                     url: '/Data/addOfficeAddress',
                     data: _addresslist,
                     dataType: "json",
-                    type: "POST"
+                    type: "POST",
+                    success: function (data) {
+                        resp = data;
+                    }
                 });
             }
 
@@ -146,6 +154,10 @@
 
             //初始化人员信息表
             $('#dg').datagrid({
+                width: '100%',
+                height: '308px',
+                rownumbers: true,
+                singleSelect: true,
                 columns: [[
                     {
                         field: 'Name',
@@ -379,7 +391,7 @@
                     <tr>
                         <td style="text-align:right">机构名称：</td>
                         <td colspan="3">
-                            <input name="Name" class="easyui-textbox easyui-validatebox" required="true" style="width:100%;"/>
+                            <input name="Name" class="easyui-textbox" required="true" style="width:100%;"/>
                         </td>
                     </tr>
                     <tr>
@@ -392,8 +404,7 @@
                         </td>
                         <td style="text-align:right">资质等级：</td>
                         <td>
-                            <select name="Level1" class="easyui-combobox"
-                                    data-options="panelHeight:'auto'" editable="false">
+                            <select name="Level1" class="easyui-combobox" panelHeight="auto" editable="false">
                                 <option value="0">一级</option>
                                 <option value="1">二级</option>
                                 <option value="2">三级</option>
@@ -404,7 +415,7 @@
                         </td>
                         <td style="text-align:right">证书编号：</td>
                         <td>
-                            <input name="Number1" class="easyui-textbox easyui-validatebox" required="true" >
+                            <input name="Number1" class="easyui-textbox" required="true" >
                         </td>
                         <td style="text-align:right;">证书有效日期：</td>
                         <td>
@@ -416,7 +427,7 @@
                         <td style="text-align:right">办公场所地址：</td>
                         <td colspan="3"><input class="easyui-textbox address" style="width:100%" required="true"></td>
                         <td style="text-align:right">建筑面积：</td>
-                        <td><input class="easyui-numberbox easyui-validatebox area" precision="2" max="99999.99" size="8" maxlength="8" required="true">m2</td>
+                        <td><input class="easyui-numberbox easyui-validatebox area" precision="2" max="9999999.99" size="8" maxlength="8" required="true">m2</td>
                         <td><a id="addAddress" href="#">新增</a></td>
                     </tr>
 
@@ -430,7 +441,7 @@
                         <td style="text-align:right">办公电话：</td>
                         <td><input name="DelegateOfficePhone" class="easyui-textbox"></td>
                         <td style="text-align:right">手机号码：</td>
-                        <td><input name="DelegateMobilePhone" class="easyui-numberbox" maxlength="11"></td>
+                        <td><input name="DelegateMobilePhone" class="easyui-textbox"></td>
                     </tr>
                     <tr>
                         <td style="text-align:right">联系人：</td>
@@ -438,7 +449,7 @@
                         <td style="text-align:right">办公电话：</td>
                         <td><input name="ContactOfficePhone" class="easyui-textbox"></td>
                         <td style="text-align:right">手机号码：</td>
-                        <td><input name="ContactMobilePhone" class="easyui-numberbox" maxlength="11"></td>
+                        <td><input name="ContactMobilePhone" class="easyui-textbox"></td>
                     </tr>
                     <tr>
                         <td style="text-align:right">传真：</td>
@@ -446,14 +457,14 @@
                         <td style="text-align:right">邮政编码：</td>
                         <td><input name="Postcode" class="easyui-textbox"></td>
                         <td style="text-align:right">电子邮件：</td>
-                        <td><input name="Email" class="easyui-textbox" validType="email"></td>
+                        <td><input name="Email" class="easyui-textbox easyui-validatebox" validType="email"></td>
                     </tr>
                 </table>
             </form>
             <br />
             <br />
-            <div style="width:100px;margin:0 auto; height:50px;">
-                <a href="#" class="easyui-linkbutton" style="float:right;" id="next-page">下一页</a>
+            <div style="width:100px;margin:0 auto; height:50px; text-align:center;">
+                <a href="#" class="easyui-linkbutton" id="next-page">下一页</a>
             </div>
             <div style="color:red">
                 提示：<br />
@@ -464,10 +475,6 @@
 
 
         <div title="人员信息" >
-
-            <div id="progressdiv" class="easyui-dialog" closed="true" title="进度">
-                <div id="p" class="easyui-progressbar" data-options="value:60" style="width:400px;"></div>
-            </div>
             <div id="tb" style="height:auto">
                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">添加</a>|
                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除</a>|
@@ -475,7 +482,7 @@
                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">撤销</a>|
                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-user',plain:true" onclick="importbtn()">导入</a>
             </div>
-            <table id="dg" class="easyui-datagrid" style="width:98%;height:400px;margin:0 auto;"></table>
+            <table id="dg"></table>
 
             <div id="win">
                 <p style="margin-left:10px;">
@@ -497,7 +504,7 @@
                     <a href="#" class="easyui-linkbutton" iconCls="icon-reload" onclick="doReset()">重置</a>
                 </p>
                 <div>
-                    <table id="windg" class="easyui-datagrid" style="width:100%;height:auto">
+                    <table id="windg">
                         <thead>
                             <tr>
                                 <th field="Name" width="80">姓名</th>

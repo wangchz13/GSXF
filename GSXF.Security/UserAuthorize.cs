@@ -18,7 +18,7 @@ namespace GSXF.Security
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
-            filterContext.RequestContext.HttpContext.Response.Write("用户未登录或登录信息过期，点此<a href='/User/Login' target='_self'>重新登录</a>！");
+            filterContext.RequestContext.HttpContext.Response.Write("用户未登录或登录信息过期，点此<a href='/' target='_self'>重新登录</a>！");
             filterContext.RequestContext.HttpContext.Response.End();
         }
     }

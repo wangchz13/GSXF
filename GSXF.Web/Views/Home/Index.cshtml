@@ -5,220 +5,136 @@
 
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('#login').form({
+    function login() {
+        $.ajax({
+            async: false,
+            url: '/User/Login',
+            data: {"Name":$('#username').val(),"Password":$('#password').val(),"VerficationCode":$('#code').val()},
+            dataType:'json',
+            type: 'POST',
             success: function (data) {
-                window.location.href = "/User/Login";
+                if (data.Code != 3) {
+                    $('#msg').html(data.Message);
+                } else {
+                    window.location.href = "/User";
+                }
             }
+
         });
-    });
+    }
+    
+    function findfile() {
+        window.open("/Home/Report/?filecode=" + $('#filecode').val());
+    }
+
 </script>
 
+<style>
+    li{
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+    }
+</style>
 
-<div class="row">
-    <div class="col-lg-3 col-md-2 col-sm-2" style="padding-right:0px;">
-        <div class="border" style="padding-bottom:18px;">
-            <h4 class="title">查询服务</h4>
-            <div>
-                <div class="input-group" style="margin-bottom:6px;">
-                    <input type="text" class="form-control input-sm" placeholder="请输入报告查询明码" />
-                    <span class="input-group-addon btn " style="background-color:#0690FA;color:#fff;">
-                        <span class="glyphicon glyphicon-search"></span>
-                        搜索
-                    </span>
+<div style="width:100%">
+    <table style="width:100%">
+        <tr>
+            <td style="width:24%">
+                <div class="border" style="padding-bottom:18px;">
+                    <h4 class="title">查询服务</h4>
+                    <div>
+                        <div class="input-group" style="margin-bottom:6px;">
+                            <input type="text" class="form-control" placeholder="请输入报告查询明码" id="filecode" />
+                            <span class="input-group-addon btn " style="background-color:#0690FA;color:#fff;" onclick="findfile()">
+                                <span class="glyphicon glyphicon-search"></span>
+                                搜索
+                            </span>
+                        </div>
+                        <p>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <a class="btn btn-info btn-default  form-control" href="/Home/JGCX">机构查询</a>
+                                </div>
+                                <div class="col-lg-6">
+                                    <a class="btn btn-info btn-default form-control" href="/Home/XMCX">项目查询</a>
+                                </div>
+                            </div>
+                        </p>
+                        
+                        <p>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <a class="btn btn-info btn-default form-control" href="/Home/GCSCX">工程师查询</a>
+                                </div>
+                                <div class="col-lg-6">
+                                    <a class="btn btn-info btn-default form-control" href="/Home/FWPJ">服务查询</a>
+                                </div>
+                            </div>
+                        </p>
+                        
+                            
+                        
+
+                    </div>
                 </div>
-                <p>
-                    <a class="btn btn-info btn-default  form-control" href="/Home/JGCX">技术服务机构查询</a>
-
-                </p>
-                <p>
-                    <a  class="btn btn-info btn-default form-control" href="/Home/XMCX">技术服务项目查询</a>
-
-                </p>
-                    <a  class="btn btn-info btn-default form-control" href="/Home/GCSCX">注册消防工程师查询</a>
-
-            </div>
-        </div>
-        <div class="border" style="padding-bottom:29px">
-            <h4 class="title">系统登录</h4>
-            <form action="/User/Login" method="post" id="login">
-                <div class="form-group">
-                    <input class="form-control" name="Name" id="username" placeholder="用户名">
+            </td>
+            <td style="width:38%;">
+                <div class="border">
+                    <h4 class="title">通知公告<span class="more"><a href="/Home/ArticleList/?category=0">更多>></a></span></h4>
+                    <div class="list" >
+                        @Html.Action("LastArticleList", new { category = 0 })
+                    </div>
                 </div>
-
-                <div class="form-group">
-                    <input type="password" class="form-control" name="Password" id="password" placeholder="密　码">
+            </td>
+            <td style="width:38%;">
+                <div class="border">
+                    <h4 class="title">技术标准<span class="more"><a href="/Home/ArticleList/?category=1">更多>></a></span></h4>
+                    <div class="list">
+                        @Html.Action("LastArticleList", new { category = 1 })
+                    </div>
                 </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:24%">
+                <div class="border" style="padding-bottom:5px;">
+                    <h4 class="title">系统登录</h4>
+                    <div id="login">
+                        <p >
+                            <input class="form-control input-sm " name="Name" id="username" placeholder="用户名" required="true">
+                        </p>
 
-                <div class="form-group">
-                    <button type="submit" class="btn btn-default">登录</button>
+                        <p >
+                            <input type="password" class="form-control input-sm" name="Password" id="password" placeholder="密　码" required="true">
+                        </p>
+                        <div class="form-group">
+                            <input class=" input-sm" name="VerficationCode" id="code" placeholder="验证码" style="width:50%"  required="true"/>
+                            <img id="verificationcode" alt="" src="@Url.Action("VerificationCode", "Home")"  onclick="this.src = '/Home/VerificationCode?d=' + Math.random();"/>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-default btn-sm" onclick="login()" >登录</button>
+                            <label id="msg" style="color:red;float:right;"></label>
+                        </div>
+                    </div>
                 </div>
-            </form>
-        </div>
-    </div>
-    <div class="col-lg-5 col-md-5 col-sm-5" style="padding-right:0px;">
-        <div class="border">
-            <h4 class="title">通知公告</h4>
-            <div class="list">
-                <ul>
-                    <li>
-                        <a title="注册消防工程师管理规定" href=" ~/Content/注册消防工程师管理规定.pdf" target="_blank">
-
-                            注册消防工程师管理规定
-                        </a>
-                    </li>
-
-                    <li>
-                        <a title="公布第二次社会消防技术服务机构临时资质评审结果" href=" ~/Content/公布第二次社会消防技术服务机构临时资质评审结果.pdf" target="_blank">
-
-                            公布第二次社会消防技术服务机构临时资质评审结果
-                        </a>
-                    </li>
-
-                    <li>
-                        <a title="公布第一次社会消防技术服务机构临时资质评审结果" href=" ~/Content/公布第一次社会消防技术服务机构临时资质评审结果.pdf" target="_blank" >
-                            公布第一次社会消防技术服务机构临时资质评审结果
-
-                        </a>
-                    </li>
-
-                    <li>
-                        <a title="开展办理临时社会消防技术服务机构资质相关工作的通知" href=" ~/Content/开展办理临时社会消防技术服务机构资质相关工作的通知.pdf" target="_blank" >
-
-                            开展办理临时社会消防技术服务机构资质相关工作的通知
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">&nbsp;</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="border">
-            <h4 class="title">相关法规</h4>
-            <div class="list">
-                <ul>
-                    <li>
-                        <a title="社会消防技术服务管理规定公安部129号" href="~/Content/相关法规社会消防技术服务管理规定公安部129号.pdf" target="_blank">
-
-                            社会消防技术服务管理规定公安部129号
-                        </a>
-                    </li>
-
-                    <li>
-                        <a title="社会消防技术服务管理规定公安部129号" href="~/Content/相关法规公安部令第136号.pdf" target="_blank">
-
-                            社会消防技术服务管理规定公安部136号
-
-                        </a>
-                    </li>
-
-                    <li>
-                        <a title="注册消防工程师制度暂行规定" href=" ~/Content/相关法规注册消防工程师制度暂行规定.pdf" target="_blank">
-
-                            注册消防工程师制度暂行规定
-
-                        </a>
-                    </li>
-                    <li>
-                        <a title="注册消防工程师资格考试实施办法.pdf" href=" ~/Content/相关法规注册消防工程师资格考试实施办法.pdf" target="_blank">
-                            注册消防工程师资格考试实施办法
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">&nbsp;</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-    </div>
-    <div class="col-lg-4 col-md-5 col-sm-5">
-        <div class="border">
-            <h4 class="title">技术标准</h4>
-            <div class="list">
-                <ul>
-
-                    <li>
-                        <a title="技术标准建设工程消防验收评定规则（GA836-2009）" href=" ~/Content/技术标准建设工程消防验收评定规则（GA836-2009）.pdf" target="_blank">
-
-
-                            技术标准建设工程消防验收评定规则
-                        </a>
-                    </li>
-
-                    <li>
-                        <a title="建筑消防设施的维护管理" href=" ~/Content/技术标准建筑消防设施的维护管理.pdf" target="_blank">
-
-
-                            建筑消防设施的维护管理
-                        </a>
-                    </li>
-
-                    <li>
-                        <a title="技术标准建筑消防设施检测技术规程（GA503-2004)" href=" ~/Content/技术标准建筑消防设施检测技术规程（GA503-2004).pdf" target="_blank" >
-
-
-                            建筑消防设施检测技术规程
-                        </a>
-                    </li>
-
-                    <li>
-                        <a title="消防技术服务机构设备配备" href=" ~/Content/技术标准消防技术服务机构设备配备.pdf" target="_blank" >
-                            消防技术服务机构设备配备
-
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">&nbsp;</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="border">
-            <h4 class="title">办事指南</h4>
-            <div class="list">
-                <ul>
-                    <li>
-                        <a title="消防工程相关专业'新旧对照表" href=" ~/Content/办事指南消防工程相关专业'新旧对照表.pdf" target="_blank" >
-
-
-                            消防工程相关专业'新旧对照表
-
-                        </a>
-                    </li>
-
-                    <li>
-                        <a title="办事指南消防设施维护保养检测临时三级资质申请条件及材料要求" href=" ~/Content/办事指南消防设施维护保养检测临时三级资质申请条件及材料要求.pdf" target="_blank" >
-
-
-                            消防设施维护保养检测临时三级...
-
-                        </a>
-                    </li>
-
-                    <li>
-                       <a title="办事指南消防设施维护保养检测临时二级资质申请条件及材料要求" href=" ~/Content/办事指南消防设施维护保养检测临时二级资质申请条件及材料要求.pdf" target="_blank">
-
-
-                           消防设施维护保养检测临时二级...
-
-                        </a>
-                    </li>
-
-                    <li>
-                        <a title="办事指南消防设施维护保养检测临时一级资质申请条件及材料要求"href=" ~/Content/办事指南消防设施维护保养检测临时一级资质申请条件及材料要求.pdf" target="_blank">
-
-
-                            消防设施维护保养检测临时一级...
-
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">&nbsp;</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
+            </td>
+            <td style="width:38%;">
+                <div class="border">
+                    <h4 class="title">相关法规<span class="more"><a href="/Home/ArticleList/?category=2">更多>></a></span></h4>
+                    <div class="list">
+                        @Html.Action("LastArticleList", new { category = 2 })
+                    </div>
+                </div>
+            </td>
+            <td style="width:38%;">
+                <div class="border">
+                    <h4 class="title">办事指南<span class="more"><a href="/Home/ArticleList/?category=3">更多>></a></span></h4>
+                    <div class="list">
+                        @Html.Action("LastArticleList", new { category = 3 })
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
 </div>

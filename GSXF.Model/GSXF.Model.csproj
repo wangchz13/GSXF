@@ -48,6 +48,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -82,13 +83,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Action.cs" />
-    <Compile Include="ActionRole.cs" />
     <Compile Include="Article.cs" />
-    <Compile Include="Category.cs" />
     <Compile Include="Company.cs" />
+    <Compile Include="SiteConfig.cs" />
     <Compile Include="EnumItem.cs" />
-    <Compile Include="File.cs" />
+    <Compile Include="Evaluation.cs" />
+    <Compile Include="UploadFile.cs" />
     <Compile Include="FireControlInstitution.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Employee.cs" />

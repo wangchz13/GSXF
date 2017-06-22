@@ -13,8 +13,6 @@ namespace GSXF.DataBase
 
         public DbSet<Article> Articles { get; set; }
 
-        public DbSet<Category> Categories { get; set; }
-
         public DbSet<Company> Companies { get; set; }
 
         public DbSet<Employee> Employees { get; set; }
@@ -27,14 +25,13 @@ namespace GSXF.DataBase
 
         public DbSet<Role> Roles { get; set; }
 
-        public DbSet<Action> Actions { get; set; }
-
-        public DbSet<ActionRole> ActionRoles { get; set; }
-
         public DbSet<UserCompany> UserCompanies { get; set; }
 
         public DbSet<FireControlInstitution> FireControlInstitutions { get; set; }
 
-        public DbSet<File> Files { get; set; }
+        public DbSet<UploadFile> UploadFiles { get; set; }
+
+
+        public DbSet<Evaluation> Evaluations { get; set; }
     } 
 }

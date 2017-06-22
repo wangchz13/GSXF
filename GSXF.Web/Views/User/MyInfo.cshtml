@@ -2,19 +2,108 @@
 @{
     Layout = null;
 }
-
+@Styles.Render("~/Content/easyui")
+@Scripts.Render("~/Content/easyuijs")
 <!DOCTYPE html>
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>MyInfo</title>
+
+    <script>
+        $(function(){
+
+            $('#win').window({
+                title: '修改密码',
+                modal: true,
+                closed: true,
+            });
+        });
+
+
+        function xgmm() {
+            if (!$('#form').form('validate')) {
+                $.messager.alert('提示', '存在无效字段，请检查', 'info');
+                return;
+            }
+            var data = $("#form").serialize();
+            $.ajax({
+                async: false,
+                url: '/Data/setPassword',
+                data: data,
+                datatype: "json",
+                type: "POST",
+                success: function (data) {
+                    if (data.Code = -1) {
+                        $.messager.alert('提示', '输入密码与当前用户密码不一致，密码修改失败！');
+                    }
+                    $.messager.alert('提示', '密码修改成功!', 'info', function () {
+                        window.location.reload();
+                    });
+                }
+            });
+        }
+    </script>
+
 </head>
 <body>
-    <div> 
-        账号：@ViewBag.Name
-        账号类型：@ViewBag.Role
-        注册时间：@ViewBag.Regtime
+    <p>
+        账号信息
+    </p>
+    <hr />
+    <p>
+        【账号名】：@ViewBag.Name
+    </p>
+    <p>
+        【注册时间】：@ViewBag.RegTime
+    </p>
+    <p>
+        【主账号】：
+    </p>
+    <p>
+        【上次登录时间】：@ViewBag.LoginTime
+    </p>
+    <p>
+        【上次登录IP】:@ViewBag.LoginIP
+    </p>
+    <p>
+        <br />
+    </p>
+    <p>
+        机构信息
+    </p>
+    <hr />
+    <p>
+        【机构类型】：@ViewBag.Role
+    </p>
+    <p>
+        【机构名称】：@ViewBag.CompanyName
+    </p>
+    <p>
+        【机构信息】：
+    </p>
+    <p>
+        <br />
+    </p>
+
+
+    <a class="easyui-linkbutton" onclick="$('#win').window('open')">修改密码</a>
+    <div id="win">
+        <form id="form">
+            <p >
+                原密码：<input class="easyui-textbox" name="p1"style="float:right" />
+            </p>
+            <p >
+                新密码： <input id="password" name="password" validType="length[4,32]" class="easyui-textbox easyui-validatebox" required="true" type="password" value="" />
+            </p>
+            <p>
+                确认密码：<input type="password" name="repassword" id="repassword" required="true" class="easyui-textbox easyui-validatebox" validType="equalTo['#password']" invalidMessage="两次输入密码不匹配" />
+            </p>
+            <p style="text-align:center">
+                <a class="easyui-linkbutton" onclick="xgmm()">提交</a>
+            </p>
+        </form>
     </div>
 </body>
 </html>

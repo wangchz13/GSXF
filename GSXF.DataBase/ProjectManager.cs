@@ -16,5 +16,10 @@ namespace GSXF.DataBase
             }
             return res;
         }
+
+        public int GetProjectCount2(ProjectType type)
+        {
+            return FindList(p => p.Type == type).Count();
+        }
     }
 }

@@ -1,0 +1,41 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Thanks</title>
+
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/Content/easyuijs")
+</head>
+<body>
+    <div>
+        已经完成评价，谢谢！
+        <span id="num" style="color:red">5&nbsp;</span>秒后关闭此页面
+    </div>
+    <script>
+        $(function () {
+            jump(5);
+        });
+
+        function jump(count) {
+            window.setTimeout(function () {
+                count--;
+                if (count > 0) {
+                    $('#num').text(count+" ");
+                    jump(count);
+                } else {
+                    window.opener = null;
+                    window.open('', '_self');
+                    window.close();
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

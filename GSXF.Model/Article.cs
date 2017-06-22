@@ -10,8 +10,8 @@ namespace GSXF.Model
 
         public string Title { get; set; }
 
-        public string Content { get; set; }
+        public virtual UploadFile File { get; set; }
 
-        public virtual Category Category { get; set; }
+        public Category Category { get; set; }
     }
 }

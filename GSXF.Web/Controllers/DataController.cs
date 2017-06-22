@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.IO;
+using System.Web;
 using GSXF.DataBase;
 using Newtonsoft.Json;
 using GSXF.Auxiliary;
@@ -22,10 +24,35 @@ namespace GSXF.Web.Controllers
         private static UserManager userManager = new UserManager();
         private static RoleManager roleManager = new RoleManager();
         private static OfficeAddressManager officeAddressManager = new OfficeAddressManager();
-
+        private static EvaluationManager evaManager = new EvaluationManager();
 
         private static List<Employee> employees = new List<Employee>();
         private static List<OfficeAddress> offices = new List<OfficeAddress>();
+
+        [AllowAnonymous]
+        public static string getSiteConfig(string key)
+        {
+            SiteConfig siteConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~").GetSection("SiteConfig") as GSXF.Model.SiteConfig;
+            if(key == "EmailName")
+            {
+                return siteConfig.EmailName;
+            }
+            if(key == "EmailPassword")
+            {
+                return siteConfig.EmailPassword;
+            }
+            if(key == "SiteUrl")
+            {
+                return siteConfig.SiteUrl;
+            }
+
+            return "";
+        }
+
+
+
+
+
 
         /// <summary>
         /// 枚举转对象
@@ -100,14 +127,68 @@ namespace GSXF.Web.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public ActionResult StatisticsData2()
+        {
+            var user = Session["User"] as User;
+            string fireCode = user.Name.Substring(0, 8);
+            var fire = fireManager.Find(f => f.Code == fireCode);
+            var projects = projectManager.FindList(p => p.FireControlInstitution.ID == fire.ID);
+            int[] data = new int[4];
+            data[0] = projectManager.GetProjectCount2(ProjectType.竣工检测);
+            data[1] = projectManager.GetProjectCount2(ProjectType.年度检测);
+            data[2] = projectManager.GetProjectCount2(ProjectType.维护保养);
+            data[3] = projectManager.GetProjectCount2(ProjectType.安全评估);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult getArticles()
+        {
+            string category = Request.QueryString["category"];
+            ArticleManager articleManager = new ArticleManager();
+            var articles = articleManager.FindList().OrderByDescending(a => a.ID).ToList();
+            if (category!=null && category != "")
+            {
+                Category c = (Category)int.Parse(category);
+                articles = articles.Where(a => a.Category == c).ToList();
+            }
+            
+            
+            
+
+            var data = articles.Select(a => new {
+                ID = a.ID,
+                Title = a.Title,
+                Category = a.Category.ToString(),
+                Path = a.File.Path
+            });
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult deleteArticle(int id)
+        {
+            ArticleManager articleManager = new ArticleManager();
+            articleManager.Delete(id);
+            return Json("成功");
+        }
+
+
+
+
+
         /// <summary>
         /// 获取所有项目（默认只会获取进度到提交备案的项目）
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult getProjects(int userID = 0)
         {
-            //TODO: FindList函数中药加上p.progress == 提交备案
+            
 
 
             IQueryable<Project> projects = projectManager.FindList();
@@ -157,7 +238,7 @@ namespace GSXF.Web.Controllers
             {
                 projects = projects.Where(p => p.Name.Contains(name));
             }
-
+            //按项目进度查询
             if(progress != null && progress!= ""){
                 var p = int.Parse(progress);
                 ProjectProgress pp = (ProjectProgress)p;
@@ -165,17 +246,26 @@ namespace GSXF.Web.Controllers
             }
 
             User user = Session["User"] as User;
-            string roleName = string.Empty;
-            if (user != null)
+            string roleName = user == null ? "" : user.Role.Name;
+
+            if(roleName == "消防机构支队" || roleName == "消防机构大队")
             {
-                roleName = user.Role.Name;
+                string fireCode = user.Name.Substring(0, 8);
+                var fire = fireManager.Find(f => f.Code == fireCode);
+                projects = projects.Where(p => p.FireControlInstitution.ID == fire.ID);
             }
+
+
 
             if(roleName == "服务机构")
             {
                 int companyID = userCompanyManager.Find(ur => ur.UserID == user.ID).CompanyID;
                 projects = projects.Where(p => p.Company.ID == companyID);
             }
+
+
+            projects = projects.OrderByDescending(p => p.ID);
+
 
             var data = projects.Select(p => new
             {
@@ -201,7 +291,38 @@ namespace GSXF.Web.Controllers
         {
             //TODO: slect掉循环引用的部分
             Project project = projectManager.Find(projectID);
-            return Json(project, JsonRequestBehavior.AllowGet);
+
+            var data = new
+            {
+                ID = project.ID,
+                Name = project.Name,
+                Type = project.Type,
+                City = project.City,
+                jg = project.FireControlInstitution.ID,
+                Address = project.Address,
+                BuildType = project.BuildType,
+                FireRisk = project.FireRisk,
+                Area = project.Area,
+                AllLayer = project.AllLayer,
+                ServiceLayer = project.ServiceLayer,
+                ContractNumber = project.ContractNumber,
+                SignDate = project.SignDate,
+                StartDate = project.StartDate,
+                EndDate = project.EndDate,
+                ProjectHead = project.ProjectHead,
+                TechHead = project.TechHead,
+                ProjectContact = project.ProjectContact,
+                Note = project.Note,
+                Object = project.Object,
+                ObjectContact = project.ObjectContact,
+                ObjectContactPhone = project.ObjectContactPhone,
+                ObjectEmail = project.ObjectEmail,
+                Progress = (int)project.Progress,
+                HasData = project.DataFile!=null,
+                HasReport = project.ReportFile!=null
+            };
+
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -224,8 +345,27 @@ namespace GSXF.Web.Controllers
 
 
             User user = Session["User"] as User;
-            string roleName = user.Role.Name;
+            string roleName = user == null ? "" : user.Role.Name;
 
+
+            //总队只能看到一个季度的项目
+            if(roleName == "消防机构总队")
+            {
+                DateTime leftDate = DateTime.Now.AddMonths(-3);
+                projects = projects.Where(p => p.RecordDate >= leftDate);
+            }
+
+            //支队大队只能看到管辖单位为自己的项目
+            if(roleName == "消防机构支队"||roleName == "消防机构大队")
+            {
+                
+                string fireCode = user.Name.Substring(0, 8);
+                var fire = fireManager.Find(f => f.Code == fireCode);
+                projects = projects.Where(p => p.FireControlInstitution.ID == fire.ID);
+            }
+
+
+            //服务机构只能看到属于自己的项目
             if(roleName == "服务机构")
             {
                 int companyID = userCompanyManager.Find(ur => ur.UserID == user.ID).CompanyID;
@@ -234,12 +374,7 @@ namespace GSXF.Web.Controllers
 
 
 
-
-
-
-
-
-
+            projects = projects.OrderByDescending(p => p.ID);
 
             var data = projects.Select(p => new
             {
@@ -248,17 +383,11 @@ namespace GSXF.Web.Controllers
                 CompanyName = p.Company.Name,
                 FireName = p.FireControlInstitution.Name,
                 Progress = p.Progress.ToString(),
-
             });
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// 添加项目
-        /// </summary>
-        /// <param name="project"></param>
-        /// <param name="jg">所属消防机构</param>
-        /// <returns></returns>
+
         [HttpPost]
         public ActionResult addProject(Project project, string jg)
         {
@@ -276,10 +405,48 @@ namespace GSXF.Web.Controllers
             int fireID = int.Parse(jg);
             project.FireControlInstitution = fireManager.Find(fireID);
             project.RecordDate = DateTime.Now;
-            project.Progress = ProjectProgress.入场检测;
+            project.Progress = ProjectProgress.项目登记;
+
+            //搞查询明码
+            string companyCodeString = project.Company.Code;
+            string dateString = DateTime.Now.Year.ToString()
+                + string.Format("{0:D2}", DateTime.Now.Month)
+                + string.Format("{0:D2}", DateTime.Now.Day);
+
+            string typeString = string.Format("{0:D2}", (int)project.Type + 1);
+            DateTime lastYear = DateTime.Now.AddYears(-1);
+            int count = projectManager.FindList(p => p.Type == project.Type && p.RecordDate >= lastYear && p.RecordDate <= DateTime.Now).Count();
+            string countString = string.Format("{0:D4}", count + 1);
+
+            project.ReportFileCode = companyCodeString + dateString + typeString + countString;
+
             resp = projectManager.Add(project);
+
+            projectManager.Update(project);
+            int emailcount = projectManager.FindList(p => p.ObjectEmail == project.ObjectEmail).Count();
+
+            if(emailcount >= 5)
+            {
+                
+                Evaluation eva = new Evaluation();
+                eva.Project = projectManager.Find(p => p.ID == project.ID);
+                eva.Result = 0 - emailcount / 5 * 10;
+                eva.Source = EvaluationSource.系统检测;
+                eva.Note = "该机构存在恶意刷分行为。";
+                evaManager.Add(eva);
+            }
+            
             resp.Data = null;
             return Json(resp);
+        }
+
+        [HttpPost]
+        public ActionResult setProject(Project p)
+        {
+            var project = projectManager.Find(p.ID);
+            project = p;
+            projectManager.Update(project);
+            return Content("123");
         }
 
 
@@ -288,6 +455,7 @@ namespace GSXF.Web.Controllers
         /// 获得所有服务机构信息
         /// </summary>
         /// <returns></returns>
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult getCompanies()
         {
@@ -311,7 +479,19 @@ namespace GSXF.Web.Controllers
             {
                 companies = companies.Where(c => c.Name.Contains(name));
             }
-            return Content(JsonConvert.SerializeObject(companies));
+
+            companies = companies.OrderByDescending(c => c.ID);
+
+            var data = companies.Select(c => new
+            {
+                Name = c.Name,
+                Type = c.Type1.ToString() + (c.Type2 == null ? "" : "/" + c.Type2.ToString()),
+                Level = c.Level1.ToString() + (c.Type2 == null ? "" : "/" + c.Level2.ToString()),
+                Number = c.Number1.ToString() + (c.Type2 == null ? "" : "/" + c.Number2.ToString()),
+                State = c.ExpiryDate1 < DateTime.Now ? "有效" : "无效" + (c.Type2 == null ? "" : "/" + (c.ExpiryDate2 < DateTime.Now ? "有效" : "无效")),
+                Score = c.Score
+            });
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -353,9 +533,22 @@ namespace GSXF.Web.Controllers
                 company.OfficeAddresses = offices;
             }
 
+            var companies = companyManager.FindList().ToList();
+            string code = string.Empty;
+            if (companies.Count == 0)
+            {
+                code = string.Format("GS{0:D4}", 1);
+            }
+            else
+            {
+                var lastCompany = companies.Last();
+                int a = int.Parse(lastCompany.Code.Substring(2, 4)) + 1;
+                code = string.Format("GS{0:D4}", a);
+            }
 
+            company.Code = code;
             resp = companyManager.Add(company);
-            resp.Data = CreateCompanyUser(company.ID);
+            resp.Data = CreateCompanyUser(company);
             return Json(resp);
         }
 
@@ -364,7 +557,7 @@ namespace GSXF.Web.Controllers
         /// </summary>
         /// <param name="companyID"></param>
         /// <returns></returns>
-        /// 
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult getEmployees(int companyID=0)
         {
@@ -392,12 +585,10 @@ namespace GSXF.Web.Controllers
                 employees = employees.Where(e => e.IdentificationNumber == idn);
             }
 
-            User user = Session["User"] as User;
-            string roleName = user.Role.Name;
-            if(roleName == "消防机构总队")
-            {
-                employees = employees.Where(e => e.Level == EmployeeLevel.一级注册消防工程师 || e.Level == EmployeeLevel.二级注册消防工程师 || e.Level==EmployeeLevel.临时注册消防工程师);
-            }
+
+            employees = employees.Where(e => e.Level == EmployeeLevel.一级注册消防工程师 || e.Level == EmployeeLevel.二级注册消防工程师 || e.Level == EmployeeLevel.临时注册消防工程师);
+
+            employees = employees.OrderByDescending(e => e.ID);
 
             var data = employees.Select(e => new
             {
@@ -408,6 +599,33 @@ namespace GSXF.Web.Controllers
                 CertificateNumber = e.CertificateNumber,
                 IdentificationNumber = e.IdentificationNumber,
                 CompanyName = e.Company == null?"无":e.Company.Name
+            });
+
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpGet]
+
+        public ActionResult getMyEmployees()
+        {
+            User user = Session["User"] as User;
+            var employees = employeeManager.FindList();
+
+            Company company = companyManager.Find(userCompanyManager.Find(uc => uc.UserID == user.ID).CompanyID);
+            employees = employees.Where(e => e.Company.ID == company.ID);
+
+            employees = employees.OrderByDescending(e => e.ID);
+
+            var data = employees.Select(e => new
+            {
+                ID = e.ID,
+                Name = e.Name,
+                Gender = e.Gender.ToString(),
+                Level = e.Level.ToString(),
+                CertificateNumber = e.CertificateNumber,
+                IdentificationNumber = e.IdentificationNumber,
+                CompanyName = e.Company == null ? "无" : e.Company.Name
             });
 
             return Json(data, JsonRequestBehavior.AllowGet);
@@ -469,6 +687,9 @@ namespace GSXF.Web.Controllers
         [HttpPost]
         public ActionResult addEmployee(Employee employee)
         {
+
+            var user = Session["User"] as User;
+            string roleName = user.Role.Name;
             Response resp = new Response();
             if (!ModelState.IsValid)
             {
@@ -478,16 +699,39 @@ namespace GSXF.Web.Controllers
             }
 
             Employee e = employeeManager.Find(i => i.IdentificationNumber == employee.IdentificationNumber);
-            if (e != null)
+            if (roleName == "消防机构总队")
             {
-                resp.Code = -2;
-                resp.Message = "检测到身份证号为【" + employee.IdentificationNumber + "】的人员已备案，备案失败！";
-                return Json(resp);
+                if (e != null)
+                {
+                    resp.Code = -2;
+                    resp.Message = "检测到身份证号为【" + employee.IdentificationNumber + "】的人员已备案，备案失败！";
+                    return Json(resp);
+                }
+                else
+                {
+                    resp = employeeManager.Add(employee);
+                }
             }
-            resp = employeeManager.Add(employee);
+            else if(roleName == "服务机构")
+            {
+                Company company = companyManager.Find(userCompanyManager.Find(uc => uc.UserID == user.ID).CompanyID);
+                if (e != null)
+                {
+                    e.Company = company;
+                    employeeManager.Update(e);
+                }
+                else
+                {
+                    employee.Company = company;
+                    employeeManager.Add(employee);
+                }
+            }
             return Json("123");
 
         }
+
+
+        
 
         /// <summary>
         /// 添加人员信息（多个）
@@ -508,7 +752,7 @@ namespace GSXF.Web.Controllers
 
             foreach (var i in list)
             {
-                var employee = employeeManager.Find(e => e.IdentificationNumber == i.IdentificationNumber);
+                var employee = employeeManager.Find(e => e.IdentificationNumber == i.IdentificationNumber && (e.Level==EmployeeLevel.临时注册消防工程师||e.Level==EmployeeLevel.一级注册消防工程师||e.Level==EmployeeLevel.二级注册消防工程师));
                 if (employee != null)
                 {
                     if (employee.Company != null)
@@ -526,6 +770,7 @@ namespace GSXF.Web.Controllers
                 if (employee != null)
                 {
                     employees.Add(employee);
+                    resp.Code = 1;
                 }
                 else
                 {
@@ -539,10 +784,25 @@ namespace GSXF.Web.Controllers
         [HttpPost]
         public ActionResult deleteEmployee(int employeeID)
         {
-            var data = employeeManager.Delete(employeeID);
-            return Json(data, JsonRequestBehavior.AllowGet);
+
+            User user = Session["User"] as User;
+            string roleName = user.Role.Name;
+            if(roleName == "消防机构总队")
+            {
+                var data = employeeManager.Delete(employeeID);
+                return Json(data);
+            }else if(roleName == "服务机构")
+            {
+                var employee = employeeManager.Find(employeeID);
+                employee.Company = null;
+                employeeManager.Update(employee);
+            }
+
+            return Json("123");
         }
         
+
+        [HttpGet]
         public ActionResult getUsers()
         {
             var users = userManager.FindList();
@@ -550,8 +810,16 @@ namespace GSXF.Web.Controllers
             if (name != null)
             {
                 users = users.Where(c => c.Name.Contains(name));
-            }  
-            var data = users.Select(u => new { Name = u.Name, LoginTime = u.LoginTime, LoginIP = u.LoginIP, IsOnline = u.IsOnline });  
+            }
+
+            users = users.OrderByDescending(u => u.ID);
+
+            var data = users.Select(u => new { Name = u.Name,
+                RegTime = u.RegTime.ToString(),
+                LoginTime = u.LoginTime,
+                LoginIP = u.LoginIP,
+                IsOnline = u.IsOnline
+            });  
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
@@ -560,6 +828,50 @@ namespace GSXF.Web.Controllers
             User user = userManager.Find(userID);
             return Json(user, JsonRequestBehavior.AllowGet);
         }
+
+        [AllowAnonymous]
+        public ActionResult getEvaluations()
+        {
+
+            EvaluationManager evaluationManager = new EvaluationManager();
+
+            var evas = evaluationManager.FindList();
+
+
+            var companyName = Request.QueryString["CompanyName"];
+            var source = Request.QueryString["Source"];
+
+            if(companyName != null && companyName != "")
+            {
+                evas = evas.Where(e => e.Project.Company.Name == companyName);
+            }
+
+
+            if(source != null && source != "-1")
+            {
+                EvaluationSource es = (EvaluationSource)int.Parse(source);
+                evas = evas.Where(e => e.Source == es);
+            }
+            evas = evas.OrderByDescending(e => e.ID);
+
+            var data = evas.Select(e=>new{
+                CompanyName = e.Project.Company.Name,
+                ProjectName = e.Project.Name,
+                Note = e.Note,
+                Result = e.Result,
+                Source = e.Source.ToString()
+            });
+            return Json(data,JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        public ActionResult addEvaluation()
+        {
+            return Json("");
+        }
+
+
 
 
         [HttpPost]
@@ -582,6 +894,39 @@ namespace GSXF.Web.Controllers
         }
 
 
+        [HttpPost]
+        public ActionResult resetPassword(int id,string Password)
+        {
+            Response resp = new Auxiliary.Response();
+            var user = userManager.Find(id);
+            user.Password = Password;
+            userManager.Update(user);
+            return Json("213", JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        public ActionResult setPassword()
+        {
+            Response resp = new Auxiliary.Response();
+
+            string p = Request.Form["p"];
+            string password = Request.Form["password"];
+
+            var user = Session["User"] as User;
+            if(user.Password != p)
+            {
+                resp.Code = -1;
+                resp.Message = "输入密码错误，请重试";
+                return Json(resp);
+            }
+
+            user.Password = password;
+            userManager.Update(user);
+            resp.Code = 1;
+            resp.Message = "密码修改成功！";
+            return Json(resp);
+        }
 
 
 
@@ -592,39 +937,165 @@ namespace GSXF.Web.Controllers
         }
 
 
-        private object CreateCompanyUser(int companyID)
+        public ActionResult
+
+
+        private object CreateCompanyUser(Company company)
         {
-            string name = string.Empty;
-            char[] ver = new Char[4];
-            Random random = new Random();
-            char[] dict = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-            for (int i = 0; i < 4; i++)
-            {
-                ver[i] = dict[random.Next(dict.Length - 1)];
-            }
-            name = new string(ver);
-            name = "GS-" + name;
-            if(userManager.Find(name) != null)
-            {
-                name += "0";
-            }
-            string password = Verification.Text(6);
-            userManager.Add(name, password);
+
+
+            string name = company.Code + "00";
+            string password = name;
+            userManager.Add(name, password, roleManager.Find(5));
+
+
             User user = userManager.Find(name);
-            user.Role = roleManager.Find(5);
 
             UserCompany uc = new UserCompany();
             uc.UserID = user.ID;
-            uc.CompanyID = companyID;
+            uc.CompanyID = company.ID;
             userCompanyManager.Add(uc);
 
             return new { Name = name, Password = password };
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        public ActionResult getFile(int projectID,int type)
+        {
+            Project project = projectManager.Find(projectID);
+
+            UploadFile file = type == 0 ? project.DataFile : project.ReportFile;
+
+            if (file==null|| !System.IO.File.Exists(Server.MapPath(file.Path)))
+            {
+                return Content("文件不存在，下载失败");
+            }
+
+            string path = file.Path;
+            string name = file.Name;
+
+
+
+            var contentType = MimeMapping.GetMimeMapping(name);
+            return File(path,contentType, name);
+        }
+
+
+        [HttpPost]
+        public ActionResult addArticle()
+        {
+            Response resp = new Auxiliary.Response();
+
+            if (Request.Files.Count == 0)
+            {
+                resp.Code = -1;
+                resp.Message = "上传文件不能为空";
+                return Json(resp);
+            }
+            var file = Request.Files[0];
+            if (file.ContentLength >= 20971520)
+            {
+                resp.Code = -2;
+                resp.Message = "上传文件太大";
+                return Json(resp);
+            }
+            var fileName = file.FileName;
+
+            if (fileName.Substring(fileName.Length - 4, 4) != ".pdf")
+            {
+                resp.Code = -3;
+                resp.Message = "文件格式不符合要求";
+                return Json(resp);
+            }
+            fileName = Verification.Text(20) + ".pdf";
+            var filePath = Server.MapPath("~/Upload/Articles");
+
+            var path = string.Format(filePath + "\\{0}", fileName);
+            file.SaveAs(path);
+            FileManager fileManager = new FileManager();
+            UploadFile ufile = new UploadFile();
+            ufile.Name = fileName;
+            ufile.Path = "~/Upload/Articles/" + fileName;
+            fileManager.Add(ufile);
 
 
 
 
+            ArticleManager articleManager = new ArticleManager();
+            Article article = new Article();
+            article.Title = Request.Form["Title"];
+            article.Category = (Category)int.Parse(Request.Form["Category"]);
+            article.File = fileManager.Find(f => f.Name == ufile.Name);
+
+            articleManager.Add(article);
+            return Json("");
+        }
+        [HttpPost]
+        public ActionResult CreateUser()
+        {
+            Response resp = new Auxiliary.Response();
+
+
+            User user = Session["User"] as User;
+
+            Company company = companyManager.Find(userCompanyManager.Find(uc => uc.UserID == user.ID).CompanyID);
+            string code = user.Name.Substring(0, user.Name.Length - 2);
+            var users = userManager.FindList(u => u.Name.Contains(code));
+            if(users.Count() > 10)
+            {
+                resp.Code = -1;
+                resp.Message = "添加失败，最多只能有10个账号";
+                return Json(resp);
+            }
+
+            string str = string.Format("{0:D2}", users.Count());
+
+            User newuser = new Model.User();
+            newuser.Name = code + str;
+            newuser.Password = password;
+            newuser.RegTime = DateTime.Now;
+            newuser.Role = user.Role;
+
+            if(user.Role.Name == "消防机构总队" || user.Role.Name == "消防机构支队" || user.Role.Name == "消防机构大队")
+            {
+
+            }
+
+            
+            resp = userManager.Add(newuser);
+            if (user.Role.Name == "服务机构")
+            {
+                UserCompany uc = new UserCompany();
+                uc.UserID = newuser.ID;
+                uc.CompanyID = company.ID;
+            }
+
+            return Json(resp);
+        }
+
+
+
+        [HttpGet]
+        public ActionResult getMyUsers()
+        {
+            User user = Session["User"] as User;
+            string code = user.Name.Substring(0, user.Name.Length - 2);
+            var users = userManager.FindList(u => u.Name.Contains(code));
+
+            users = users.OrderByDescending(u => u.ID);
+            var data = users.Select(u => new
+            {
+                ID = u.ID,
+                Name = u.Name,
+                LoginIP = u.LoginIP,
+                LoginTime = u.LoginTime,
+                RegTime = u.RegTime,
+                IsOnline = u.IsOnline
+            });
+            return Json(data,JsonRequestBehavior.AllowGet);
+
+        }
 
 
 

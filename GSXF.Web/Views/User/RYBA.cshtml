@@ -2,17 +2,373 @@
 @{
     Layout = null;
 }
-
+@Styles.Render("~/Content/easyui")
+@Scripts.Render("~/Content/easyuijs")
 <!DOCTYPE html>
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>RYBA</title>
+
+
+    <script>
+        $(function () {
+
+            $('#dg').datagrid({
+                title: '人员列表',
+                height: 'auto',
+                rownumbers: true,
+                collapsible: true,
+                singleSelect: true,
+                pagination: true,
+                pageList: [10, 20, 30, 50, 100, 200],
+                url: '/Data/getMyEmployees',
+                method: 'get',
+                loadFilter: loadFilter,
+                columns: [[
+                    {
+                        field: 'Name',
+                        title: '姓名',
+                        width: 120,
+                        editor: {
+                            type: 'textbox',
+                            options: {
+                                required: true
+                            }
+                        }
+                    },
+                    {
+                        field: 'Gender',
+                        title: '性别',
+                        width: 60,
+                        formatter: function (value) {
+                            if (value == 0 || value == '男')
+                                return '男';
+                            else if (value == 1 || value == '女')
+                                return '女';
+                            else return '未知';
+                        },
+                        editor: {
+                            type: 'combobox',
+                            options: {
+                                valueField: 'Id',
+                                textField: 'Text',
+                                method: 'get',
+                                url: '/Data/getGenderList',
+                                required: true,
+                                editable: false,
+                                panelHeight: 'auto'
+                            }
+                        }
+                    },
+                    {
+                        field: 'Level',
+                        title: '人员类别',
+                        width: 160,
+                        formatter: function (value) {
+                            if (value == 0 || value == '临时注册消防工程师')
+                                return '临时注册消防工程师';
+                            else if (value == 1 || value == '一级注册消防工程师')
+                                return '一级注册消防工程师';
+                            else if (value == 2 || value == '二级注册消防工程师')
+                                return '二级注册消防工程师';
+                            else if (value == 3)
+                                return '建(构)筑物消防员(初级)';
+                            else if (value == 4)
+                                return '建(构)筑物消防员(中级)';
+                            else if (value == 5)
+                                return '建(构)筑物消防员(高级)';
+                        },
+                        editor: {
+                            type: 'combobox',
+                            options: {
+                                value: 0,
+                                valueField: 'Id',
+                                textField: 'Text',
+                                method: 'get',
+                                url: '/Data/getEmployeeLevelList',
+                                required: true,
+                                editable: false,
+                                panelHeight: 'auto'
+                            }
+                        }
+                    },
+                    {
+                        field: 'CertificateNumber',
+                        title: '证书编号',
+                        width: 100,
+                        editor: {
+                            type: 'textbox',
+                            options: {
+                                required: true
+                            }
+                        }
+                    },
+                    {
+                        field: 'IdentificationNumber',
+                        title: '身份证号',
+                        width: 160,
+                        editor: {
+                            type: 'textbox',
+                            options: {
+                                required: true
+                            }
+                        }
+                    },
+                    {
+                        field: 'MobilePhone',
+                        title: '手机号码',
+                        width: 120,
+                        editor: {
+                            type: 'textbox'
+                        }
+                    }
+                ]]
+
+            });
+            $('#windg').datagrid({
+                width: '100%',
+                height: '308px',
+                rownumbers: true,
+                singleSelect: true,
+                pagination: true,
+                pageList: [10, 20, 30, 50, 100, 200],
+                url: '/Data/getEmployees',
+                method: 'get',
+                loadFilter: loadFilter,
+            });
+            $('#win1').window({
+                title: '添加工程师',
+                modal: true,
+                closed:true
+            });
+
+            $('#win').window({
+                title: '导入人员',
+                width: '80%',
+                height: 431,
+                modal: true,
+                shadow: true,
+                closed: true,
+                footer: '#footer'
+            });
+
+
+            $('#Submit').click(function () {
+                if (!$('#form1').form('validate')) {
+                    $.messager.alert('提示', '存在无效字段，请检查', 'info');
+                    return;
+                }
+                var e = $('#form1').serialize();
+                $.ajax({
+                    async: false,
+                    url: '/Data/addEmployee',
+                    data: e,
+                    dataType: "json",
+                    type: "POST",
+                    success: function (resp) {
+                        $.messager.alert('提示', '添加成功!', 'info', function () {
+                            $('#dg').datagrid('reload');
+                        });
+                    }
+
+                });
+
+            });
+        });
+
+
+        function add() {
+            $('#win1').window('open');
+        }
+        function importbtn(){
+            $('#win').window('open');
+        }
+
+        function importing() {
+            var row = $('#windg').datagrid('getSelected');
+            if (row == null) {
+                $.messager.alert('提示', '请先选中行', 'info');
+                return;
+            }
+
+
+            if (row.CompanyName != '无') {
+                $.messager.alert('提示', '此人员已在其他公司注册，导入失败', 'info');
+                return;
+            }
+            $.ajax({
+                async: false,
+                url: '/Data/addEmployee',
+                data: row,
+                dataType: "json",
+                type: "POST",
+                success: function (resp) {
+                    $.messager.alert('提示', '添加成功!', 'info', function () {
+                        $('#dg').datagrid('reload');
+                    });
+                }
+
+            });
+        }
+
+        function removeit() {
+            var row = $('#dg').datagrid('getSelected');
+            if (row == null) {
+                $.messager.alert('提示', '请先选中行', 'info');
+                return;
+            }
+            $.ajax({
+                async: false,
+                url: '/Data/deleteEmployee',
+                data: {"employeeID":row.ID},
+                dataType: "json",
+                type: "POST",
+                success: function (resp) {
+                    $.messager.alert('提示', '删除成功!', 'info', function () {
+                        $('#dg').datagrid('reload');
+                    });
+                }
+
+            });
+
+        }
+        function doSearch() {
+            $('#windg').datagrid('load', {
+                Level: $('#level').val(),
+                CertificateNumber: $('#cn').val(),
+                IdentificationNumber: $('#idn').val(),
+                Name: $('#name').val()
+            });
+        }
+        function doReset() {
+            $('#level').combobox('setValue', '-1');
+            $('#cn').textbox('setValue', '');
+            $('#idn').textbox('setValue', '');
+            $('#name').textbox('setValue', '');
+            doSearch();
+        }
+    </script>
 </head>
 <body>
-    <div> 
-        正在建设中...
+    <div id="tb" style="height:auto">
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="add()">添加非注册消防工程师</a>|
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-user',plain:true" onclick="importbtn()">添加注册消防工程师</a>|
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除</a>
+        
+    </div>
+    <table id="dg"></table>
+
+    <div id="win1">
+        <form id="form1" method="post">
+            <table style="margin:0 auto;">
+                <tr>
+                    <td style="text-align:right">
+                        姓名：
+                    </td>
+                    <td>
+                        <input name="Name" class="easyui-textbox easyui-validatebox"
+                               data-options="required:true,width:100" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:right">
+                        性别：
+                    </td>
+                    <td>
+                        <select name="Gender" class="easyui-combobox"
+                                data-options="panelHeight:'auto'" editable="false">
+                            <option value="0">男</option>
+                            <option value="1">女</option>
+                            <option value="2">未知</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:right">
+                        证书类别：
+                    </td>
+                    <td>
+                        <select name="Level" class="easyui-combobox"
+                                data-options="panelHeight:'102px'" editable="false">
+                            <option value="3">建（构）筑物消防员（初级）</option>
+                            <option value="4">建（构）筑物消防员（中级）</option>
+                            <option value="5">建（构）筑物消防员（高级）</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:right">
+                        证书编号：
+                    </td>
+                    <td>
+                        <input name="CertificateNumber" class="easyui-textbox easyui-validatebox"
+                               data-options="required:true,width:180" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:right">
+                        身份证号：
+                    </td>
+                    <td>
+                        <input name="IdentificationNumber" class="easyui-textbox easyui-validatebox"
+                               data-options="required:true,width:180" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:right">
+                        手机号码：
+                    </td>
+                    <td>
+                        <input name="MobilePhone" class="easyui-numberbox" maxlength="11" width="180">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div style="margin:0 auto;width:200px;">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-save" id="Submit">提交</a>
+        </div>
+    </div>
+
+    <div id="win">
+        <p style="margin-left:10px;">
+            证书类别:
+            <select name="Level" id="level" class="easyui-combobox" style="width:140px;"
+                    data-options="panelHeight:'auto'" editable="false">
+                <option value="-1">全部</option>
+                <option value="0">临时注册消防工程师</option>
+                <option value="1">一级注册消防工程师</option>
+                <option value="2">二级注册消防工程师</option>
+            </select>
+            证书编号:
+            <input name="CertificateNumber" id="cn" class="easyui-textbox" style="width:160px" />
+            身份证号：
+            <input name="IdentificationNumber" id="idn" class="easyui-textbox" style="width:140px" />
+            姓名：
+            <input name="Name" id="name" class="easyui-textbox" style="width:60px" />
+            <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doSearch()">查询</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-reload" onclick="doReset()">重置</a>
+        </p>
+        <div>
+            <table id="windg">
+                <thead>
+                    <tr>
+                        <th field="Name" width="80">姓名</th>
+                        <th field="Gender" width="40">性别</th>
+                        <th field="Level" width="130">证书类别</th>
+                        <th field="CertificateNumber" width="240">证书编号</th>
+                        <th field="IdentificationNumber" width="160px">身份证号</th>
+                        <th field="CompanyName" width="200">注册公司</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+
+    <div id="footer" style="padding:5px;text-align:center;">
+        <a href="#" class="easyui-linkbutton" iconCls="icon-save" onclick="importing()">导入</a>
     </div>
 </body>
 </html>

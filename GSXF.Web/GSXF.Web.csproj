@@ -44,6 +44,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="itextsharp">
+      <HintPath>.\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -269,6 +272,7 @@
     <Content Include="Content\img\sdg--.png" />
     <Content Include="Content\img\star.png" />
     <Content Include="Content\img\tbzs.png" />
+    <Content Include="Content\img\Texture.JPG" />
     <Content Include="Content\img\ukey.jpg" />
     <Content Include="Content\Easy UI\jquery.easyui.min.js" />
     <Content Include="Content\Easy UI\jquery.min.js" />
@@ -298,6 +302,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\注册消防工程师管理规定.pdf" />
     <Content Include="Content\Json\institutioninfo.json" />
+    <Content Include="MyConfig.config" />
     <None Include="Properties\PublishProfiles\123.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -349,7 +354,6 @@
     <Content Include="Views\User\Index5.cshtml" />
     <Content Include="Views\User\Login.cshtml" />
     <Content Include="Views\User\Menu.cshtml" />
-    <Content Include="Views\User\MyInfo.cshtml" />
     <Content Include="Views\User\JGBA.cshtml" />
     <Content Include="Views\User\ZCGCSBA.cshtml" />
     <Content Include="Views\User\XMCX.cshtml" />
@@ -358,6 +362,18 @@
     <Content Include="Views\User\XMDJ.cshtml" />
     <Content Include="Views\User\XMJG.cshtml" />
     <Content Include="Views\User\RYBA.cshtml" />
+    <Content Include="Views\User\XMCJ.cshtml" />
+    <Content Include="Views\Home\FeedBack.cshtml" />
+    <Content Include="Views\Home\Thanks.cshtml" />
+    <Content Include="Views\Home\FWPJ.cshtml" />
+    <Content Include="SiteConfig.config" />
+    <Content Include="Views\User\MyInfo.cshtml" />
+    <Content Include="Views\User\XMXQ.cshtml" />
+    <Content Include="Views\User\WZGL.cshtml" />
+    <Content Include="Views\Home\LastArticleList.cshtml" />
+    <Content Include="Views\Home\ArticleList.cshtml" />
+    <Content Include="Views\User\ZHGL.cshtml" />
+    <Content Include="Views\User\ZZHGL.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

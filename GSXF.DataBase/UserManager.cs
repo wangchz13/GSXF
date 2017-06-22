@@ -12,18 +12,46 @@ namespace GSXF.DataBase
     
     public class UserManager : BaseManager<User>
     {
+
+        private FireControlInstitutionManager fireManager = new FireControlInstitutionManager();
+        private CompanyManager companyManager = new CompanyManager();
+        private UserCompanyManager userCompanyManager = new UserCompanyManager();
         public User Find(string name)
         {
             return Find(u => u.Name == name);
         }
 
-        public Response Add(string name, string password)
+
+        public string getOrgName(int userID)
+        {
+            User user = Find(userID);
+            string roleName = user.Role.Name;
+            string orgName = string.Empty;
+            if(roleName=="消防机构总队" || roleName=="消防机构支队" || roleName == "消防机构大队")
+            {
+                string fireCode = user.Name.Substring(0, 8);
+                orgName  = fireManager.Find(f => f.Code == fireCode).Name;
+            }else if(roleName == "服务机构")
+            {
+                Company company = companyManager.Find(userCompanyManager.Find(uc => uc.UserID == userID).CompanyID);
+                orgName = company.Name;
+            }
+            else
+            {
+
+            }
+            return orgName;
+        }
+
+
+        public Response Add(string name, string password, Role role=null)
         {
             User user = new User();
             user.Name = name;
             user.Password = password;
             user.RegTime = DateTime.Now;
             user.IsOnline = false;
+            user.Role = role;
             return Add(user);
         }
         

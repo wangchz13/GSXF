@@ -2,17 +2,89 @@
 @{
     Layout = null;
 }
-
 <!DOCTYPE html>
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>首页 - @ViewBag.Title</title>
+    <title>消防机构支队</title>
+    @Styles.Render("~/Content/easyui")
+    @Scripts.Render("~/Content/easyuijs")
+    <script src="~/Content/Highcharts/highcharts.js"></script>
+    <script src="~/Content/Highcharts/exporting.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var count = new Array();
+            $.ajax({
+                async: false,
+                url: '/Data/StatisticsData2',
+                datatype: "json",
+                type: "GET",
+                success: function (data) {
+                    count = data;
+                },
+                error: function () {
+                    $.messager.alert('提示', '请求出错，请联系管理员','error');
+                }
+            });
+
+
+            Highcharts.chart('chart', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: '地州市统计表'
+                },
+                xAxis: {
+                    categories: [
+                        '竣工检测',
+                        '年度检测',
+                        '维护保养',
+                        '安全评估'
+                    ],
+                    crosshair: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: '项目数量 (个)'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y} 个</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                lang: {
+                    contextButtonTitle: "图表菜单",
+                    printChart: "打印图片",
+                    downloadJPEG: "下载JPEG 图片",
+                    downloadPDF: "下载PDF文档",
+                    downloadPNG: "下载PNG 图片",
+                    downloadSVG: "下载SVG 矢量图",
+                    exportButtonTitle: "导出图片"
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0
+                    }
+                },
+                series: [{
+                    name: '项目数量',
+                    data: count
+                }]
+            });
+        });
+    </script>
 </head>
+
 <body>
-    <div> 
-        支队首页
-    </div>
+    <div id="chart" style="height:80%; width:100%; margin: 0 auto"></div>
 </body>
+
 </html>

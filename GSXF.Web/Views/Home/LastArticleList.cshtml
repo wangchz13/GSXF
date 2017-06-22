@@ -1,0 +1,27 @@
+﻿@{ 
+    Layout = null;
+}
+
+<ul>
+    @{ 
+        foreach(var i in ViewBag.articles)
+        {
+            if (i != null)
+            {
+                <li>
+                    <a title="@i.Title" href="@i.File.Path.Substring(1,i.File.Path.Length-1)" target="_blank">
+                        @i.Title
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    &nbsp;
+                </li>
+            }
+        }
+    }
+
+
+</ul>

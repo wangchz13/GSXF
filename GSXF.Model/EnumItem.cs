@@ -56,19 +56,25 @@ namespace GSXF.Model
     public enum City
     {
         兰州,
-        天水,
+        嘉峪关,
+        
         金昌,
         白银,
-        武威,
-        平凉,
+        天水,
         酒泉,
-        庆阳,
+        张掖,
+        武威,
         定西,
         陇南,
+        平凉,
+        
+        庆阳,
+        
+        
         临夏,
-        嘉峪关,
+        
         甘南,
-        张掖,
+        
         兰州新区
     }
 
@@ -119,5 +125,21 @@ namespace GSXF.Model
         丙,
         丁,
         戊
+    }
+
+    public enum EvaluationSource
+    {
+        客户评价,
+        项目抽查,
+        系统检测
+    }
+
+
+    public enum Category
+    {
+        通知公告,
+        技术标准,
+        相关法规,
+        办事指南
     }
 }

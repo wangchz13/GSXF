@@ -1,0 +1,41 @@
+﻿
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ArticleList</title>
+
+
+    <style>
+        #list li{
+            border-bottom:1px dotted #ccc;
+        }
+    </style>
+
+</head>
+<body>
+    <ol class="breadcrumb">
+        <li>当前位置：</li>
+        <li><span class="glyphicon glyphicon-home"></span>  @Html.ActionLink("首页", "Index", "Home")</li>
+        <li class="active">@ViewBag.Category</li>
+    </ol>
+    <div id="list">
+        <ul>
+            @{
+                foreach (var i in ViewBag.articles)
+                {
+                    <li>
+                        <a title="@i.Title" href="@i.File.Path.Substring(1,i.File.Path.Length-1)" target="_blank">
+                            @i.Title
+                        </a>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+
+    
+</body>
+</html>

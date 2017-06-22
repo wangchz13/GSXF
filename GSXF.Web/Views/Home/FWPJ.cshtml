@@ -1,0 +1,82 @@
+﻿
+
+@Styles.Render("~/Content/easyui")
+@Scripts.Render("~/Content/easyuijs")
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>FWPJ</title>
+
+    <script>
+        $(function () {
+            $('#dg').datagrid({
+                height: 'auto',
+                rownumbers: true,
+                singleSelect: true,
+                pagination: true,
+                pageList: [10, 20, 30, 50, 100, 200],
+                url: '/Data/getEvaluations',
+                method: 'get',
+                loadFilter: loadFilter
+            });
+        });
+
+
+        function doSearch() {
+            $('#dg').datagrid('load', {
+                CompanyName: $('#name').val(),
+                Source:$('#source').val()
+            });
+        }
+        function doReset() {
+            $('#source').combobox('setValue', '-1');
+            $('#name').textbox('setValue', '');
+            doSearch();
+        }
+    </script>
+
+</head>
+<body style="margin:0;font-size:10px;">
+    <ol class="breadcrumb">
+        <li>当前位置：</li>
+        <li><span class="glyphicon glyphicon-home"></span>  @Html.ActionLink("首页", "Index", "Home")</li>
+        <li class="active">评价查询</li>
+    </ol>
+
+    <p style="margin-left:10px;">
+        机构名称:
+        <input name="CompanyName" id="name" class="easyui-textbox" style="width:100px" />
+        评价来源：
+
+        <select name="Source" id="source" class="easyui-combobox" style="width:102px;"
+                data-options="panelHeight:'auto'" editable="false">
+            <option value="-1">全部</option>
+            <option value="0">客户评价</option>
+            <option value="1">项目抽查</option>
+            <option value="2">系统检测</option>
+        </select>
+        
+        <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doSearch()">查询</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-reload" onclick="doReset()">重置查询</a>
+    </p>
+
+    <table id="dg">
+        <thead>
+            <tr>
+                <th field="ProjectName" width="240">项目名称</th>
+                <th field="CompanyName" width="240">服务机构</th>
+                <th field="Source" width="80">来源</th>
+                <th field="Note" width="420px">评价内容</th>
+                <th field="Result" width="60" data-options="formatter:function(value,row){
+                            if(row.Result>=0)
+                                return '+' + row.Result + '分';
+                            else return row.Result + '分';
+                        }">评分</th>
+            </tr>
+        </thead>
+    </table>
+</body>
+</html>

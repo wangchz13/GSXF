@@ -1,0 +1,84 @@
+﻿
+
+
+@Styles.Render("~/Content/easyui")
+@Scripts.Render("~/Content/easyuijs")
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>服务评价</title>
+    <style>
+        body{
+            background:#EFEFEF;
+            text-align:center;
+            
+        }
+        body,input,button,select,textarea,th,td{
+            color:#666666;
+            font-size:14px;
+            line-height:1.4;
+        }
+        #content{
+            width:814px;
+            height:600px;
+            margin:auto auto;
+            background:#fff;
+            border:1px #dbdbdb solid;
+        }
+
+        #hr{
+            width:100%;
+            height:3px;
+            background-color:#53a4f4;
+            float:left;
+            margin-top:20px;
+            margin-bottom:20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+         <p style="text-align:center">
+             <h3>意见反馈</h3>
+         </p>
+        <p>
+            服务机构：@ViewBag.Company
+            项目名称：@ViewBag.Name
+        </p>
+        
+
+        <div id="hr"></div>
+        <p>
+            我们真诚希望听取您的意见和建议
+        </p>
+        <div id="title" style="margin-bottom:20px">
+            请对此次项目进行打分，分值在0~100之间。（此次打分会直接影响到该服务机构的服务评价分数）
+
+            
+        </div>
+        <form action="" method="post" id="form">
+            <input name="projectID" style="display:none" value="@ViewBag.ID" /> 
+            <div style="margin-bottom:20px">
+                <input name="Score" class="easyui-numberspinner" value="100" data-options="labelPosition:'top',spinAlign:'right'" max="100" min="0" required="true">
+            </div>
+
+            <div style="margin-bottom:20px">
+                您还有什么想说的？（您的评价信息将会对外公开）
+            </div>
+
+            <div style="margin-bottom:20px">
+
+                <input name="Note" class="easyui-textbox" data-options="multiline:true" style="width:60%;height:100px">
+
+            </div>
+
+            <div style="margin-bottom:20px">
+                <a href="#" class="easyui-linkbutton" style="width:60px;height:40px;font-size:18px" onclick="$('#form').submit();">提交</a>
+            </div>
+        </form>
+        
+        
+</body>
+</html>

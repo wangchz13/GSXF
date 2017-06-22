@@ -10,14 +10,22 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>首页 - @ViewBag.Title</title>
+    <title>甘肃省社会消防服务信息管理系统 - @ViewBag.OrgName</title>
     <link href="~/Content/User/index.css" rel="stylesheet" />
     <script src="~/Content/User/index.js"></script>
+    <script>
+        function openindex() {
+            window.open("/");
+        }
+    </script>
 </head>
 <body class="easyui-layout">
     <div id="north" region="north" split="true">
         <div class="top-bg">
             <span style="float:right; padding-right:10px;padding-top:64px;">
+                <a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-house'" onclick="openindex()">
+                    网站首页
+                </a>
                 <a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-user'" >
                     欢迎您， @ViewBag.User.Name
                 </a>

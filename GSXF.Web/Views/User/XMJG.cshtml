@@ -89,55 +89,57 @@
     <script>
         $(function () {
             $('#dg').datagrid({
-                height: 'auto',
+                height: '308px',
                 rownumbers: true,
                 singleSelect: true,
                 pagination: true,
                 pageList: [10, 20, 30, 50, 100, 200],
                 url: '/Data/getWorkingProjects',
                 method: 'get',
-                loadFilter: function (data) {
-                    if (typeof data.length == 'number' && typeof data.splice == 'function') {    // 判断数据是否是数组
-                        data = {
-                            total: data.length,
-                            rows: data
-                        }
-                    }
-                    var dg = $(this);
-                    var opts = dg.datagrid('options');
-                    var pager = dg.datagrid('getPager');
-                    pager.pagination({
-                        onSelectPage: function (pageNum, pageSize) {
-                            opts.pageNumber = pageNum;
-                            opts.pageSize = pageSize;
-                            pager.pagination('refresh', {
-                                pageNumber: pageNum,
-                                pageSize: pageSize
-                            });
-                            dg.datagrid('loadData', data);
-                        }
-                    });
-                    if (!data.originalRows) {
-                        data.originalRows = (data.rows);
-                    }
-                    var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);
-                    var end = start + parseInt(opts.pageSize);
-                    data.rows = (data.originalRows.slice(start, end));
-                    return data;
+                loadFilter: loadFilter,
+                onDblClickRow: function (index, row) {
+                    $('#iframe').attr('src', '/User/XMXQ/?projectID=' + row.ID);
+                    $('#win').window('open');
+
                 }
+            });
+
+            $('#win').window({
+                title: '项目详情',
+                width: '90%',
+                height: '400px',
+                modal: true,
+                closed: true,
             });
         });
         var s1 = "<div id='jd' class='jd_bg'><div class='circle step-1'></div><div class='circle step-2 unover'></div><div class='circle step-3 unover'></div><div class='circle step-4 unover'></div></div>";
         var s2 =  "<div id='jd' class='jd_bg'><div class='circle step-1'></div><div class='circle step-2'></div><div class='circle step-3 unover'></div><div class='circle step-4 unover'></div></div>";
         var s3 = "<div id='jd' class='jd_bg'><div class='circle step-1'></div><div class='circle step-2'></div><div class='circle step-3'></div><div class='circle step-4 unover'></div></div>";
+
+        $(".step-1").attr("title", "登记项目");
+        $(".step-2").attr("title", "入场检测");
+        $(".step-3").attr("title", "出具报告");
+        $(".step-4").attr("title", "提交备案");
     </script>
 
-    <table id="dg" class="easyui-datagrid">
+    <table id="dg">
         <thead>
             <tr>
                 <th field="Name" width="300px">项目名称</th>
-                <th field="CompanyName" width="260px">服务机构</th>
-                <th field="FireName" width="260px">管辖单位</th>
+                @{
+                    if (ViewBag.Role != "服务机构")
+                    {
+                        <th field="CompanyName" width="260px">服务机构</th>
+                    }
+                    if (ViewBag.Role != "消防机构支队" && ViewBag.Role != "消防机构大队")
+                    {
+                        <th field="FireName" width="260px">管辖单位</th>
+                    }
+                }
+
+
+                
+                
                 <th field="Progress" width="80px">当前状态</th>
                 <th field="t4" width="160px" data-options="formatter: function (value,row) {
                             if (row.Progress == '项目登记')
@@ -151,12 +153,9 @@
         </thead>
 
     </table>
-    <script>
-        $(".step-1").attr("title", "登记项目");
-        $(".step-2").attr("title", "入场检测");
-        $(".step-3").attr("title", "出具报告");
-        $(".step-4").attr("title", "提交备案");
-    </script>
+    <div id="win">
 
+        <iframe id="iframe" style="width:100%;height:100%"></iframe>
+    </div>
 </body>
 </html>

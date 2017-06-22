@@ -115,13 +115,20 @@ namespace GSXF.Model
         /// </summary>
         public bool Result { get; set; }
 
+        public bool IsFeedBack { get; set; }
+
         public DateTime RecordDate { get; set; }
 
 
-        public virtual File DataFile { get; set; }
+        public virtual UploadFile DataFile { get; set; }
 
-        public virtual File ReportFile { get; set; }
+        public virtual UploadFile ReportFile { get; set; }
 
         public DateTime? rcjcsj { get; set; }
+
+        /// <summary>
+        /// 装逼的查询明码
+        /// </summary>
+        public string ReportFileCode { get; set; }
     }
 }

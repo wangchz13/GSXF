@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace GSXF.Model
 {
-    public class File
+    public class UploadFile
     {
         [Key]
         public int ID { get; set; }

@@ -1,0 +1,189 @@
+﻿
+@{
+    Layout = null;
+}
+@Styles.Render("~/Content/easyui")
+@Scripts.Render("~/Content/easyuijs")
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>XMCJ</title>
+
+    <script>
+
+        $(function () {
+            $('#win').window({
+                title: '选择项目',
+                width: '90%',
+                height: '400px',
+                modal: true,
+                closed: true,
+                footer: '#footer'
+            });
+
+            $('#windg').datagrid({
+                width: '100%',
+                height: '308px',
+                rownumbers: true,
+                singleSelect: true,
+                pagination: true,
+                pageList: [10, 20, 30, 50, 100, 200],
+                url: '/Data/getProjects',
+                method: 'get',
+                loadFilter: loadFilter,
+            });
+
+        });
+
+        function importing() {
+            var row = $('#windg').datagrid('getSelected');
+            if (row == null) {
+                $.messager.alert('提示', '请先选中行', 'info');
+                return;
+            }
+
+            console.log(row.ID);
+            console.log(row.Name);
+            console.log(row.Name);
+
+            $('#projectid').val(row.ID);
+            $('#projectname').textbox('setValue', row.Name);
+            $('#win').window('close');
+
+        }
+
+        function doSearch() {
+            $('#windg').datagrid('load', {
+                Type: $('#s_type').val(),
+                lTime: $('#s_ltime').val(),
+                rTime: $('#s_rtime').val(),
+                Result: $('#s_result').val(),
+                Name: $('#s_name').val()
+            });
+        }
+        function doReset() {
+            $('#s_type').combobox('setValue', '-1');
+            $('#s_ltime').datebox('setValue', '');
+            $('#s_rtime').datebox('setValue', '');
+            $('#s_result').combobox('setValue', '-1');
+            $('#s_name').textbox('setValue', '');
+            doSearch();
+        }
+
+        function xmcj() {
+            if (!$('#form').form('validate')) {
+                $.messager.alert('提示', '存在无效字段，请检查', 'info');
+                return;
+            }
+            var project = $("#form").serialize();
+            $.ajax({
+                async: false,
+                url: '/User/xmcj',
+                data: project,
+                datatype: "json",
+                type: "POST",
+                success: function (data) {
+                    $.messager.alert('提示', '提交成功!', 'info', function () {
+                        window.location.reload();
+                    });
+                }
+            });
+        }
+    </script>
+
+</head>
+<body>
+    <div> 
+
+        <form id="form">
+            <table>
+                <tr>
+                    <td>
+                        抽检项目：
+                    </td>
+                    <td>
+                        <input class="easyui-textbox" editable="false" id="projectname" />
+                        <input name="projectID" style="display:none" id="projectid" required="true"/>
+                    </td>
+                    <td>
+                        <a href="#" class="easyui-linkbutton" onclick="$('#win').window('open');">选择项目</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>抽检结果：</td>
+                    <td>
+                        <select class="easyui-combobox" name="Result" style="width:80px;"
+                                data-options="panelHeight:'auto'" editable="false">
+                            <option value="0">合格</option>
+                            <option value="1">不合格</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>备注：</td>
+                    <td>
+                        <input class="easyui-textbox" name="Note" style="width:300px;height:100px">
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <a class="easyui-linkbutton" onclick="xmcj()">提交</a>
+
+
+        <div id="win">
+            <p style="margin-left:10px;">
+                项目类型:
+                <select class="easyui-combobox" name="Type" id="s_type" style="width:102px;"
+                        data-options="panelHeight:'auto'" editable="false">
+                    <option value="-1">全部</option>
+                    <option value="0">竣工检测</option>
+                    <option value="1">年度检测</option>
+                    <option value="2">维护保养</option>
+                    <option value="3">安全评估</option>
+                </select>
+                报告备案时间:
+                <input name="lTime" id="s_ltime" class="easyui-datebox" style="width:96px;" editable="false">-<input name="rTime" id="s_rtime" class="easyui-datebox" style="width:96px;" editable="false">
+                检测结果:
+                <select class="easyui-combobox" name="Result" id="s_result" style="width:62px;" data-options="panelHeight:'auto'" editable="false">
+                    <option value="-1">全部</option>
+                    <option value="0">合格</option>
+                    <option value="1">不合格</option>
+                </select>
+                项目名称:
+                <input name="Name" id="s_name" class="easyui-textbox" style="width:120px" />
+                <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doSearch()">查询</a>
+                <a href="#" class="easyui-linkbutton" iconCls="icon-reload" onclick="doReset()">重置查询</a>
+            </p>
+            <table id="windg">
+                <thead>
+                    <tr>
+                        <th field="Name" width="300px">项目名称</th>
+                        <th field="CompanyName" width="260px">服务机构</th>
+                        <th field="Type" width="100px">项目类型</th>
+                        <th field="RecordDate" width="96px" formatter="formatdate">报告备案时间</th>
+                        <th field="Result" width="80px" formatter="formatresult">检测结果</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="footer" style="padding:5px;text-align:center;">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-save" onclick="importing()">确定</a>
+        </div>
+
+        <script>
+        function formatdate(val, row) {
+            return val.substring(0, 10);
+
+        }
+
+        function formatresult(val,row) {
+                return '合格';
+        }
+        </script>
+    </div>
+</body>
+</html>

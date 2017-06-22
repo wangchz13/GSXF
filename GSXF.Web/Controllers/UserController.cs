@@ -6,13 +6,19 @@ using GSXF.Web.Models;
 using GSXF.Auxiliary;
 using GSXF.Security;
 
-using Spire.License;
-using Spire.Pdf;
-using Spire.Pdf.Graphics;
+//using Spire.Pdf;
+//using Spire.Pdf.Graphics;
+using System.IO;
 
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Net.Mail;
+using System.Net;
+
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+
 
 namespace GSXF.Web.Controllers
 {
@@ -20,14 +26,18 @@ namespace GSXF.Web.Controllers
     public class UserController : Controller
     {
         private static UserManager userManager = new UserManager();
+        private static UserCompanyManager userCompanyManager = new UserCompanyManager();
+        private static CompanyManager companyManager = new CompanyManager();
+        private static FireControlInstitutionManager fireManager = new FireControlInstitutionManager();
+        private static ProjectManager projectManager = new ProjectManager();
+        private static EvaluationManager evaluationManager = new EvaluationManager();
         // GET: User
         public ActionResult Index()
         {
             var user = Session["User"] as User;
-            if (user == null)
-                return RedirectToAction("Login");
-
+            string roleName = user.Role.Name;
             ViewBag.User = user;
+            ViewBag.OrgName = userManager.getOrgName(user.ID);
             return View();
         }
 
@@ -45,6 +55,17 @@ namespace GSXF.Web.Controllers
         public ActionResult Login(LoginViewModel login)
         {
             Response resp = new Response();
+
+
+            var currentUser = Session["User"] as User;
+            if (currentUser != null)
+            {
+                currentUser.IsOnline = false;
+                userManager.Update(currentUser);
+            }
+
+
+            
             if (!ModelState.IsValid)
             {
                 resp.Code = -1;
@@ -52,22 +73,29 @@ namespace GSXF.Web.Controllers
                 return Json(resp);
             }
 
+            if (Session["VerificationCode"].ToString() != login.VerficationCode.ToUpper())
+            {
+                resp.Code = -2;
+                resp.Message = "验证码错误";
+                return Json(resp);
+            }
+
             resp = userManager.Verify(login.Name, login.Password);
             if (resp.Code != 3)
-                return Json(resp);
-
-            var currentUser = Session["User"] as User;
-            if(currentUser != null)
             {
-                currentUser.IsOnline = false;
-                userManager.Update(currentUser);
+                return Json(resp);
             }
+                
+
+            
 
             var user = userManager.Find(login.Name);
             user.LoginTime = DateTime.Now;
             user.LoginIP = Request.UserHostAddress;
             user.IsOnline = true;
             userManager.Update(user);
+
+
             Session.Add("User", user);
             return Json(resp);
         }
@@ -83,30 +111,46 @@ namespace GSXF.Web.Controllers
                 userManager.Update(user);
             }
             Session.Clear();
-            return RedirectToAction("Login");
+            return Redirect("/");
         }
 
         public ActionResult Menu()
         {
             User user = Session["User"] as User;
-            if (user == null)
-                return Content("请登录账号");
             var roleName = user.Role.Name;
             ViewBag.Role = roleName;
+
+            //标志是否为主账号
+            ViewBag.Flag = user.Name.Substring(user.Name.Length - 2, 2) == "00";
+
             return PartialView();
+        }
+
+        public ActionResult ZZHGL()
+        {
+            return View();
         }
 
         public ActionResult MyInfo()
         {
             User user = Session["User"] as User;
-            if(user == null)
-            {
-                return Content("账号已过期，请重新登录");
-            }
             ViewBag.Name = user.Name;
             ViewBag.Regtime = user.RegTime;
-            var roleName = user.Role.Name;
-            ViewBag.Role = roleName;
+            ViewBag.LoginTime = user.LoginTime;
+            ViewBag.LoginIP = user.LoginIP;
+            ViewBag.Role = user.Role.Name;
+
+            if(ViewBag.Role == "服务机构")
+            {
+                int companyID = userCompanyManager.Find(uc => uc.UserID == user.ID).CompanyID;
+                ViewBag.CompanyName = companyManager.Find(companyID).Name;
+            }
+            else
+            {
+                string fireCode = user.Name.Substring(0, 8);
+                ViewBag.CompanyName = fireManager.Find(f => f.Code == fireCode).Name;
+            }
+
             return View();
         }
 
@@ -116,10 +160,7 @@ namespace GSXF.Web.Controllers
 
 
         #region 超级管理员
-        /// <summary>
-        /// 超级管理员页面
-        /// </summary>
-        /// <returns></returns>
+
         public ActionResult Index1()
         {
             return View();
@@ -127,82 +168,85 @@ namespace GSXF.Web.Controllers
         #endregion
 
         #region 消防机构总队
-        /// <summary>
-        /// 消防机构总队首页
-        /// </summary>
-        /// <returns></returns>
+        //总队首页
         public ActionResult Index2()
         {
             return View();
         }
-        /// <summary>
-        /// 项目监管
-        /// </summary>
-        /// <returns></returns>
+        //项目监管
         public ActionResult XMJG()
         {
+            User user = Session["User"] as User;
+            ViewBag.Role = user == null ? "" : user.Role.Name;
+
             return View();
         }
-        /// <summary>
-        /// 机构备案
-        /// </summary>
-        /// <returns></returns>
+        //机构备案
         public ActionResult JGBA()
         {
 
             return View();
         }
-        /// <summary>
-        /// 注册消防工程师备案
-        /// </summary>
-        /// <returns></returns>
+        //注册工程师备案
         public ActionResult ZCGCSBA()
         {
             return View();
         }
-
+        //项目查询
         public ActionResult XMCX()
         {
+            User user = Session["User"] as User;
+            ViewBag.Role = user == null ? "" : user.Role.Name;
+
             return View();
         }
-
+        //机构查询
         public ActionResult JGCX()
         {
             return View();
         }
-
+        //注册工程师查询
         public ActionResult ZCGCSCX()
         {
             return View();
         }
+
+        public ActionResult WZGL()
+        {
+            return View();
+        }
+
+        public ActionResult ZHGL()
+        {
+            return View();
+        }
+
         #endregion
 
-        #region 消防机构支队
+        #region 消防机构支队、大队
         public ActionResult Index3()
         {
             return View();
         }
-        #endregion
 
-        #region 消防机构大队
-        /// <summary>
-        /// 消防机构大队首页
-        /// </summary>
-        /// <returns></returns>
         public ActionResult Index4()
         {
             return View();
         }
+
+        //项目抽检
+        public ActionResult XMCJ()
+        {
+            return View();
+        }
+
         #endregion
 
         #region 服务机构
-        /// <summary>
-        /// 服务机构首页
-        /// </summary>
-        /// <returns></returns>
+
         public ActionResult Index5()
         {
-            return View();
+            return View("XMJG");
         }
 
         public ActionResult XMDJ()
@@ -215,6 +259,57 @@ namespace GSXF.Web.Controllers
             return View();
         }
         #endregion
+
+
+        //项目详情
+        public ActionResult XMXQ(int projectID)
+        {
+            var user = Session["User"] as User;
+            ViewBag.Role = user == null ? "" : user.Role.Name;
+            ViewBag.Progress = (int)projectManager.Find(projectID).Progress;
+
+            ViewBag.Path = "/Data/getProject/?projectID=" + projectID.ToString();
+            ViewBag.ID = projectID;
+            return View();
+        }
+
+
+        [HttpPost]
+        public ActionResult xmcj()
+        {
+            string id = Request.Form["projectID"];
+            string result = Request.Form["Result"];
+            string note = Request.Form["Note"];
+
+            int projectID = int.Parse(id);
+            var project = projectManager.Find(projectID);
+            var company = project.Company;
+
+
+            Evaluation eva = new Evaluation();
+            eva.Project = project;
+            eva.Source = EvaluationSource.项目抽查;
+            eva.Note = note;
+            
+
+
+
+
+            if (result == "0")
+            {
+                eva.Result = 0;
+            }
+            else
+            {
+                company.Score = company.Score - 10;
+                eva.Result = -10;
+            }
+            evaluationManager.Add(eva);
+
+
+            projectManager.Update(project);
+            return Json("123");
+        }
 
 
         [HttpPost]
@@ -256,18 +351,22 @@ namespace GSXF.Web.Controllers
                 return Json(resp);
             }
 
-            var filePath = Server.MapPath(string.Format("~/{0}/Datas", "Upload"));
+            fileName = Verification.Text(20) + ".rar";
+
+            var filePath = Server.MapPath("~/Upload/Datas");
 
             var path = string.Format(filePath + "\\{0}", fileName);
             file.SaveAs(path);
+
+
             FileManager fileManager = new FileManager();
-            Model.File f = new Model.File();
-            f.Name = project.Name + "_入场检测材料";
-            f.Path = path;
+            Model.UploadFile f = new Model.UploadFile();
+            f.Name = fileName;
+            f.Path = "~/Upload/Datas/" + fileName;
             var res = fileManager.Add(f);
             project.DataFile = f;
             projectManager.Update(project);
-            return View();
+            return Json(resp);
         }
 
         [HttpPost]
@@ -306,36 +405,82 @@ namespace GSXF.Web.Controllers
                 return Json(resp);
             }
 
-            var filePath = Server.MapPath(string.Format("~/{0}/Reports", "Upload"));
+            
+            var filePath = Server.MapPath("~/Upload/Reports");
 
             var path = string.Format(filePath + "\\{0}", fileName);
             file.SaveAs(path);
+            
+            fileName = Verification.Text(20) + ".pdf";
 
 
-            PdfDocument pdf = new PdfDocument();
-            pdf.LoadFromFile(path);
-            PdfPageBase page = pdf.Pages[0];
-            PdfFont font = new PdfFont(PdfFontFamily.Helvetica, 24);
-            PdfSolidBrush brush = new PdfSolidBrush(Color.LightBlue);
-            PdfStringFormat leftAlignment = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
-            PdfStringFormat rightAlignment = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
-            page.Canvas.DrawString("123456789000", font, brush, page.Canvas.ClientSize.Width, 20, rightAlignment);
-            pdf.SaveToFile(path);
+
+
+            string inputfilepath = path;
+            string outputfilepath = string.Format(filePath + "\\{0}", fileName);
+            string waterMarkName = project.ReportFileCode;
+            PdfReader pdfReader = null;
+            PdfStamper pdfStamper = null;
+            try
+            {
+                pdfReader = new PdfReader(inputfilepath);
+                pdfStamper = new PdfStamper(pdfReader, new FileStream(outputfilepath, FileMode.Create));
+                int total = pdfReader.NumberOfPages + 1;
+                iTextSharp.text.Rectangle psize = pdfReader.GetPageSize(1);
+                float width = psize.Width;
+                float height = psize.Height;
+                PdfContentByte content;
+                BaseFont font = BaseFont.CreateFont(@"C:\WINDOWS\Fonts\SIMFANG.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                PdfGState gs = new PdfGState();
+                for (int i = 1; i < total; i++)
+                {
+                    content = pdfStamper.GetOverContent(i);//在内容上方加水印
+                    //content = pdfStamper.GetUnderContent(i);//在内容下方加水印
+                    //透明度
+                    content.SetGState(gs);
+                    //content.SetGrayFill(0.3f);
+                    //开始写入文本
+                    content.BeginText();
+                    content.SetColorFill(BaseColor.BLUE);
+                    content.SetFontAndSize(font, width / 40);
+                    content.SetTextMatrix(0, 0);
+                    content.ShowTextAligned(Element.ALIGN_RIGHT, waterMarkName, width, height - height / 40, 0);
+                    //content.SetColorFill(BaseColor.BLACK);
+                    //content.SetFontAndSize(font, 8);
+                    //content.ShowTextAligned(Element.ALIGN_CENTER, waterMarkName, 0, 0, 0);
+                    content.EndText();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+
+                if (pdfStamper != null)
+                    pdfStamper.Close();
+
+                if (pdfReader != null)
+                    pdfReader.Close();
+            }
+
+            System.IO.File.Delete(inputfilepath);
 
 
             FileManager fileManager = new FileManager();
-            Model.File f = new Model.File();
-            f.Name = project.Name + "_报告";
-            f.Path = path;
+            Model.UploadFile f = new Model.UploadFile();
+            f.Name = fileName;
+            f.Path = "~/Upload/Reports/" + f.Name;
             var res = fileManager.Add(f);
             project.ReportFile = f;
 
 
             project.Progress = ProjectProgress.出具报告;
             projectManager.Update(project);
-            return View();
+            return Json(resp);
         }
-
+        [HttpPost]
         public ActionResult tjba()
         {
             string id = Request.Form["id"];
@@ -347,8 +492,38 @@ namespace GSXF.Web.Controllers
             bool res = result == "0" ? true : false;
             project.Result = res;
             project.Progress = ProjectProgress.提交备案;
+
+
             projectManager.Update(project);
+
+            
+            string feedPath = DataController.getSiteConfig("SiteUrl") + "/Home/FeedBack/" + "?projectID=" + project.ID + "&&c=" + Security.Encryption.SHA256(project.ID.ToString());
+
+            sendFeedEmail(project.ObjectEmail, feedPath,project.Company.Name, project.Name);
             return Content("成功");
+        }
+
+        private void sendFeedEmail(string to, string path,string companyName, string projectName)
+        {
+            MailMessage message = new MailMessage();
+            string email = DataController.getSiteConfig("EmailName");
+            string password = DataController.getSiteConfig("EmailPassword");
+
+
+            MailAddress from = new MailAddress(email);
+            message.From = from;
+            message.To.Add(to);
+            message.Subject = "项目评价";
+
+            string content = "客户您好： 请您抽空对【" + companyName + "】公司的【" + projectName + "】项目服务做出评价。点击 " + path + " 进行评价。 ";
+
+            message.Body = content;
+            message.IsBodyHtml = true;
+            SmtpClient smtp = new SmtpClient();
+            smtp.Host = "smtp.163.com";
+            smtp.Credentials = new NetworkCredential(email,password);
+            smtp.EnableSsl = true;
+            smtp.Send(message);
         }
     }
 }

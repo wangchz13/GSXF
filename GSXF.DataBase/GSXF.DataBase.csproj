@@ -49,14 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionManager.cs" />
-    <Compile Include="ActionRoleManager.cs" />
     <Compile Include="ArticleManager.cs" />
     <Compile Include="BaseManager.cs" />
-    <Compile Include="CategoryManager.cs" />
     <Compile Include="CompanyManager.cs" />
     <Compile Include="ContextFactory.cs" />
     <Compile Include="EmployeeManager.cs" />
+    <Compile Include="EvaluationManager.cs" />
     <Compile Include="FileManager.cs" />
     <Compile Include="FireControlInstitutionManager.cs" />
     <Compile Include="GSXFContext.cs" />

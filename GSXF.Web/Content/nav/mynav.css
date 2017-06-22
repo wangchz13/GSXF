@@ -130,8 +130,13 @@
 
 .border{
     background:#ffffff;
-    padding:21px 30px;
-    margin-bottom:14px;
+    padding:20px 30px;
+}
+
+.more{
+    float:right;
+    font-size:10px;
+    color:#e67e22;
 }
 
 .title{

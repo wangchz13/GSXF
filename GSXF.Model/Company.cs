@@ -18,6 +18,9 @@ namespace GSXF.Model
         [Required(ErrorMessage ="机构名称不能为空")]
         public string Name { get; set; }
 
+        public string Code { get; set; }
+
+
         /// <summary>
         /// 资质类型1
         /// </summary>
@@ -95,6 +98,8 @@ namespace GSXF.Model
         /// 电子邮件
         /// </summary>
         public string Email { get; set; }
+
+        public int Score { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<Employee> Employees { get; set; }

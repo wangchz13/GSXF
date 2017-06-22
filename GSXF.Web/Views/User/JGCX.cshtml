@@ -26,7 +26,7 @@
                 singleSelect: true,
                 pagination: true,
                 pageList: [10, 20, 30, 50, 100, 200],
-                url: '/Data/Companies',
+                url: '/Data/getCompanies',
                 method: 'get',
                 loadFilter: loadFilter
             });
@@ -77,12 +77,10 @@
         <thead>
             <tr>
                 <th field="Name" width="300px">机构名称</th>
-                <th field="QualificationType" width="160px">资质类别</th>
-                <th field="QualificationLevel" width="80px">资质等级</th>
-                <th field="CertificateNumber" width="160px">证书编号</th>
-                <th field="tt" width="60px" data-options="formatter:function(){
-                    return '有效';
-                    }">证书状态</th>
+                <th field="Type" width="160px">资质类别</th>
+                <th field="Level" width="80px">资质等级</th>
+                <th field="Number" width="160px">证书编号</th>
+                <th field="State" width="120px">证书状态</th>
             </tr>
         </thead>
 

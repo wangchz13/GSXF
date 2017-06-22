@@ -13,5 +13,7 @@ namespace GSXF.Web.Models
         public string Name { get; set; }
         [Required(ErrorMessage = "煞笔密码不能为空")]
         public string Password { get; set; }
+        [Required]
+        public string VerficationCode { get; set; }
     }
 }
