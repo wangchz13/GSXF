@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using GSXF.Auxiliary;
 using GSXF.Model;
 using GSXF.Security;
+using GSXF.Web.Models;
 
 namespace GSXF.Web.Controllers
 {
@@ -23,11 +24,11 @@ namespace GSXF.Web.Controllers
         private static FireControlInstitutionManager fireManager = new FireControlInstitutionManager();
         private static UserManager userManager = new UserManager();
         private static RoleManager roleManager = new RoleManager();
-        private static OfficeAddressManager officeAddressManager = new OfficeAddressManager();
         private static EvaluationManager evaManager = new EvaluationManager();
+        private static ArticleManager articleManager = new ArticleManager();
+        private static FileManager fileManager = new FileManager();
 
         private static List<Employee> employees = new List<Employee>();
-        private static List<OfficeAddress> offices = new List<OfficeAddress>();
 
         [AllowAnonymous]
         public static string getSiteConfig(string key)
@@ -50,6 +51,70 @@ namespace GSXF.Web.Controllers
         }
 
 
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult Login(LoginViewModel login)
+        {
+
+            Response resp = new Response();
+
+
+            var currentUser = Session["User"] as User;
+            if (currentUser != null)
+            {
+                currentUser.IsOnline = false;
+                userManager.Update(currentUser);
+            }
+
+
+
+            if (!ModelState.IsValid)
+            {
+                resp.Code = -1;
+                resp.Message = "数据格式有误，提交失败";
+                return Json(resp);
+            }
+
+            if (Session["VerificationCode"].ToString() != login.VerficationCode.ToUpper())
+            {
+                resp.Code = -2;
+                resp.Message = "验证码错误";
+                return Json(resp);
+            }
+
+            resp = userManager.Verify(login.Name, login.Password);
+            if (resp.Code != 3)
+            {
+                return Json(resp);
+            }
+
+
+
+
+            var user = userManager.Find(login.Name);
+            user.LoginTime = DateTime.Now;
+            user.LoginIP = Request.UserHostAddress;
+            user.IsOnline = true;
+            userManager.Update(user);
+
+
+            Session.Add("User", user);
+            return Json(resp);
+        }
+
+        [AllowAnonymous]
+        public ActionResult LoginOut()
+        {
+            User user = Session["User"] as User;
+            if (user != null)
+            {
+                user = userManager.Find(user.ID);
+                user.IsOnline = false;
+                userManager.Update(user);
+            }
+            Session.Clear();
+            return Redirect("/");
+        }
 
 
 
@@ -171,7 +236,13 @@ namespace GSXF.Web.Controllers
         [HttpPost]
         public ActionResult deleteArticle(int id)
         {
-            ArticleManager articleManager = new ArticleManager();
+            var article = articleManager.Find(id);
+            var path = Server.MapPath(article.File.Path);
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+            }
+
             articleManager.Delete(id);
             return Json("成功");
         }
@@ -306,9 +377,9 @@ namespace GSXF.Web.Controllers
                 AllLayer = project.AllLayer,
                 ServiceLayer = project.ServiceLayer,
                 ContractNumber = project.ContractNumber,
-                SignDate = project.SignDate,
-                StartDate = project.StartDate,
-                EndDate = project.EndDate,
+                SignDate = project.SignDate.ToShortDateString(),
+                StartDate = project.StartDate.ToShortDateString(),
+                EndDate = project.EndDate.ToShortDateString(),
                 ProjectHead = project.ProjectHead,
                 TechHead = project.TechHead,
                 ProjectContact = project.ProjectContact,
@@ -444,11 +515,46 @@ namespace GSXF.Web.Controllers
         public ActionResult setProject(Project p)
         {
             var project = projectManager.Find(p.ID);
-            project = p;
+
+            project.Name = p.Name;
+            project.Type = p.Type;
+            project.City = p.City;
+            project.Address = p.Address;
+            project.BuildType = p.BuildType;
+            project.FireRisk = p.FireRisk;
+            project.Area = p.Area;
+            project.AllLayer = p.AllLayer;
+            project.ServiceLayer = p.ServiceLayer;
+            project.ContractNumber = p.ContractNumber;
+            project.SignDate = p.SignDate;
+            project.StartDate = p.StartDate;
+            project.EndDate = p.EndDate;
+            project.ProjectHead = p.ProjectHead;
+            project.TechHead = p.TechHead;
+            project.ProjectContact = p.ProjectContact;
+            project.Note = p.Note;
+            project.Object = p.Object;
+            project.ObjectContact = p.ObjectContact;
+            project.ObjectContactPhone = p.ObjectContactPhone;
+            project.ObjectEmail = p.ObjectEmail;
+
+
             projectManager.Update(project);
             return Content("123");
         }
 
+
+        [HttpPost]
+        public ActionResult deleteProject(int id)
+        {
+            projectManager = new ProjectManager();
+            Response resp = new Auxiliary.Response();
+
+
+            var project = projectManager.Find(id);
+            resp = projectManager.Delete(id);
+            return Json(resp);
+        }
 
 
         /// <summary>
@@ -488,7 +594,7 @@ namespace GSXF.Web.Controllers
                 Type = c.Type1.ToString() + (c.Type2 == null ? "" : "/" + c.Type2.ToString()),
                 Level = c.Level1.ToString() + (c.Type2 == null ? "" : "/" + c.Level2.ToString()),
                 Number = c.Number1.ToString() + (c.Type2 == null ? "" : "/" + c.Number2.ToString()),
-                State = c.ExpiryDate1 < DateTime.Now ? "有效" : "无效" + (c.Type2 == null ? "" : "/" + (c.ExpiryDate2 < DateTime.Now ? "有效" : "无效")),
+                State = (c.ExpiryDate1 < DateTime.Now ? "有效" : "无效") + (c.Type2 == null ? "" : ("/" + (c.ExpiryDate2 < DateTime.Now ? "有效" : "无效"))),
                 Score = c.Score
             });
             return Json(data, JsonRequestBehavior.AllowGet);
@@ -528,10 +634,6 @@ namespace GSXF.Web.Controllers
                 company.Employees = employees;
             }
 
-            if (offices.Count != 0)
-            {
-                company.OfficeAddresses = offices;
-            }
 
             var companies = companyManager.FindList().ToList();
             string code = string.Empty;
@@ -625,7 +727,8 @@ namespace GSXF.Web.Controllers
                 Level = e.Level.ToString(),
                 CertificateNumber = e.CertificateNumber,
                 IdentificationNumber = e.IdentificationNumber,
-                CompanyName = e.Company == null ? "无" : e.Company.Name
+                CompanyName = e.Company == null ? "无" : e.Company.Name,
+                MobilePhone = e.MobilePhone
             });
 
             return Json(data, JsonRequestBehavior.AllowGet);
@@ -874,40 +977,25 @@ namespace GSXF.Web.Controllers
 
 
 
-        [HttpPost]
-        public ActionResult addOfficeAddress(List<OfficeAddress> list)
-        {
-            offices = new List<OfficeAddress>();
-            Response resp = new Response();
-            if (!ModelState.IsValid)
-            {
-                resp.Code = -1;
-                resp.Message = "数据格式有误，提交失败";
-                return Json(resp);
-            }
-            foreach (var i in list)
-            {
-                resp = officeAddressManager.Add(i);
-                offices.Add(i);
-            }
-            return Json(resp);
-        }
 
 
         [HttpPost]
         public ActionResult resetPassword(int id,string Password)
         {
-            Response resp = new Auxiliary.Response();
+            userManager = new UserManager();
+
             var user = userManager.Find(id);
             user.Password = Password;
             userManager.Update(user);
-            return Json("213", JsonRequestBehavior.AllowGet);
+            return Json("成功");
         }
 
 
         [HttpPost]
         public ActionResult setPassword()
         {
+            userManager = new UserManager();
+
             Response resp = new Auxiliary.Response();
 
             string p = Request.Form["p"];
@@ -937,7 +1025,6 @@ namespace GSXF.Web.Controllers
         }
 
 
-        public ActionResult
 
 
         private object CreateCompanyUser(Company company)
@@ -963,6 +1050,8 @@ namespace GSXF.Web.Controllers
         [HttpGet]
         public ActionResult getFile(int projectID,int type)
         {
+            //对当前数据库刷新
+            projectManager = new ProjectManager();
             Project project = projectManager.Find(projectID);
 
             UploadFile file = type == 0 ? project.DataFile : project.ReportFile;
@@ -1031,47 +1120,51 @@ namespace GSXF.Web.Controllers
             articleManager.Add(article);
             return Json("");
         }
-        [HttpPost]
+
+
         public ActionResult CreateUser()
         {
+
+            userManager = new UserManager();
+            userCompanyManager = new UserCompanyManager();
             Response resp = new Auxiliary.Response();
 
 
             User user = Session["User"] as User;
 
-            Company company = companyManager.Find(userCompanyManager.Find(uc => uc.UserID == user.ID).CompanyID);
             string code = user.Name.Substring(0, user.Name.Length - 2);
             var users = userManager.FindList(u => u.Name.Contains(code));
             if(users.Count() > 10)
             {
                 resp.Code = -1;
                 resp.Message = "添加失败，最多只能有10个账号";
-                return Json(resp);
+                return Json(resp,JsonRequestBehavior.AllowGet);
             }
 
             string str = string.Format("{0:D2}", users.Count());
 
-            User newuser = new Model.User();
-            newuser.Name = code + str;
-            newuser.Password = password;
-            newuser.RegTime = DateTime.Now;
-            newuser.Role = user.Role;
-
-            if(user.Role.Name == "消防机构总队" || user.Role.Name == "消防机构支队" || user.Role.Name == "消防机构大队")
-            {
-
-            }
+            string fullName = code + str;
 
             
-            resp = userManager.Add(newuser);
+            resp = userManager.Add(fullName,fullName,roleManager.Find(user.Role.ID));
+
+            if (user.Role.Name == "消防机构总队" || user.Role.Name == "消防机构支队" || user.Role.Name == "消防机构大队")
+            {
+
+            }
             if (user.Role.Name == "服务机构")
             {
-                UserCompany uc = new UserCompany();
-                uc.UserID = newuser.ID;
-                uc.CompanyID = company.ID;
+                UserCompany userCompany = new UserCompany();
+                userCompany.UserID = userManager.Find(u => u.Name == fullName).ID;
+                userCompany.CompanyID = userCompanyManager.Find(uc => uc.UserID == user.ID).CompanyID;
+                userCompanyManager.Add(userCompany);
             }
-
-            return Json(resp);
+            resp.Data = new
+            {
+                Name = fullName,
+                Password = fullName
+            };
+            return Json(resp,JsonRequestBehavior.AllowGet);
         }
 
 
@@ -1089,8 +1182,8 @@ namespace GSXF.Web.Controllers
                 ID = u.ID,
                 Name = u.Name,
                 LoginIP = u.LoginIP,
-                LoginTime = u.LoginTime,
-                RegTime = u.RegTime,
+                LoginTime = u.LoginTime.ToString(),
+                RegTime = u.RegTime.ToString(),
                 IsOnline = u.IsOnline
             });
             return Json(data,JsonRequestBehavior.AllowGet);

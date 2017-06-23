@@ -11,14 +11,19 @@
     @Styles.Render("~/Content/easyui")
     @Scripts.Render("~/Content/easyuijs")
 
+    <style>
+        td{
+            text-align:center;
+        }
+    </style>
+
     <script>
         $(function () {
             $('#dg').datagrid({
                 width: '100%',
-                height: 'auto',
-                rownumbers: true,
                 singleSelect: true,
                 pagination: true,
+                pageSize:20,
                 pageList: [10, 20, 30, 50, 100, 200],
                 url: '/Data/getEmployees',
                 method: 'get',
@@ -94,7 +99,7 @@
 
         function deleteemployee() {
 
-            $.messager.confirm('提示', '删除后不可找回，确认删除此人员？', function (r) {
+            $.messager.confirm('提示', '确认删除此人员？', function (r) {
                 if (r) {
                     $.ajax({
                         async: false,
@@ -114,6 +119,11 @@
 
     </script>
     <link href="~/Content/User/ipage.css" rel="stylesheet" />
+    <style>
+        #dg>td{
+            text-align:center;
+        }
+    </style>
 </head>
 <body>
     <p style="margin-left:10px;">
@@ -160,6 +170,7 @@
                     <td>
                         <input class="easyui-textbox" name="Name" />
                     </td>
+                    <td></td>
                     <td style="text-align:right">
                         性别：
                     </td>
@@ -176,6 +187,7 @@
                     <td style="text-align:right">
                         证书类别：
                     </td>
+                    
                     <td>
                         <select name="Level" id="l" class="easyui-combobox"
                                 data-options="panelHeight:'102px'" editable="false">
@@ -184,6 +196,7 @@
                             <option value="2">二级注册消防工程师</option>
                         </select>
                     </td>
+                    <td></td>
                     <td style="text-align:right">证书编号：</td>
                     <td>
                         <input name="CertificateNumber" class="easyui-textbox easyui-validatebox"
@@ -198,6 +211,7 @@
                         <input name="IdentificationNumber" class="easyui-textbox easyui-validatebox"
                                data-options="required:true,width:180" />
                     </td>
+                    <td></td>
                     <td style="text-align:right">
                         手机号码：
                     </td>
@@ -209,7 +223,7 @@
                     <td style="text-align:right">
                         注册公司：
                     </td>
-                    <td colspan="3">
+                    <td colspan="4">
                         <select name="CompanyName" class="easyui-combobox"
                                 data-options="panelHeight:'auto'" editable="false" style="width:100%">
                             <option value="0">无</option>
@@ -221,7 +235,7 @@
     </div>
     <div id="footer" style="padding:5px;text-align:center;">
         <a href="#" class="easyui-linkbutton" iconCls="icon-save" onclick="update()">保存修改</a>
-        <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="deleteemployee()" style="float:right">删除此人员</a>
+        <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="deleteemployee()">删除此人员</a>
     </div>
 </body>
 </html>

@@ -23,10 +23,6 @@
             $("#front-page").click(function () {
                 $('#tabs').tabs('select', "机构信息");
             });
-            $('#addAddress').click(function () {
-                $("#flag").before('<tr class="newaddress"><td>办公场所地址：</td><td colspan="3"><input class="easyui-textbox address" style="width:100%" required="true"></td><td>建筑面积：</td><td><input class="easyui-numberbox easyui-validatebox area" precision="2" max="99999.99" size="8" maxlength="8" required="true">m2</td><td><a class="removeAddress" href="#" onclick="$(this).parent().parent().remove();">删除</a></td></tr>');
-                $.parser.parse('.newaddress');
-            });
 
             $('#addzizhi').click(function () {
                 if ($('#zizhi').length >0) {
@@ -79,13 +75,7 @@
                     });
                     return;
                 }
-                submitaddress();
-                if (resp.Code != 1) {
-                    $.messager.alert('提示', '出现错误：' + resp.Message, 'info', function () {
-                        window.location.reload();
-                    });
-                    return;
-                }
+
                 submitcompany();
                 $.messager.alert('提示', '机构备案成功!<br/><br/><p>账号：<span style="color:#E53333;font-size:18px;">' + name + '</p><p></span>   密码：<span style="color:#E53333;font-size:18px;">' + password + '</span></p>', 'info', function () {
                     window.location.reload();
@@ -109,25 +99,6 @@
                     async: false,
                     url: '/Data/addEmployees',
                     data: _employeelist,
-                    dataType: "json",
-                    type: "POST",
-                    success: function (data) {
-                        resp = data;
-                    }
-                });
-            }
-
-            function submitaddress() {
-                var _addresslist = {};
-                var addressrows = $(".address").length;
-                for (var i = 0; i < addressrows; i++) {
-                    _addresslist["list[" + i + "].Name"] = $(".address")[i].value;
-                    _addresslist["list[" + i + "].Area"] = $(".area")[i].value;
-                }
-                $.ajax({
-                    async: false,
-                    url: '/Data/addOfficeAddress',
-                    data: _addresslist,
                     dataType: "json",
                     type: "POST",
                     success: function (data) {
@@ -240,9 +211,10 @@
                         title: '身份证号',
                         width: 160,
                         editor: {
-                            type: 'textbox',
+                            type: 'validatebox',
                             options: {
-                                required: true
+                                required: true,
+                                validType:"idcard"
                             }
                         }
                     },
@@ -251,7 +223,10 @@
                         title: '手机号码',
                         width: 120,
                         editor: {
-                            type: 'textbox'
+                            type: 'validatebox',
+                            options: {
+                                validType:"mobilephone"
+                            }
                         }
                     }
                 ]],
@@ -425,10 +400,13 @@
                     </tr>
                     <tr id="flag1">
                         <td style="text-align:right">办公场所地址：</td>
-                        <td colspan="3"><input class="easyui-textbox address" style="width:100%" required="true"></td>
+                        <td colspan="3">
+                            <input name="Address" class="easyui-textbox" style="width:100%" required="true">
+                        </td>
                         <td style="text-align:right">建筑面积：</td>
-                        <td><input class="easyui-numberbox easyui-validatebox area" precision="2" max="9999999.99" size="8" maxlength="8" required="true">m2</td>
-                        <td><a id="addAddress" href="#">新增</a></td>
+                        <td>
+                            <input name="Area" class="easyui-numberbox easyui-validatebox" precision="2" max="9999999.99" size="8" maxlength="8" required="true">m2
+                        </td>
                     </tr>
 
                     <tr id="flag">
@@ -441,7 +419,7 @@
                         <td style="text-align:right">办公电话：</td>
                         <td><input name="DelegateOfficePhone" class="easyui-textbox"></td>
                         <td style="text-align:right">手机号码：</td>
-                        <td><input name="DelegateMobilePhone" class="easyui-textbox"></td>
+                        <td><input name="DelegateMobilePhone" class="easyui-textbox easyui-validatebox" validType="mobilephone"></td>
                     </tr>
                     <tr>
                         <td style="text-align:right">联系人：</td>
@@ -449,7 +427,7 @@
                         <td style="text-align:right">办公电话：</td>
                         <td><input name="ContactOfficePhone" class="easyui-textbox"></td>
                         <td style="text-align:right">手机号码：</td>
-                        <td><input name="ContactMobilePhone" class="easyui-textbox"></td>
+                        <td><input name="ContactMobilePhone" class="easyui-textbox easyui-validatebox" validType="mobilephone"></td>
                     </tr>
                     <tr>
                         <td style="text-align:right">传真：</td>

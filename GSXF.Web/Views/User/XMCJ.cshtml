@@ -25,10 +25,9 @@
 
             $('#windg').datagrid({
                 width: '100%',
-                height: '308px',
-                rownumbers: true,
                 singleSelect: true,
                 pagination: true,
+                pageSize:20,
                 pageList: [10, 20, 30, 50, 100, 200],
                 url: '/Data/getProjects',
                 method: 'get',

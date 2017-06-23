@@ -35,7 +35,8 @@ namespace GSXF.Web
                       "~/Content/Easy UI/jquery.min.js",
                       "~/Content/Easy UI/jquery.easyui.min.js",
                       "~/Content/Easy UI/easyui-lang-zh_CN.js",
-                      "~/Content/User/loadfilter.js"
+                      "~/Content/User/loadfilter.js",
+                      "~/Content/User/validator.js"
                 ));
 
         }

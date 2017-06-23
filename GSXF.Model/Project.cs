@@ -120,9 +120,9 @@ namespace GSXF.Model
         public DateTime RecordDate { get; set; }
 
 
-        public virtual UploadFile DataFile { get; set; }
+        public  virtual UploadFile DataFile { get; set; }
 
-        public virtual UploadFile ReportFile { get; set; }
+        public  virtual UploadFile ReportFile { get; set; }
 
         public DateTime? rcjcsj { get; set; }
 

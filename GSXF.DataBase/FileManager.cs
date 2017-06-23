@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using GSXF.Model;
 using GSXF.Auxiliary;
+using System.Web;
+
+
+
 
 namespace GSXF.DataBase
 {
@@ -13,22 +15,14 @@ namespace GSXF.DataBase
     {
         public override Response Delete(int ID)
         {
-
-            Response resp = new Response();
-            var file = Find(ID);
-
-
-
-            if (file != null)
+            UploadFile file = Find(ID);
+            string filePath = HttpContext.Current.Server.MapPath(file.Path);
+            if (File.Exists(filePath))
             {
-                string path = file.Path;
-                if (File.Exists(path))
-                {
-                    File.Delete(path);
-                }
-
+                File.Delete(filePath);
             }
-            return Delete(ID);
+            return base.Delete(ID);
         }
+
     }
 }

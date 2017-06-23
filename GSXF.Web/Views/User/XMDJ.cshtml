@@ -293,14 +293,14 @@
                             <tr>
                                 <td style="text-align:right">建筑类型：</td>
                                 <td>
-                                    <select name="BuildType" class="easyui-combobox" editable="false">
+                                    <select name="BuildType" class="easyui-combobox" editable="false" panelHeight="auto">
                                         <option value="0">公用建筑</option>
                                         <option value="1">民用建筑</option>
                                     </select>
                                 </td>
                                 <td style="text-align:right">火灾危险性：</td>
                                 <td>
-                                    <select name="FireRisk" class="easyui-combobox" editable="false">
+                                    <select name="FireRisk" class="easyui-combobox" editable="false" panelHeight="auto">
                                         <option value="-1">无</option>
                                         <option value="0">甲</option>
                                         <option value="1">已</option>
@@ -411,6 +411,7 @@
                             上传材料：
                             <input type="file" name="file" required="true"/>
                         </p>
+                        <p>提示：入场检测材料必须为".rar"格式文件，且大小不超过20MB</p>
                         <a class="easyui-linkbutton" onclick="rcjcupload()">上传并保存</a>
                     </form>
                 </div>
@@ -453,6 +454,7 @@
                                 提交报告：
                                 <input type="file" name="file" required="true" />
                             </p>
+                            <p>提示：报告必须为".pdf"格式文件，且大小不超过20MB</p>
                             <a class="easyui-linkbutton" onclick="cjbgupload()">上传报告</a>
                         </form>
                     </div>
@@ -482,7 +484,7 @@
                             <option value="0">合格</option>
                             <option value="1">不合格</option>
                         </select>
-
+                        <br />
                         <a href="#" class="easyui-linkbutton" onclick="tjbasubmit()">提交备案</a>
                     </form>
                 </div>

@@ -30,7 +30,8 @@
                 title: '添加文章',
                 modal: true,
                 shadow: true,
-                closed: true
+                closed: true,
+                footer:'#footer'
             });
 
         });
@@ -98,7 +99,7 @@
         <form id="form" enctype="multipart/form-data">
             <table>
                 <tr>
-                    <td>
+                    <td style="text-align:right">
                         文章标题：
                     </td>
                     <td>
@@ -107,9 +108,9 @@
                 </tr>
 
                 <tr>
-                    <td>栏目：</td>
+                    <td style="text-align:right">栏目：</td>
                     <td>
-                        <select class="easyui-combobox" name="Category" id="category">
+                        <select class="easyui-combobox" name="Category" id="category" style="width:90px">
                             <option value="0">通知公告</option>
                             <option value="1">技术标准</option>
                             <option value="2">相关法规</option>
@@ -119,15 +120,9 @@
                 </tr>
 
                 <tr>
-                    <td>附件：</td>
+                    <td style="text-align:right">附件：</td>
                     <td>
                         <input type="file" name="File" id="file" required="true" />
-                    </td>
-                </tr>
-
-                <tr>
-                    <td colspan="2">
-                        <a class="easyui-linkbutton" onclick="submit()">发布</a>
                     </td>
                 </tr>
             </table>
@@ -136,7 +131,9 @@
 
     </div>
 
-
+    <div id="footer" style="padding:5px;text-align:center">
+        <a class="easyui-linkbutton" onclick="submit()">发布文章</a>
+    </div>
 
     <div id="tb" style="height:auto">
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">添加</a>|

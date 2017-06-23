@@ -22,6 +22,8 @@ using iTextSharp.text.pdf;
 
 namespace GSXF.Web.Controllers
 {
+
+    
     [UserAuthorize]
     public class UserController : Controller
     {
@@ -41,78 +43,6 @@ namespace GSXF.Web.Controllers
             return View();
         }
 
-        [AllowAnonymous]
-        public ActionResult Login()
-        {
-            var user = Session["User"] as User;
-            if (user != null)
-                return RedirectToAction("Index");
-            return View();
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult Login(LoginViewModel login)
-        {
-            Response resp = new Response();
-
-
-            var currentUser = Session["User"] as User;
-            if (currentUser != null)
-            {
-                currentUser.IsOnline = false;
-                userManager.Update(currentUser);
-            }
-
-
-            
-            if (!ModelState.IsValid)
-            {
-                resp.Code = -1;
-                resp.Message = "数据格式有误，提交失败";
-                return Json(resp);
-            }
-
-            if (Session["VerificationCode"].ToString() != login.VerficationCode.ToUpper())
-            {
-                resp.Code = -2;
-                resp.Message = "验证码错误";
-                return Json(resp);
-            }
-
-            resp = userManager.Verify(login.Name, login.Password);
-            if (resp.Code != 3)
-            {
-                return Json(resp);
-            }
-                
-
-            
-
-            var user = userManager.Find(login.Name);
-            user.LoginTime = DateTime.Now;
-            user.LoginIP = Request.UserHostAddress;
-            user.IsOnline = true;
-            userManager.Update(user);
-
-
-            Session.Add("User", user);
-            return Json(resp);
-        }
-
-
-        [AllowAnonymous]
-        public ActionResult LoginOut()
-        { 
-            User user = Session["User"] as User;
-            if (user != null)
-            {
-                user.IsOnline = false;
-                userManager.Update(user);
-            }
-            Session.Clear();
-            return Redirect("/");
-        }
 
         public ActionResult Menu()
         {
@@ -140,17 +70,8 @@ namespace GSXF.Web.Controllers
             ViewBag.LoginIP = user.LoginIP;
             ViewBag.Role = user.Role.Name;
 
-            if(ViewBag.Role == "服务机构")
-            {
-                int companyID = userCompanyManager.Find(uc => uc.UserID == user.ID).CompanyID;
-                ViewBag.CompanyName = companyManager.Find(companyID).Name;
-            }
-            else
-            {
-                string fireCode = user.Name.Substring(0, 8);
-                ViewBag.CompanyName = fireManager.Find(f => f.Code == fireCode).Name;
-            }
-
+            ViewBag.CompanyName = userManager.getOrgName(user.ID);
+            DataController.
             return View();
         }
 

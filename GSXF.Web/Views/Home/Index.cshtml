@@ -8,7 +8,7 @@
     function login() {
         $.ajax({
             async: false,
-            url: '/User/Login',
+            url: '/Data/Login',
             data: {"Name":$('#username').val(),"Password":$('#password').val(),"VerficationCode":$('#code').val()},
             dataType:'json',
             type: 'POST',

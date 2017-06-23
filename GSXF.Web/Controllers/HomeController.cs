@@ -17,6 +17,12 @@ namespace GSXF.Web.Controllers
     public class HomeController : Controller
     {
 
+        private static ProjectManager projectManager = new ProjectManager();
+        private static CompanyManager companyManager = new CompanyManager();
+        private static ArticleManager articleManager = new ArticleManager();
+        private static EvaluationManager evaluationManager = new EvaluationManager();
+        private static FileManager fileManager = new FileManager();
+
         public ActionResult Default()
         {
             return View();
@@ -62,15 +68,17 @@ namespace GSXF.Web.Controllers
 
         public ActionResult Report(string filecode)
         {
-            ProjectManager projectManager = new ProjectManager();
+            projectManager = new ProjectManager();
+
             var project = projectManager.Find(p => p.ReportFileCode == filecode);
-            if(project == null)
+            UploadFile reportFile = project.ReportFile;
+            if (project == null || reportFile==null)
             {
                 return Content("找不到此报告");
             }
             else
-            {
-                return Redirect(project.ReportFile.Path.Substring(1, project.ReportFile.Path.Length - 1));
+            {   
+                return Redirect(reportFile.Path.Substring(1, reportFile.Path.Length - 1));
             }
 
         }
@@ -101,7 +109,6 @@ namespace GSXF.Web.Controllers
         public ActionResult FeedBack(int projectID, string c)
         {
 
-            ProjectManager projectManager = new ProjectManager();
             var project = projectManager.Find(projectID);
             if (project == null)
             {
@@ -133,7 +140,7 @@ namespace GSXF.Web.Controllers
 
             int projectID = int.Parse(id);
             int Score = int.Parse(score);
-            ProjectManager projectManager = new ProjectManager();
+
             var project = projectManager.Find(projectID);
             
 
@@ -146,10 +153,10 @@ namespace GSXF.Web.Controllers
             int s = company.Score;
             company.Score = (company.Score + Score) / count;
             
-            CompanyManager companyManager = new CompanyManager();
+            
             companyManager.Update(company);
 
-            EvaluationManager evaluationManager = new EvaluationManager();
+            
 
 
             Evaluation eva = new Evaluation();
@@ -173,7 +180,7 @@ namespace GSXF.Web.Controllers
 
         public ActionResult LastArticleList(int category)
         {
-            ArticleManager articleManager = new ArticleManager();
+            
             Category c = (Category)category;
 
             var articles = articleManager.FindList().Where(a => a.Category == c).OrderByDescending(a => a.ID).Take(5).ToList();

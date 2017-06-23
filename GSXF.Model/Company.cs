@@ -107,7 +107,8 @@ namespace GSXF.Model
         [JsonIgnore]
         public virtual ICollection<Project> Projects { get; set; }
 
-        [JsonIgnore]
-        public virtual ICollection<OfficeAddress> OfficeAddresses { get; set; }
+        public string Address { get; set; }
+
+        public float Area { get; set; }
     }
 }

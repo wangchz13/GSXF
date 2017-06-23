@@ -17,7 +17,6 @@ namespace GSXF.DataBase
 
         public DbSet<Employee> Employees { get; set; }
 
-        public DbSet<OfficeAddress> OfficeAddresses { get; set; }
 
         public DbSet<Project> Projects { get; set; }
 

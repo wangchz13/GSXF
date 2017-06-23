@@ -64,7 +64,7 @@ function logout() {
             $.messager.progress({
                 text: '正在退出中...'
             });
-            window.location.href = '/User/LoginOut';
+            window.location.href = '/Data/LoginOut';
         }
     });
 }

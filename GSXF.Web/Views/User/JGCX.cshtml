@@ -22,15 +22,16 @@
             $('#companydg').datagrid({
                 width:'100%',
                 height: 'auto',
-                rownumbers: true,
                 singleSelect: true,
                 pagination: true,
-                pageList: [10, 20, 30, 50, 100, 200],
+                pageSize:20,
+                pageList: [20, 30, 50, 100, 200],
                 url: '/Data/getCompanies',
                 method: 'get',
                 loadFilter: loadFilter
             });
         });
+
         function doSearch() {
             $('#companydg').datagrid('load', {
                 QualificationType: $('#qt').val(),
@@ -59,7 +60,7 @@
         </select>
         资质等级:
         <select name="QualificationLevel" id="ql" class="easyui-combobox" style="width:102px;"
-                data-options="panelHeight:'102px'" editable="false">
+                data-options="panelHeight:'auto'" editable="false">
             <option value="-1">全部</option>
             <option value="0">一级</option>
             <option value="1">二级</option>
@@ -78,8 +79,8 @@
             <tr>
                 <th field="Name" width="300px">机构名称</th>
                 <th field="Type" width="160px">资质类别</th>
-                <th field="Level" width="80px">资质等级</th>
-                <th field="Number" width="160px">证书编号</th>
+                <th field="Level" width="160px">资质等级</th>
+                <th field="Number" width="320px">证书编号</th>
                 <th field="State" width="120px">证书状态</th>
             </tr>
         </thead>

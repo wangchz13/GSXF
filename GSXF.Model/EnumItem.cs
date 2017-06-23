@@ -113,6 +113,7 @@ namespace GSXF.Model
 
     public enum BuildType
     {
+        
         公用建筑,
         民用建筑
     }
