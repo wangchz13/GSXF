@@ -42,7 +42,7 @@ namespace GSXF.Web
 
         protected void Session_Start(object sender, EventArgs e)
         {
-            Session.Timeout = 1440;
+            Session.Timeout = 60;
         }
 
         protected void Session_End(object sender, EventArgs e)
