@@ -43,6 +43,9 @@
             <span>文章管理</span>
         </li>
 
+        <li data-options="attributes:{'url':'@Url.Action("ZHGL")'}">
+            <span>账号管理</span>
+        </li>
     }
 
     if (ViewBag.Role == "消防机构支队" || ViewBag.Role == "消防机构大队")
@@ -53,19 +56,8 @@
         <li data-options="attributes:{'url':'@Url.Action("XMJG")'}">
             <span>项目监管</span>
         </li>
-        <li>
-            <span>查询统计</span>
-            <ul>
-                <li data-options="attributes:{'url':'@Url.Action("XMCX")'}">
-                    <span>项目查询</span>
-                </li>
-                <li data-options="attributes:{'url':'@Url.Action("JGCX")'}">
-                    <span>机构查询</span>
-                </li>
-                <li data-options="attributes:{'url':'@Url.Action("ZCGCSCX")'}">
-                    <span>注册工程师查询</span>
-                </li>
-            </ul>
+        <li data-options="attributes:{'url':'@Url.Action("XMCX")'}">
+            <span>项目查询</span>
         </li>
         <li data-options="attributes:{'url':'@Url.Action("XMCJ")'}">
             <span>项目抽检</span>
