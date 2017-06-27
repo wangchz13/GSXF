@@ -21,14 +21,14 @@ namespace GSXF.Model
         /// <summary>
         /// 项目类型
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
         public ProjectType Type { get; set; }
         /// <summary>
         /// 项目地区
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
         public City City { get; set; }
-        [JsonIgnore]
+        /// <summary>
+        /// 消防机构
+        /// </summary>
         public virtual FireControlInstitution FireControlInstitution { get; set; }
         /// <summary>
         /// 详细地址
@@ -38,12 +38,10 @@ namespace GSXF.Model
         /// <summary>
         /// 建筑类型
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
         public BuildType BuildType { get; set; }
         /// <summary>
         /// 火灾风险
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
         public FireRisk FireRisk { get; set; }
         /// <summary>
         /// 建筑面积
@@ -102,12 +100,10 @@ namespace GSXF.Model
         /// <summary>
         /// 所属服务机构
         /// </summary>
-        [JsonIgnore]
         public virtual Company Company { get; set; }
         /// <summary>
         /// 项目进度
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
         public ProjectProgress Progress { get; set; }
         
         /// <summary>
@@ -116,15 +112,28 @@ namespace GSXF.Model
         public bool Result { get; set; }
 
         public bool IsFeedBack { get; set; }
+        /// <summary>
+        /// 添加时间（项目登记时间）
+        /// </summary>
+        public DateTime RegTime { get; set; }
+        /// <summary>
+        /// 入场检测时间
+        /// </summary>
+        public DateTime? CheckTime { get; set; }
 
-        public DateTime RecordDate { get; set; }
+        /// <summary>
+        /// 备案时间
+        /// </summary>
+        public DateTime? RecordDate { get; set; }
 
-
+        /// <summary>
+        /// 入场检测材料
+        /// </summary>
         public  virtual UploadFile DataFile { get; set; }
-
+        /// <summary>
+        /// 项目报告
+        /// </summary>
         public  virtual UploadFile ReportFile { get; set; }
-
-        public DateTime? rcjcsj { get; set; }
 
         /// <summary>
         /// 装逼的查询明码
