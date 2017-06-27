@@ -369,7 +369,7 @@ namespace GSXF.Web.Controllers
 
                 for (int i = 1; i < total; i++)
                 {
-                    content = pdfStamper.GetUnderContent(i);//在内容上方加水印
+                    content = pdfStamper.GetOverContent(i);//在内容上方加水印
                     //content = pdfStamper.GetUnderContent(i);//在内容下方加水印
                     //透明度
                     content.AddImage(image);
