@@ -35,9 +35,6 @@
                 datatype: "json",
                 type: "POST",
                 success: function (data) {
-                    if (data.Code = -1) {
-                        $.messager.alert('提示', '输入密码与当前用户密码不一致，密码修改失败！');
-                    }
                     $.messager.alert('提示', '密码修改成功!', 'info', function () {
                         window.location.reload();
                     });
@@ -59,13 +56,13 @@
         【注册时间】：@ViewBag.RegTime
     </p>
     <p>
-        【主账号】：
+        【主账号】：@(ViewBag.Name.Substring(0,ViewBag.Name.Length-2))00
     </p>
     <p>
-        【上次登录时间】：@ViewBag.LoginTime
+        【登录时间】：@ViewBag.LoginTime
     </p>
     <p>
-        【上次登录IP】:@ViewBag.LoginIP
+        【登录IP】:@ViewBag.LoginIP
     </p>
     <p>
         <br />
@@ -81,9 +78,6 @@
         【机构名称】：@ViewBag.CompanyName
     </p>
     <p>
-        【机构信息】：
-    </p>
-    <p>
         <br />
     </p>
 
@@ -91,9 +85,6 @@
     <a class="easyui-linkbutton" onclick="$('#win').window('open')">修改密码</a>
     <div id="win">
         <form id="form">
-            <p >
-                原密码：<input class="easyui-textbox" name="p1"style="float:right" />
-            </p>
             <p >
                 新密码： <input id="password" name="password" validType="length[4,32]" class="easyui-textbox easyui-validatebox" required="true" type="password" value="" />
             </p>
