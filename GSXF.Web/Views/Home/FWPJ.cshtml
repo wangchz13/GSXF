@@ -56,7 +56,6 @@
             <option value="-1">全部</option>
             <option value="0">客户评价</option>
             <option value="1">项目抽查</option>
-            <option value="2">系统检测</option>
         </select>
         
         <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doSearch()">查询</a>
@@ -69,14 +68,16 @@
                 <th field="ProjectName" width="240">项目名称</th>
                 <th field="CompanyName" width="240">服务机构</th>
                 <th field="Source" width="80">来源</th>
-                <th field="Note" width="420px">评价内容</th>
-                <th field="Result" width="60" data-options="formatter:function(value,row){
-                            if(row.Result>=0)
-                                return '+' + row.Result + '分';
-                            else return row.Result + '分';
-                        }">评分</th>
+                <th field="Note" width="480px" formatter="formatter">评价内容</th>
             </tr>
         </thead>
     </table>
+
+    <script>
+        function formatter(value, row) {
+            return "<span title='" + value + "'>" + value + "</span>";
+        }
+    </script>
+
 </body>
 </html>
