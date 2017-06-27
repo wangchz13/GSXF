@@ -57,7 +57,6 @@ namespace GSXF.Model
     {
         兰州,
         嘉峪关,
-        
         金昌,
         白银,
         天水,
@@ -67,14 +66,9 @@ namespace GSXF.Model
         定西,
         陇南,
         平凉,
-        
         庆阳,
-        
-        
         临夏,
-        
-        甘南,
-        
+        甘南, 
         兰州新区
     }
 
@@ -110,14 +104,18 @@ namespace GSXF.Model
         女,
         未知
     }
-
+    /// <summary>
+    /// 建筑类型
+    /// </summary>
     public enum BuildType
     {
         
         公用建筑,
         民用建筑
     }
-
+    /// <summary>
+    /// 火灾危险性
+    /// </summary>
     public enum FireRisk
     {
         无 = -1,
@@ -128,6 +126,9 @@ namespace GSXF.Model
         戊
     }
 
+    /// <summary>
+    /// 评价来源
+    /// </summary>
     public enum EvaluationSource
     {
         客户评价,
@@ -135,7 +136,9 @@ namespace GSXF.Model
         系统检测
     }
 
-
+    /// <summary>
+    /// 文章栏目
+    /// </summary>
     public enum Category
     {
         通知公告,
