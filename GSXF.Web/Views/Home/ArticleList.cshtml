@@ -12,6 +12,9 @@
         #list li{
             border-bottom:1px dotted #ccc;
         }
+        .commitdate{
+            float:right;
+        }
     </style>
 
 </head>
@@ -30,6 +33,9 @@
                         <a title="@i.Title" href="@i.File.Path.Substring(1,i.File.Path.Length-1)" target="_blank">
                             @i.Title
                         </a>
+                        <span class="commitdate">
+                            @i.CommitDate.ToShortDateString()
+                        </span>
                     </li>
                 }
             }
