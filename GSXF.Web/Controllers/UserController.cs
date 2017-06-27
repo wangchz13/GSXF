@@ -5,7 +5,8 @@ using GSXF.Model;
 using GSXF.Web.Models;
 using GSXF.Auxiliary;
 using GSXF.Security;
-
+using System.Collections.Generic;
+using System.Linq;
 //using Spire.Pdf;
 //using Spire.Pdf.Graphics;
 using System.IO;
@@ -25,14 +26,8 @@ namespace GSXF.Web.Controllers
 
     
     [UserAuthorize]
-    public class UserController : Controller
+    public class UserController : BaseController
     {
-        private static UserManager userManager = new UserManager();
-        private static UserCompanyManager userCompanyManager = new UserCompanyManager();
-        private static CompanyManager companyManager = new CompanyManager();
-        private static FireControlInstitutionManager fireManager = new FireControlInstitutionManager();
-        private static ProjectManager projectManager = new ProjectManager();
-        private static EvaluationManager evaluationManager = new EvaluationManager();
         // GET: User
         public ActionResult Index()
         {
@@ -71,7 +66,6 @@ namespace GSXF.Web.Controllers
             ViewBag.Role = user.Role.Name;
 
             ViewBag.CompanyName = userManager.getOrgName(user.ID);
-            DataController.
             return View();
         }
 
@@ -172,6 +166,16 @@ namespace GSXF.Web.Controllers
 
         public ActionResult XMDJ()
         {
+            User user = Session["User"] as User;
+            int companyID = userCompanyManager.Find(uc => uc.UserID == user.ID).CompanyID;
+            Company company = companyManager.Find(companyID);
+            int count = company.Employees.Where(e => e.Level == EmployeeLevel.临时注册消防工程师 || e.Level == EmployeeLevel.一级注册消防工程师 || e.Level == EmployeeLevel.二级注册消防工程师).Count();
+            //if(count < 8)
+            //{
+            //    return Content("检测到注册消防工程师少于8人，该功能已被暂停使用...");
+            //}
+            
+
             return View();
         }
 
@@ -191,6 +195,12 @@ namespace GSXF.Web.Controllers
 
             ViewBag.Path = "/Data/getProject/?projectID=" + projectID.ToString();
             ViewBag.ID = projectID;
+            return View();
+        }
+
+        public ActionResult JGXQ(int companyID)
+        {
+            ViewBag.companyID = companyID;
             return View();
         }
 
@@ -222,8 +232,9 @@ namespace GSXF.Web.Controllers
             }
             else
             {
-                company.Score = company.Score - 10;
-                eva.Result = -10;
+                company.Score = company.Score - 5;
+                companyManager.Update(company);
+                eva.Result = -5;
             }
             evaluationManager.Add(eva);
 
@@ -244,10 +255,9 @@ namespace GSXF.Web.Controllers
             string date = Request.Form["date"];
 
             int projectID = int.Parse(id);
-            ProjectManager projectManager = new ProjectManager();
             Project project = projectManager.Find(projectID);
 
-            project.rcjcsj = DateTime.Parse(date);
+            project.CheckTime = DateTime.Parse(date);
             project.Progress = ProjectProgress.入场检测;
             
             if (Request.Files.Count == 0)
@@ -280,7 +290,6 @@ namespace GSXF.Web.Controllers
             file.SaveAs(path);
 
 
-            FileManager fileManager = new FileManager();
             Model.UploadFile f = new Model.UploadFile();
             f.Name = fileName;
             f.Path = "~/Upload/Datas/" + fileName;
@@ -299,7 +308,6 @@ namespace GSXF.Web.Controllers
 
             string id = Request.Form["id"];
             int projectID = int.Parse(id);
-            ProjectManager projectManager = new ProjectManager();
             Project project = projectManager.Find(projectID);
 
             
@@ -339,7 +347,8 @@ namespace GSXF.Web.Controllers
 
             string inputfilepath = path;
             string outputfilepath = string.Format(filePath + "\\{0}", fileName);
-            string waterMarkName = project.ReportFileCode;
+            string waterMarkName = "查询码："+ project.ReportFileCode;
+            string pngpath = Server.MapPath("~/Content/img/waterprint_09.png");
             PdfReader pdfReader = null;
             PdfStamper pdfStamper = null;
             try
@@ -353,11 +362,17 @@ namespace GSXF.Web.Controllers
                 PdfContentByte content;
                 BaseFont font = BaseFont.CreateFont(@"C:\WINDOWS\Fonts\SIMFANG.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
                 PdfGState gs = new PdfGState();
+
+                iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(pngpath);
+
+                image.SetAbsolutePosition(width / 2 - image.Width / 2, height / 2 - image.Height / 2);
+
                 for (int i = 1; i < total; i++)
                 {
-                    content = pdfStamper.GetOverContent(i);//在内容上方加水印
+                    content = pdfStamper.GetUnderContent(i);//在内容上方加水印
                     //content = pdfStamper.GetUnderContent(i);//在内容下方加水印
                     //透明度
+                    content.AddImage(image);
                     content.SetGState(gs);
                     //content.SetGrayFill(0.3f);
                     //开始写入文本
@@ -389,7 +404,6 @@ namespace GSXF.Web.Controllers
             System.IO.File.Delete(inputfilepath);
 
 
-            FileManager fileManager = new FileManager();
             Model.UploadFile f = new Model.UploadFile();
             f.Name = fileName;
             f.Path = "~/Upload/Reports/" + f.Name;
@@ -407,13 +421,12 @@ namespace GSXF.Web.Controllers
             string id = Request.Form["id"];
             int pid = int.Parse(id);
 
-            ProjectManager projectManager = new ProjectManager();
             Project project = projectManager.Find(pid);
             string result = Request.Form["result"];
             bool res = result == "0" ? true : false;
             project.Result = res;
             project.Progress = ProjectProgress.提交备案;
-
+            project.RecordDate = DateTime.Now;
 
             projectManager.Update(project);
 
