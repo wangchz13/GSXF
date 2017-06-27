@@ -17,16 +17,15 @@ namespace GSXF.Model
         /// </summary>
         [Required(ErrorMessage ="机构名称不能为空")]
         public string Name { get; set; }
-
+        /// <summary>
+        /// 机构代码
+        /// </summary>
         public string Code { get; set; }
-
-
         /// <summary>
         /// 资质类型1
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]
         public QualificationType Type1 { get; set; }
-
         /// <summary>
         /// 资质等级1
         /// </summary>
@@ -99,7 +98,32 @@ namespace GSXF.Model
         /// </summary>
         public string Email { get; set; }
 
-        public int Score { get; set; }
+
+        private int _Score;
+
+        public int Score
+        {
+            get
+            {
+                return this._Score;
+            }
+            set
+            {
+                if (value > 100)
+                {
+                    _Score = 100;
+                }
+                else if (value < 0)
+                {
+                    _Score = 0;
+                }
+                else
+                {
+                    _Score = value;
+                }
+            }
+
+        }
 
         [JsonIgnore]
         public virtual ICollection<Employee> Employees { get; set; }
