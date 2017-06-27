@@ -44,7 +44,6 @@ namespace GSXF.DataBase
             {
                 _response.Code = 1;
                 _response.Message = "添加数据成功！";
-                _response.Data = entity;
             }
             else
             {
@@ -67,7 +66,6 @@ namespace GSXF.DataBase
             {
                 _response.Code = 1;
                 _response.Message = "更新数据成功！";
-                _response.Data = entity;
             }
             else
             {
