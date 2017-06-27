@@ -17,7 +17,6 @@ namespace GSXF.DataBase
 
         public DbSet<Employee> Employees { get; set; }
 
-
         public DbSet<Project> Projects { get; set; }
 
         public DbSet<User> Users { get; set; }
@@ -29,7 +28,6 @@ namespace GSXF.DataBase
         public DbSet<FireControlInstitution> FireControlInstitutions { get; set; }
 
         public DbSet<UploadFile> UploadFiles { get; set; }
-
 
         public DbSet<Evaluation> Evaluations { get; set; }
     } 
