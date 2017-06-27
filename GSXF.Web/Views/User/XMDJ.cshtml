@@ -14,7 +14,73 @@
 
     <link href="~/Content/User/ipage.css" rel="stylesheet" />
     
+
+    <script type="text/javascript">
+
+var isIE = /msie/i.test(navigator.userAgent) && !window.opera;
+function fileChange(target, id) {
+    
+
+var fileSize = 0;
+var filetypes =[".rar",".pdf"];
+var filepath = target.value;
+var filemaxsize = 1024 * 20;//2M
+
+if(filepath){
+var isnext = false;
+var fileend = filepath.substring(filepath.indexOf("."));
+
+console.log(id);
+if (id == "file1") {
+    isnext = filetypes[0] == fileend;
+} else if (id == "file2") {
+    isnext = filetypes[1] == fileend;
+}
+
+
+if(!isnext){
+alert("不接受此文件类型！");
+target.value ="";
+return false;
+}
+}else{
+return false;
+}
+if (isIE && !target.files) {
+var filePath = target.value;
+var fileSystem = new ActiveXObject("Scripting.FileSystemObject");
+if(!fileSystem.FileExists(filePath)){
+alert("附件不存在，请重新输入！");
+return false;
+}
+var file = fileSystem.GetFile (filePath);
+fileSize = file.Size;
+} else {
+fileSize = target.files[0].size;
+}
+
+var size = fileSize / 1024;
+if(size>filemaxsize){
+alert("附件大小不能大于"+filemaxsize/1024+"M！");
+target.value ="";
+return false;
+}
+if(size<=0){
+alert("附件大小不能为0M！");
+target.value ="";
+return false;
+}
+}
+    </script> 
+    
     <script>
+
+
+        function findSize(field_id) {
+            var fileInput = $("#" + field_id)[0];
+            byteSize = fileInput.files[0].fileSize;
+            return byteSize; // Size returned in KB.
+        }
         $(document).ready(function () {
 
             $('#rcjcdg').datagrid({
@@ -151,7 +217,6 @@
             }
 
              var formData = new FormData($("#rcjcForm")[0]);
-             console.log(formData);
              formData.append("id", $('#pid').val());
              formData.append("date", $('#pdate').val())
              $.ajax({
@@ -187,6 +252,7 @@
 
 
         function cjbgupload() {
+
 
             var formData = new FormData($("#cjbgForm")[0]);
             formData.append("id", $('#pid1').val());
@@ -245,7 +311,7 @@
                             <tr>
                                 <td style="text-align:right">项目名称：</td>
                                 <td colspan="3"> 
-                                    <input name="Name"  class="easyui-textbox" style="width:100%" />
+                                    <input name="Name"  class="easyui-textbox" style="width:100%" required="true"/>
                                 </td>
                                 <td style="text-align:right">项目类型：</td>
                                 <td>
@@ -287,7 +353,7 @@
                                 </td>
                                 <td style="text-align:right">详细地址：</td>
                                 <td colspan="2">
-                                    <input class="easyui-textbox" name="Address" />
+                                    <input class="easyui-textbox" name="Address" required="true" />
                                 </td>
                             </tr>
                             <tr>
@@ -311,7 +377,7 @@
                                 </td>
                                 <td style="text-align:right">单体建筑面积：</td>
                                 <td>
-                                    <input class=" easyui-numberbox" name="Area" style="width:60px" />
+                                    <input class=" easyui-numberbox" name="Area" style="width:60px"  required="true"/>
                                 </td>
                                 <td style="text-align:right">建筑层总数：</td>
                                 <td>
@@ -325,15 +391,15 @@
                             <tr>
                                 <td style="text-align:right">合同编号：</td>
                                 <td>
-                                    <input class="easyui-textbox" name="ContractNumber" />
+                                    <input class="easyui-textbox" name="ContractNumber" required="true" />
                                 </td>
                                 <td style="text-align:right">合同签订日期：</td>
                                 <td>
-                                    <input class="easyui-datebox" name="SignDate" style="width:96px;" />
+                                    <input class="easyui-datebox" name="SignDate" style="width:96px;" required="true" editable="false" />
                                 </td>
                                 <td style="text-align:right">合同起止日期：</td>
                                 <td colspan="2">
-                                    <input class="easyui-datebox" name="StartDate" style="width:96px;"/>-<input class="easyui-datebox" name="EndDate" style="width:96px;"/>
+                                    <input class="easyui-datebox" name="StartDate" style="width:96px;" required="true" editable="false"/>-<input class="easyui-datebox" name="EndDate" style="width:96px;" required="true" editable="false"/>
                                 </td>
                             </tr>
                             <tr>
@@ -400,6 +466,8 @@
                     </thead>
                 </table>
 
+                
+
                 <div class="easyui-window" id="win1" title="文件上传" style="width:400px;height:160px;padding:2px;" closed="true">
                     <form id="rcjcForm" method="post" enctype="multipart/form-data">
                         <p>
@@ -409,7 +477,7 @@
                         </p>
                         <p>
                             上传材料：
-                            <input type="file" name="file" required="true"/>
+                            <input type="file" name="file" id="file1" onchange="fileChange(this,'file1');"/>
                         </p>
                         <p>提示：入场检测材料必须为".rar"格式文件，且大小不超过20MB</p>
                         <a class="easyui-linkbutton" onclick="rcjcupload()">上传并保存</a>
@@ -452,7 +520,7 @@
                             <p>
                                 <input id="pid1" style="display:none" />
                                 提交报告：
-                                <input type="file" name="file" required="true" />
+                                <input type="file" name="file" required="true" id="file2" onchange="fileChange(this,'file2');" />
                             </p>
                             <p>提示：报告必须为".pdf"格式文件，且大小不超过20MB</p>
                             <a class="easyui-linkbutton" onclick="cjbgupload()">上传报告</a>
