@@ -177,6 +177,7 @@
     <Compile Include="App_Start\FirstRun.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -262,6 +263,8 @@
     <Content Include="Content\img\9898.png" />
     <Content Include="Content\img\admin_bg__meitu_4.png" />
     <Content Include="Content\img\bg_1900_100_logo_meitu_1_40.png" />
+    <Content Include="Content\img\fire.gif" />
+    <Content Include="Content\img\fire.swf" />
     <Content Include="Content\img\logo.png" />
     <Content Include="Content\img\LOGO1.png" />
     <Content Include="Content\img\logo_meitu_3.png" />
@@ -275,6 +278,7 @@
     <Content Include="Content\img\ukey.jpg" />
     <Content Include="Content\Easy UI\jquery.easyui.min.js" />
     <Content Include="Content\Easy UI\jquery.min.js" />
+    <Content Include="Content\img\waterprint_09.png" />
     <Content Include="Content\img\阿里旺旺图片20170430103251.jpg" />
     <Content Include="Content\nav\bottom.js" />
     <Content Include="Content\nav\jquery.min.js" />
@@ -304,6 +308,7 @@
     <Content Include="Content\Json\institutioninfo.json" />
     <Content Include="MyConfig.config" />
     <None Include="Properties\PublishProfiles\123.pubxml" />
+    <None Include="Properties\PublishProfiles\202.201.0.200.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -374,11 +379,13 @@
     <Content Include="Views\Home\ArticleList.cshtml" />
     <Content Include="Views\User\ZHGL.cshtml" />
     <Content Include="Views\User\ZZHGL.cshtml" />
+    <Content Include="Views\User\JGXQ.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Upload\Datas\" />
     <Folder Include="Upload\Reports\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
