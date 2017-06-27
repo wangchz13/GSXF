@@ -14,41 +14,13 @@
         $(function () {
             $('#dg').datagrid({
                 height: 'auto',
-                rownumbers: true,
                 singleSelect: true,
                 pagination: true,
+                pageSize:20,
                 pageList: [10, 20, 30, 50, 100, 200],
                 url: '/Data/getCompanies',
                 method: 'get',
-                loadFilter: function (data) {
-                    if (typeof data.length == 'number' && typeof data.splice == 'function') {    // 判断数据是否是数组
-                        data = {
-                            total: data.length,
-                            rows: data
-                        }
-                    }
-                    var dg = $(this);
-                    var opts = dg.datagrid('options');
-                    var pager = dg.datagrid('getPager');
-                    pager.pagination({
-                        onSelectPage: function (pageNum, pageSize) {
-                            opts.pageNumber = pageNum;
-                            opts.pageSize = pageSize;
-                            pager.pagination('refresh', {
-                                pageNumber: pageNum,
-                                pageSize: pageSize
-                            });
-                            dg.datagrid('loadData', data);
-                        }
-                    });
-                    if (!data.originalRows) {
-                        data.originalRows = (data.rows);
-                    }
-                    var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);
-                    var end = start + parseInt(opts.pageSize);
-                    data.rows = (data.originalRows.slice(start, end));
-                    return data;
-                }
+                loadFilter: loadFilter
             });
         });
         function doSearch() {
@@ -95,7 +67,7 @@
         var l1 = "<div class='star_bg'><div class='star checked star_1'></div><div class='star star_2'></div><div class='star star_3'></div><div class='star star_4'></div><div class='star star_5'></div></div>";
         var l2 = "<div class='star_bg'><div class='star checked star_1'></div><div class='star checked star_2'></div><div class='star star_3'></div><div class='star star_4'></div><div class='star star_5'></div></div>";
         var l3 = "<div class='star_bg'><div class='star checked star_1'></div><div class='star checked star_2'></div><div class='star checked star_3'></div><div class='star star_4'></div><div class='star star_5'></div></div>";
-        var l4 = "<div class='star_bg'><div class='star checked star_1'></div><div class='star checked star_2'></div><div class='star checked star_3'></div><div checked class='star star_4'></div><div class='star star_5'></div></div>";
+        var l4 = "<div class='star_bg'><div class='star checked star_1'></div><div class='star checked star_2'></div><div class='star checked star_3'></div><div checked class='star checked star_4'></div><div class='star star_5'></div></div>";
         var l5 = "<div class='star_bg'><div class='star checked star_1'></div><div class='star checked star_2'></div><div class='star checked star_3'></div><div class='star checked star_4'></div><div class='star checked star_5'></div></div>";
     </script>
 </head>
@@ -139,20 +111,21 @@
                     <th field="Level" width="80px">资质等级</th>
                     <th field="Number" width="160px">证书编号</th>
                     <th field="State" width="120px">证书状态</th>
-                    <th field="Score" width="240px" data-options="formatter:function(value){
-                    if(value>=90)
+                    <th field="Score" width="80px" data-options="formatter:function(value){return value+'分'}">服务评分</th>
+                    <th field="t" width="180px" data-options="formatter:function(value,row){
+                    if(row.Score>=90)
                         return l5;
-                    else if(value>=75)
+                    else if(row.Score>=75)
                         return l4;
-                    else if(value>=60)
+                    else if(row.Score>=60)
                         return l3;
-                    else if(value>=40)
+                    else if(row.Score>=40)
                         return l2;
-                    else if(value>=20)
+                    else if(row.Score>=20)
                         return l1;
                     else
                         return l0;
-                    }">服务评分</th>
+                    }">服务等级</th>
 
                 </tr>
             </thead>
