@@ -12,9 +12,9 @@
         $(function () {
             $('#dg').datagrid({
                 height: 'auto',
-                rownumbers: true,
                 singleSelect: true,
                 pagination: true,
+                pageSize:20,
                 pageList: [10, 20, 30, 50, 100, 200],
                 url: '/Data/getEmployees',
                 method: 'get',
@@ -38,6 +38,12 @@
         }
 
     </script>
+
+    <style>
+        td{
+            text-align:center;
+        }
+    </style>
 </head>
 <body style=" margin:0px;font-size:10px;">
 
@@ -48,7 +54,7 @@
     </ol>
     <p style="margin-left:10px;">
         证书类别:
-        <select name="Level" id="level" class="easyui-combobox" style="width:102px;"
+        <select name="Level" id="level" class="easyui-combobox" style="width:160px;"
                 data-options="panelHeight:'auto'" editable="false">
             <option value="-1">全部</option>
             <option value="0">一级注册消防工程师</option>
@@ -72,8 +78,10 @@
                     <th field="Gender" width="60">性别</th>
                     <th field="Level" width="160">证书类别</th>
                     <th field="CertificateNumber" width="240">证书编号</th>
-                    <th field="IdentificationNumber" width="160px">身份证号</th>
-                    <th field="CompanyName" width="360">注册公司</th>
+                    <th field="IdentificationNumber" width="160px" data-options="formatter:function(value){
+                        return value.substring(0,6)+'********'+value.substring(14,18);
+                        } ">身份证号</th>
+                    <th field="CompanyName" width="360">备案公司</th>
                 </tr>
             </thead>
 
