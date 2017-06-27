@@ -37,6 +37,18 @@
             margin-bottom:20px;
         }
     </style>
+
+    <script>
+        function feedback() {
+            if (!$('#form').form('validate')) {
+                $.messager.alert('提示', '表单无效，请检查', 'info');
+                return;
+            }
+
+            $('#form').submit();
+        }
+    </script>
+
 </head>
 <body>
     <div id="content">
@@ -70,12 +82,12 @@
 
             <div style="margin-bottom:20px">
 
-                <input name="Note" class="easyui-textbox" data-options="multiline:true" style="width:60%;height:100px">
+                <input name="Note" class="easyui-textbox" data-options="multiline:true" style="width:60%;height:100px" required="true" maxlength="255" minlength="10">
 
             </div>
 
             <div style="margin-bottom:20px">
-                <a href="#" class="easyui-linkbutton" style="width:60px;height:40px;font-size:18px" onclick="$('#form').submit();">提交</a>
+                <a href="#" class="easyui-linkbutton" style="width:60px;height:40px;font-size:18px" onclick="feedback()">提交</a>
             </div>
         </form>
         
