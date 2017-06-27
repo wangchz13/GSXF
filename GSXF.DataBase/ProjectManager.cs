@@ -29,15 +29,7 @@ namespace GSXF.DataBase
             var project = Find(ID);
 
             fileManager = new FileManager();
-            if(project.DataFile != null)
-            {
-                fileManager.Delete(project.DataFile.ID);
-            }
-
-            if(project.ReportFile != null)
-            {
-                fileManager.Delete(project.ReportFile.ID);
-            }
+            
 
             return base.Delete(ID);
         }
