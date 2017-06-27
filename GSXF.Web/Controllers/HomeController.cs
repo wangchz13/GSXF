@@ -14,14 +14,8 @@ using System.Drawing;
 namespace GSXF.Web.Controllers
 {
     
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-
-        private static ProjectManager projectManager = new ProjectManager();
-        private static CompanyManager companyManager = new CompanyManager();
-        private static ArticleManager articleManager = new ArticleManager();
-        private static EvaluationManager evaluationManager = new EvaluationManager();
-        private static FileManager fileManager = new FileManager();
 
         public ActionResult Default()
         {
@@ -68,10 +62,9 @@ namespace GSXF.Web.Controllers
 
         public ActionResult Report(string filecode)
         {
-            projectManager = new ProjectManager();
 
             var project = projectManager.Find(p => p.ReportFileCode == filecode);
-            UploadFile reportFile = project.ReportFile;
+            UploadFile reportFile = project == null ? null : project.ReportFile;
             if (project == null || reportFile==null)
             {
                 return Content("找不到此报告");
@@ -198,7 +191,6 @@ namespace GSXF.Web.Controllers
 
         public ActionResult ArticleList(int category)
         {
-            ArticleManager articleManager = new ArticleManager();
             Category c = (Category)category;
 
             var articles = articleManager.FindList().Where(a => a.Category == c).OrderByDescending(a => a.ID).ToList();
