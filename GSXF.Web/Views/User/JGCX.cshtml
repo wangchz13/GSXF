@@ -28,7 +28,20 @@
                 pageList: [20, 30, 50, 100, 200],
                 url: '/Data/getCompanies',
                 method: 'get',
-                loadFilter: loadFilter
+                loadFilter: loadFilter,
+                onDblClickRow: function (index, row) {
+                    $('#iframe').attr('src', '/User/JGXQ/?companyID=' + row.ID);
+                    $('#win').window('open');
+
+                }
+            });
+
+            $('#win').window({
+                title: '机构详情',
+                width: '90%',
+                height: '400px',
+                modal: true,
+                closed: true,
             });
         });
 
@@ -86,6 +99,9 @@
         </thead>
 
     </table>
+    <div id="win">
 
+        <iframe id="iframe" style="width:100%;height:100%"></iframe>
+    </div>
 </body>
 </html>
