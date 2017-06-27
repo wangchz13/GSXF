@@ -14,30 +14,35 @@ namespace GSXF.Model
     {
         [Key]
         public int ID { get; set; }
-
         /// <summary>
         /// 员工姓名
         /// </summary>
         [Required]
         public string Name { get; set; }
-
         /// <summary>
         /// 性别
         /// </summary>
-        [JsonConverter(typeof(StringEnumConverter))]
         public Gender Gender { get; set; }
-        [JsonConverter(typeof(StringEnumConverter))]
+
+        /// <summary>
+        /// 证书类别
+        /// </summary>
         public EmployeeLevel Level { get; set; }
-
+        /// <summary>
+        /// 证书编号
+        /// </summary>
         public string CertificateNumber { get; set; }
-
+        /// <summary>
+        /// 身份证号
+        /// </summary>
         public string IdentificationNumber { get; set; }
-
+        /// <summary>
+        /// 手机号码
+        /// </summary>
         public string MobilePhone { get; set; }
-
-        [JsonIgnore]
+        /// <summary>
+        /// 所属服务机构
+        /// </summary>
         public virtual Company Company { get; set; }
-
-
     }
 }
