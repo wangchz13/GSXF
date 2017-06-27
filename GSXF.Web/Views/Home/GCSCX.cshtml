@@ -57,9 +57,9 @@
         <select name="Level" id="level" class="easyui-combobox" style="width:160px;"
                 data-options="panelHeight:'auto'" editable="false">
             <option value="-1">全部</option>
-            <option value="0">一级注册消防工程师</option>
-            <option value="1">二级注册消防工程师</option>
-            <option value="5">临时注册消防工程师</option>
+            <option value="0">临时注册消防工程师</option>
+            <option value="1">一级注册消防工程师</option>
+            <option value="2">二级注册消防工程师</option>
         </select>
         证书编号:
         <input name="CertificateNumber" id="cn" class="easyui-textbox" style="width:180px" />
@@ -77,7 +77,13 @@
                     <th field="Name" width="120">姓名</th>
                     <th field="Gender" width="60">性别</th>
                     <th field="Level" width="160">证书类别</th>
-                    <th field="CertificateNumber" width="240">证书编号</th>
+                    <th field="CertificateNumber" width="240" data-options="formatter:function(value,row){
+                        if(value == row.IdentificationNumber){
+                        return value.substring(0,6)+'********'+value.substring(14,18);
+                        }else{
+                        return value;
+                        }
+                        }">证书编号</th>
                     <th field="IdentificationNumber" width="160px" data-options="formatter:function(value){
                         return value.substring(0,6)+'********'+value.substring(14,18);
                         } ">身份证号</th>

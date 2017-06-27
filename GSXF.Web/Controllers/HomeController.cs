@@ -24,6 +24,9 @@ namespace GSXF.Web.Controllers
 
         public ActionResult Index()
         {
+
+          
+
             return View();
         }
 
