@@ -23,13 +23,19 @@
             $('#userdg').datagrid({
                 title: '账号列表',
                 height: 'auto',
+                width:'100%',
                 rownumbers: true,
                 collapsible: true,
                 singleSelect: true,
 
                 url: '/Data/getMyUsers',
                 method: 'get',
-                toolbar: '#tb'
+                toolbar: '#tb',
+                onDblClickRow: function (index, row) {
+                    $('#userid').val(row.ID);
+                    $('#noteid').textbox('setValue', row.Note);
+                    $('#notewin').window('open');
+                }
             });
 
             $('#resetwin').window({
@@ -38,6 +44,13 @@
                 shadow: true,
                 closed: true,
                 footer:'#footer'
+            });
+
+            $('#notewin').window({
+                title: '添加备注',
+                modal: true,
+                closed: true,
+                footer:'#tb2'
             });
         });
 
@@ -65,6 +78,23 @@
             }
             $('#resetwin').window('open');
         }
+
+        function setnote() {
+            $.ajax({
+                async: false,
+                url: '/Data/setUserNote',
+                dataType: 'json',
+                type: 'POST',
+                data: { "id": $('#userid').val(), "Note": $("#noteid").val() },
+                success: function (data) {
+                    $.messager.alert('提示', '备注添加成功！', 'info', function () {
+                        $('#userdg').datagrid('reload');
+                        $('#notewin').window('close');
+                    });
+                }
+            });
+        }
+
 
         function reset() {
 
@@ -136,19 +166,27 @@
         <table id="userdg">
             <thead>
                 <tr>
-                    <th field="Name" width="300px">用户账号</th>
-                    <th field="RegTime" width="80px">注册时间</th>
-                    <th field="LoginTime" width="100px">上次登录时间</th>
-                    <th field="LoginIP" width="100px">上次登录IP</th>
-                    <th field="IsOnline" width="96px" data-options="formatter: function (value) {
-                            if (value == true)
-                                return '在线';
-                            else
-                                return '离线';
-                        }">当前登录状态</th>
+                    <th field="Name" width="160px">用户账号</th>
+                    <th field="RegTime" width="160px">注册时间</th>
+                    <th field="LoginTime" width="160px">登录时间</th>
+                    <th field="LoginIP" width="160px">登录IP</th>
+                    <th field="IsOnline" width="96px">当前登录状态</th>
+                    <th field="Note" width="320px">备注</th>
                 </tr>
             </thead>
         </table>
-        
+
+    <div id="notewin">
+        <div style="margin:0 auto">
+            <form id="noteform">
+                <input id="userid" style="display:none" />
+                <input class="easyui-textbox" id="noteid" />
+            </form>
+            
+        </div>
+    </div>
+    <div id="tb2" style="padding:5px;text-align:center;">
+        <a class=" easyui-linkbutton" onclick="setnote()">保存</a>
+    </div>
 </body>
 </html>
