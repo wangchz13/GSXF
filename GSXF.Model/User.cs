@@ -24,5 +24,9 @@ namespace GSXF.Model
         public bool IsOnline { get; set; }
 
         public virtual Role Role { get; set; }
+
+        public string Note { get; set; }
+
+        
     }
 }
