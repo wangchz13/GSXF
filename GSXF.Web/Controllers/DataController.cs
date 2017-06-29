@@ -611,6 +611,7 @@ namespace GSXF.Web.Controllers
             company.Type2 = c.Type2;
             company.Level2 = c.Level2;
             company.Number1 = c.Number1;
+            company.Number2 = c.Number2;
             company.ExpiryDate1 = c.ExpiryDate1;
             company.ExpiryDate2 = c.ExpiryDate2;
             company.Fund = c.Fund;
