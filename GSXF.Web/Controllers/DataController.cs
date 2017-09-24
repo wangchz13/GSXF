@@ -318,6 +318,7 @@ namespace GSXF.Web.Controllers
             string result = Request.QueryString["Result"];
             string name = Request.QueryString["Name"];
             string progress = Request.QueryString["Progress"];
+            string company = Request.QueryString["Company"];
 
             //按项目类型查询
             if(type!= null && type!= "-1")
@@ -357,6 +358,13 @@ namespace GSXF.Web.Controllers
             {
                 projects = projects.Where(p => p.Name.Contains(name));
             }
+
+            //按服务机构查询
+            if(company != null && company != "")
+            {
+                projects = projects.Where(p => p.Company.Name.Contains(company));
+            }
+
             //按项目进度查询
             if (progress != null && progress != "")
             {

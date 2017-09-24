@@ -61,7 +61,8 @@
                 lTime: $('#ltime').val(),
                 rTime: $('#rtime').val(),
                 Result: $('#result').val(),
-                Name: $('#name').val()
+                Name: $('#name').val(),
+                Company:$('#company').val()
             });
         }
         function doReset() {
@@ -71,6 +72,7 @@
             $('#rtime').datebox('setValue', '');
             $('#result').combobox('setValue', '-1');
             $('#name').textbox('setValue', '');
+            $('#company').textbox('setValue', '');
             doSearch();
         }
 
@@ -84,7 +86,7 @@
     </ol>
     <p style="margin-left:10px;">
         项目类型:
-        <select class="easyui-combobox" name="Type" id="type" style="width:102px;"
+        <select class="easyui-combobox" name="Type" id="type" style="width:80px;"
                 data-options="panelHeight:'auto'" editable="false">
             <option value="-1">全部</option>
             <option value="0">竣工检测</option>
@@ -112,7 +114,7 @@
             <option value="14">兰州新区</option>
         </select>
         报告备案时间:
-        <input name="lTime" id="ltime" class="easyui-datebox" style="width:96px;" editable="false">-<input name="rTime" id="rtime" class="easyui-datebox" style="width:96px;" editable="false">
+        <input name="lTime" id="ltime" class="easyui-datebox" style="width:92px;" editable="false">-<input name="rTime" id="rtime" class="easyui-datebox" style="width:92px;" editable="false">
         检测结果:
         <select class="easyui-combobox" name="Result" id="result" style="width:62px;" data-options="panelHeight:'auto'" editable="false">
             <option value="-1">全部</option>
@@ -120,7 +122,9 @@
             <option value="1">不合格</option>
         </select>
         项目名称:
-        <input name="Name" id="name" class="easyui-textbox" style="width:120px" />
+        <input name="Name" id="name" class="easyui-textbox" style="width:106px" />
+        服务机构:
+        <input name="Company" id="company" class="easyui-textbox" style="width:106px" />
         <a href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="doSearch()">查询</a>
         <a href="#" class="easyui-linkbutton" iconCls="icon-reload" onclick="doReset()">重置查询</a>
     </p>
